@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.ARFoundation;
 using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
 
 [RequireComponent(typeof(ARPlaneManager))]
 public class PlaneDetectionStatus : MonoBehaviour

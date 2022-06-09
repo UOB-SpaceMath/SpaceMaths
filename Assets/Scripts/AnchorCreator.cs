@@ -1,47 +1,37 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 [RequireComponent(typeof(ARAnchorManager))]
 [RequireComponent(typeof(ARRaycastManager))]
 [RequireComponent(typeof(ARPlaneManager))]
+[RequireComponent(typeof(ARPointCloudManager))]
 public class AnchorCreator : MonoBehaviour
 {
-    [SerializeField]
-    GameObject m_GameScene;
 
-    public GameObject gameScene
-    {
-        get => m_GameScene;
-        set => m_GameScene = value;
-    }
+    static readonly List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
 
-    public void RemoveAnchor()
-    {
-        if (m_CurrentAnchors)
-        {
-            Destroy(m_CurrentAnchors.gameObject);
-            m_CurrentAnchors = null;
-            TogglePlaneDetection();
-        }
-    }
+    ARRaycastManager m_RaycastManager;
 
+    ARAnchorManager m_AnchorManager;
+
+    ARPlaneManager m_PlaneManager;
+
+    ARPointCloudManager m_PointCloudManager;
+
+    ARAnchor m_CurrentAnchors;
+
+    GameObject m_GameBoard;
     void Awake()
     {
         m_RaycastManager = GetComponent<ARRaycastManager>();
         m_AnchorManager = GetComponent<ARAnchorManager>();
         m_PlaneManager = GetComponent<ARPlaneManager>();
-    }
-
-    ARAnchor CreateAnchor(in ARRaycastHit hit)
-    {
-        var oldPrefab = m_AnchorManager.anchorPrefab;
-        m_AnchorManager.anchorPrefab = gameScene;
-        var anchor = m_AnchorManager.AttachAnchor((ARPlane)hit.trackable, hit.pose);
-        m_AnchorManager.anchorPrefab = oldPrefab;
-        TogglePlaneDetection();
-        return anchor;
+        m_PointCloudManager = GetComponent<ARPointCloudManager>();
+        // get and hide game board.
+        m_GameBoard = GameObject.Find("GameBoard");
+        m_GameBoard.SetActive(false);
     }
 
     void Update()
@@ -56,12 +46,18 @@ public class AnchorCreator : MonoBehaviour
             var touch = Input.GetTouch(0);
             if (touch.phase != TouchPhase.Began)
                 return;
+
+            // Raycast against planes and feature points
+            const TrackableType trackableTypes =
+                TrackableType.FeaturePoint |
+                TrackableType.PlaneWithinPolygon;
+
             // Perform the raycast
-            if (m_RaycastManager.Raycast(touch.position, s_Hits, TrackableType.PlaneWithinPolygon))
+            if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
             {
                 // Raycast hits are sorted by distance, so the first one will be the closest hit.
                 var hit = s_Hits[0];
-                var anchor = CreateAnchor(hit);
+                var anchor = ShowGameBoardOnPlane(hit);
                 if (anchor)
                 {
                     // Remember the anchor so we can remove it later.
@@ -76,26 +72,52 @@ public class AnchorCreator : MonoBehaviour
 
     }
 
-    public void TogglePlaneDetection()
+    ARAnchor ShowGameBoardOnPlane(in ARRaycastHit hit)
     {
-        if (m_PlaneManager.enabled is true)
+        ARAnchor anchor;
+        // try to create anchor on plane
+        if (hit.trackable is ARPlane plane)
         {
-            m_PlaneManager.SetTrackablesActive(false);
+            anchor = m_AnchorManager.AttachAnchor(plane, hit.pose);
         }
         else
         {
-            m_PlaneManager.SetTrackablesActive(true);
+            // create gameObject on position
+            var gameObject = Instantiate(new GameObject(), hit.pose.position, hit.pose.rotation);
+            // Make sure the new GameObject has an ARAnchor component
+            anchor = gameObject.GetComponent<ARAnchor>();
+            if(anchor is null)
+            {
+                anchor = gameObject.AddComponent<ARAnchor>();
+            }
         }
-        m_PlaneManager.enabled = !m_PlaneManager.enabled;
+
+        // attach game board on anchor;
+        m_GameBoard.SetActive(true);
+        m_GameBoard.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
+        // turn off plane detection
+        ToggleDetection();
+        return anchor;
     }
 
-    static readonly List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+    public void RemoveAnchor()
+    {
+        if (m_CurrentAnchors)
+        {
+            Destroy(m_CurrentAnchors.gameObject);
+            m_CurrentAnchors = null;
+            m_GameBoard.SetActive(false);
+            ToggleDetection();
+        }
+    }
 
-    ARAnchor m_CurrentAnchors;
+    public void ToggleDetection()
+    {
+        m_PlaneManager.enabled = !m_PlaneManager.enabled;
+        m_PlaneManager.SetTrackablesActive(m_PlaneManager.enabled);
+        m_PointCloudManager.enabled = !m_PointCloudManager.enabled;
+        m_PointCloudManager.SetTrackablesActive(m_PointCloudManager.enabled);
+    }
 
-    ARRaycastManager m_RaycastManager;
 
-    ARAnchorManager m_AnchorManager;
-
-    ARPlaneManager m_PlaneManager;
 }
