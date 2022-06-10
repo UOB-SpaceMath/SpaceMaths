@@ -11,10 +11,10 @@ public class UIManager : MonoBehaviour
     private Button BButton;
     private Button CButton;
     private Button DButton;
-    private GameObject AChoise;
-    private GameObject BChoise;
-    private GameObject CChoise;
-    private GameObject DChoise;
+    private GameObject AChoice;
+    private GameObject BChoice;
+    private GameObject CChoice;
+    private GameObject DChoice;
     public Material MatWhite;
     public Material MatGreen;
     public Material MatRed;
@@ -38,16 +38,16 @@ public class UIManager : MonoBehaviour
         BButton = GameObject.Find("Canvas/BButton").GetComponent<Button>();
         CButton = GameObject.Find("Canvas/CButton").GetComponent<Button>();
         DButton = GameObject.Find("Canvas/DButton").GetComponent<Button>();
-        AChoise = GameObject.Find("ChoiseA");
-        BChoise = GameObject.Find("ChoiseB");
-        CChoise = GameObject.Find("ChoiseC");
-        DChoise = GameObject.Find("ChoiseD");
-        AChoise.transform.GetComponent<Renderer>().material = MatWhite;
-        BChoise.transform.GetComponent<Renderer>().material = MatWhite;
-        CChoise.transform.GetComponent<Renderer>().material = MatWhite;
-        DChoise.transform.GetComponent<Renderer>().material = MatWhite;
+        AChoice = GameObject.Find("ChoiceA");
+        BChoice = GameObject.Find("ChoiceB");
+        CChoice = GameObject.Find("ChoiceC");
+        DChoice = GameObject.Find("ChoiceD");
+        AChoice.transform.GetComponent<Renderer>().material = MatWhite;
+        BChoice.transform.GetComponent<Renderer>().material = MatWhite;
+        CChoice.transform.GetComponent<Renderer>().material = MatWhite;
+        DChoice.transform.GetComponent<Renderer>().material = MatWhite;
         btnList = new List<Button>() { AButton, BButton, CButton, DButton };
-        cubeList = new List<GameObject>() { AChoise, BChoise, CChoise, DChoise };
+        cubeList = new List<GameObject>() { AChoice, BChoice, CChoice, DChoice };
 
         GenerateQuestion();
         for (var i = 0; i < btnList.Count; i++)
