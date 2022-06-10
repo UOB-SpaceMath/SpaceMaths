@@ -61,31 +61,31 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void GenerateQuestion()
     {
-        
 
-         switch (Random.Range(0, 2))
-         {
-             case 1:
+
+        switch (Random.Range(0, 2))
+        {
+            case 1:
                 _numberOne = Random.Range(4, 10);
                 _numberTwo = Random.Range(4, 10);
                 _numberThree = _numberOne * _numberTwo;
                 MultiplicationFunc();
                 GetAnswer(_numberThree);
                 break;
-             default:
+            default:
                 _numberOne = Random.Range(10, 20);
                 _numberTwo = Random.Range(1, 10);
                 _numberThree = _numberOne * _numberTwo;
                 DivisionFunc();
                 GetAnswer(_numberOne);
                 break;
-         }
-        
+        }
+
     }
 
     private void MultiplicationFunc()
@@ -123,7 +123,7 @@ public class UIManager : MonoBehaviour
     {
         int rand;
         T tempValue;
-        for(int i = 0; i < _array.Length; i++)
+        for (int i = 0; i < _array.Length; i++)
         {
             rand = Random.Range(0, _array.Length - i);
             tempValue = _array[rand];
@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
 
     private void GetAnswer(int _result)
     {
-        string numString = string.Format("{0}",_result);
+        string numString = string.Format("{0}", _result);
         for (int i = 0; i < btnList.Count; i++)
         {
             if (btnList[i].transform.Find("Text").GetComponent<Text>().text.Equals(numString))
@@ -143,12 +143,12 @@ public class UIManager : MonoBehaviour
                 break;
             }
         }
-        
+
     }
 
     private IEnumerator OnBtnClick(int index)
-    {   
-        if(index == _trueIndex)
+    {
+        if (index == _trueIndex)
         {
             ShowCorrect(index);
         }
@@ -156,7 +156,7 @@ public class UIManager : MonoBehaviour
         {
             ShowIncorrect(index);
         }
-        
+
         yield return new WaitForSeconds(1);
 
         Reset(index);
