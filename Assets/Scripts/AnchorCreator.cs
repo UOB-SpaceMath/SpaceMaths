@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -23,6 +24,10 @@ public class AnchorCreator : MonoBehaviour
     ARAnchor m_CurrentAnchors;
 
     GameObject m_GameBoard;
+
+    Button m_ClearButton;
+
+
     void Awake()
     {
         m_RaycastManager = GetComponent<ARRaycastManager>();
@@ -32,6 +37,10 @@ public class AnchorCreator : MonoBehaviour
         // get and hide game board.
         m_GameBoard = GameObject.Find("GameBoard");
         m_GameBoard.SetActive(false);
+        // get clear buttom
+        m_ClearButton = GameObject.Find("Canvas/Button").GetComponent<Button>();
+        m_ClearButton.interactable = false;
+
     }
 
     void Update()
@@ -86,7 +95,7 @@ public class AnchorCreator : MonoBehaviour
             var gameObject = Instantiate(new GameObject(), hit.pose.position, hit.pose.rotation);
             // Make sure the new GameObject has an ARAnchor component
             anchor = gameObject.GetComponent<ARAnchor>();
-            if(anchor is null)
+            if (anchor is null)
             {
                 anchor = gameObject.AddComponent<ARAnchor>();
             }
@@ -97,6 +106,9 @@ public class AnchorCreator : MonoBehaviour
         m_GameBoard.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
         // turn off plane detection
         ToggleDetection();
+        // set button 
+        m_ClearButton.interactable = true;
+
         return anchor;
     }
 
@@ -109,6 +121,7 @@ public class AnchorCreator : MonoBehaviour
             m_GameBoard.SetActive(false);
             ToggleDetection();
         }
+        m_ClearButton.interactable = false;
     }
 
     public void ToggleDetection()
