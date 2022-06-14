@@ -11,15 +11,12 @@ public class UIManager : MonoBehaviour
     private Button BButton;
     private Button CButton;
     private Button DButton;
-    private GameObject AChoice;
-    private GameObject BChoice;
-    private GameObject CChoice;
-    private GameObject DChoice;
-    public Material MatWhite;
-    public Material MatGreen;
-    public Material MatRed;
     private List<Button> btnList;
-    private List<GameObject> cubeList;
+    private Color basicColor;
+
+    //Need to change
+    private int[] btnArray;
+
 
     private int _numberOne;
     private int _numberTwo;
@@ -33,21 +30,16 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         //Catch UI, default color is white
-        QuestionText = GameObject.Find("Canvas/QuestionText").GetComponent<Text>();
-        AButton = GameObject.Find("Canvas/AButton").GetComponent<Button>();
-        BButton = GameObject.Find("Canvas/BButton").GetComponent<Button>();
-        CButton = GameObject.Find("Canvas/CButton").GetComponent<Button>();
-        DButton = GameObject.Find("Canvas/DButton").GetComponent<Button>();
-        AChoice = GameObject.Find("ChoiceA");
-        BChoice = GameObject.Find("ChoiceB");
-        CChoice = GameObject.Find("ChoiceC");
-        DChoice = GameObject.Find("ChoiceD");
-        AChoice.transform.GetComponent<Renderer>().material = MatWhite;
-        BChoice.transform.GetComponent<Renderer>().material = MatWhite;
-        CChoice.transform.GetComponent<Renderer>().material = MatWhite;
-        DChoice.transform.GetComponent<Renderer>().material = MatWhite;
+        QuestionText = GameObject.Find("Canvas/SF QuestionText/QText").GetComponent<Text>();
+        AButton = GameObject.Find("Canvas/SF ButtonA").GetComponent<Button>();
+        BButton = GameObject.Find("Canvas/SF ButtonB").GetComponent<Button>();
+        CButton = GameObject.Find("Canvas/SF ButtonC").GetComponent<Button>();
+        DButton = GameObject.Find("Canvas/SF ButtonD").GetComponent<Button>();
+        ColorUtility.TryParseHtmlString("#0772CB", out basicColor);
+
         btnList = new List<Button>() { AButton, BButton, CButton, DButton };
-        cubeList = new List<GameObject>() { AChoice, BChoice, CChoice, DChoice };
+        btnArray = new int[4];
+
 
         GenerateQuestion();
         for (var i = 0; i < btnList.Count; i++)
@@ -66,7 +58,6 @@ public class UIManager : MonoBehaviour
 
     private void GenerateQuestion()
     {
-
 
         switch (Random.Range(0, 2))
         {
@@ -90,13 +81,13 @@ public class UIManager : MonoBehaviour
 
     private void MultiplicationFunc()
     {
-        QuestionText.text = "What is the answer for " + _numberOne.ToString() + " ¡Á " + _numberTwo.ToString() + " ?";
+        QuestionText.text = "What is the answer for " + _numberOne.ToString() + " Ã— " + _numberTwo.ToString() + " ?\n";
         ShowRandomAnswer(_numberThree);
     }
 
     private void DivisionFunc()
     {
-        QuestionText.text = "What is the answer for " + _numberThree.ToString() + " ¡Â " + _numberTwo.ToString() + " ?";
+        QuestionText.text = "What is the answer for " + _numberThree.ToString() + " Ã· " + _numberTwo.ToString() + " ?\n";
         ShowRandomAnswer(_numberOne);
     }
 
@@ -110,13 +101,12 @@ public class UIManager : MonoBehaviour
         {
             ResultSet.Add(_result + Random.Range(-4, 5));
         }
-        int[] array = new int[4];
-        ResultSet.CopyTo(array);
-        ShuffleFunc<int>(array);
-        AButton.transform.Find("Text").GetComponent<Text>().text = (array[0]).ToString();
-        BButton.transform.Find("Text").GetComponent<Text>().text = (array[1]).ToString();
-        CButton.transform.Find("Text").GetComponent<Text>().text = (array[2]).ToString();
-        DButton.transform.Find("Text").GetComponent<Text>().text = (array[3]).ToString();
+        ResultSet.CopyTo(btnArray);
+        ShuffleFunc<int>(btnArray);
+
+        //Need to check
+        QuestionText.text += "A." + btnArray[0].ToString() + "\n" + "B." + btnArray[1].ToString() + "\n" + "C." + btnArray[2].ToString() + "\n" + "D." + btnArray[3].ToString();
+
     }
 
     private void ShuffleFunc<T>(T[] _array)
@@ -134,10 +124,10 @@ public class UIManager : MonoBehaviour
 
     private void GetAnswer(int _result)
     {
-        string numString = string.Format("{0}", _result);
+
         for (int i = 0; i < btnList.Count; i++)
         {
-            if (btnList[i].transform.Find("Text").GetComponent<Text>().text.Equals(numString))
+            if (btnArray[i].Equals(_result))
             {
                 _trueIndex = i;
                 break;
@@ -157,28 +147,41 @@ public class UIManager : MonoBehaviour
             ShowIncorrect(index);
         }
 
+        ControlButton(false);
         yield return new WaitForSeconds(1);
 
-        Reset(index);
+        //Need to check this when merge the gameManager
+        ResetButton(index);
 
         GenerateQuestion();
     }
 
     private void ShowCorrect(int index)
     {
-        btnList[index].GetComponent<Image>().color = Color.green;
-        cubeList[index].GetComponent<MeshRenderer>().material = MatGreen;
+        btnList[index].transform.Find("Background").GetComponent<Image>().color = Color.green;
+        btnList[index].transform.Find("Background/Label").GetComponent<Text>().color = Color.green;
+
     }
 
     private void ShowIncorrect(int index)
     {
-        btnList[index].GetComponent<Image>().color = Color.red;
-        cubeList[index].GetComponent<MeshRenderer>().material = MatRed;
+        btnList[index].transform.Find("Background").GetComponent<Image>().color = Color.red;
+        btnList[index].transform.Find("Background/Label").GetComponent<Text>().color = Color.red;
+
     }
 
-    private void Reset(int index)
+    private void ControlButton(bool buttonStatus)
     {
-        btnList[index].GetComponent<Image>().color = Color.white;
-        cubeList[index].GetComponent<MeshRenderer>().material = MatWhite;
+        for (var i = 0; i < btnList.Count; i++)
+        {
+            btnList[i].GetComponent<Button>().interactable = buttonStatus;
+        }
+    }
+
+    private void ResetButton(int index)
+    {
+        btnList[index].transform.Find("Background").GetComponent<Image>().color = basicColor;
+        btnList[index].transform.Find("Background/Label").GetComponent<Text>().color = Color.white;
+        ControlButton(true);
     }
 }
