@@ -16,9 +16,10 @@ public class Mover : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        PrintInstructions();
+    {        
         LockedDirections = new HashSet<char>();
+        var bounds = collisionTileMap.cellBounds;
+        Debug.Log(bounds);
         //tileLook();
     }
 
@@ -27,12 +28,7 @@ public class Mover : MonoBehaviour
     {
         //MovePlayer();        
     }
-
-    void PrintInstructions()
-    {
-        //Debug.Log("Welcome to the game");
-        //Debug.Log("Move your player with WASD or arrow keys\n Don't hit the walls!");
-    }
+    
 
     //void MovePlayer()
     //{
@@ -53,49 +49,9 @@ public class Mover : MonoBehaviour
     //    //}
     //}
 
-    public void MoveLeft()
-    {
-        if (!LockedDirections.Contains('l'))
-        {
-            transform.Translate(-0.1f, 0.0f, 0.0f);
-            currentDirection = 'l';
-            LockedDirections.Remove('r');
-        }
-    }
-
-    public void MoveRight()
-    {
-        if (!LockedDirections.Contains('r'))
-        {
-            transform.Translate(0.1f, 0.0f, 0.0f);
-            currentDirection = 'r';
-            LockedDirections.Remove('l');
-        }
-    }
-
-    public void MoveUp()
-    {
-        if (!LockedDirections.Contains('u'))
-        {
-            transform.Translate(0f, 0f, 0.1f);
-            currentDirection = 'u';
-            LockedDirections.Remove('d');
-        }
-    }
-
-    public void MoveDown()
-    {
-        if (!LockedDirections.Contains('d'))
-        {
-            transform.Translate(0f, 0f, -0.1f);
-            currentDirection = 'd';
-            LockedDirections.Remove('u');
-        }
-    }
-
     //public void MoveLeft()
     //{
-    //    if (checkMove(new Vector3(-1f, -1.5f, 0.0f)))
+    //    if (!LockedDirections.Contains('l'))
     //    {
     //        transform.Translate(-0.1f, 0.0f, 0.0f);
     //        currentDirection = 'l';
@@ -133,14 +89,42 @@ public class Mover : MonoBehaviour
     //    }
     //}
 
-    //bool isOnGround(float xVal, float zVal)
-    //{
-    //    if ((xVal >= 0 && xVal <= 5) && (zVal >= 0 && zVal <= 5))
-    //    {
-    //        return true;
-    //    }
-    //    return false;
-    //}
+    public void MoveLeft()
+    {       
+        if (checkMove(new Vector3 (-1f, 0f, 0.0f)))
+        {
+            transform.position = transform.position + new Vector3(-1f, 0f, 0.0f);
+        }
+    }
+
+    public void MoveRight()
+    {
+            
+        if (checkMove(new Vector3(1f, 0f, 0.0f)))
+        {
+            transform.position = transform.position + new Vector3(1f, 0f, 0.0f);
+        }
+    }
+
+    public void MoveUp()
+    {        
+            
+        if (checkMove(new Vector3(0f, 0f, 1f)))
+        {
+            transform.position = transform.position + new Vector3(0f, 0f, 1f);
+        }
+
+    }
+
+    public void MoveDown()
+    {       
+            
+        if (checkMove(new Vector3(0f, 0f, -1f)))
+        {
+            transform.position = transform.position + new Vector3(0f, 0f, -1f);
+        }
+    }
+   
 
     private void OnTriggerEnter(Collider other)
     {
@@ -152,13 +136,13 @@ public class Mover : MonoBehaviour
 
     private bool checkMove(Vector3 direction)
     {
-        Vector3Int gridPosition = groundTileMap.WorldToCell(transform.localPosition + direction);
+        Vector3Int gridPosition = collisionTileMap.WorldToCell(transform.position + direction);
 
-        if (!groundTileMap.HasTile(gridPosition))
-        {
-            Debug.Log("No ground tile");
-            return false;
-        }
+        //if (!groundTileMap.HasTile(gridPosition))
+        //{
+        //    Debug.Log("No ground tile");
+        //    return false;
+        //}
         if (collisionTileMap.HasTile(gridPosition))
         {
             Debug.Log("Col");
@@ -167,6 +151,7 @@ public class Mover : MonoBehaviour
         return true;
 
     }
+    
 
     //private void tileCheck()
     //{
@@ -190,8 +175,8 @@ public class Mover : MonoBehaviour
     //    }
     //}
 
-    private void tileLook()
-    {
+    //private void tileLook()
+    //{
         //tileWorldLocations = new List<Vector3>();
 
         //foreach (var pos in groundTileMap.cellBounds.allPositionsWithin)
@@ -211,6 +196,6 @@ public class Mover : MonoBehaviour
         //Debug.Log(tileWorldLocations);
 
 
-    }
+    //}
 
 }
