@@ -80,6 +80,12 @@ public class GameBoardManager : MonoBehaviour
             return false;
     }
 
+    bool MoveShip(Ships ship,int x,int y)
+    {
+        _cells[ship.position.x, ship.position.y] = CellType.Empty;
+        return SetShip(ship, x, y);
+    }
+
     Vector3 GetPosision(int x, int y)
     {
         return new Vector3(x + _tileBias.x + _PLAYER_BIAS.x, _height, -(y + _tileBias.y + _PLAYER_BIAS.y));
