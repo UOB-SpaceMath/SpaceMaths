@@ -20,8 +20,8 @@ public class GameBoardManager : MonoBehaviour
         get => _enermyShips;
     }
 
-    enum CellType { Ship, Wall, Empty };
-    CellType[,] _cells;
+    public enum CellType { Ship, Wall, Empty };
+    public CellType[,] _cells;
     static readonly Vector3 _PLAYER_BIAS = new Vector3(0.5f, 0.5f, 0);
     Vector3Int _tileBias;
 
@@ -32,7 +32,7 @@ public class GameBoardManager : MonoBehaviour
         SetupShip();
     }
 
-    void GetWallInfo()
+   public void GetWallInfo()
     {
         // get map info
         var obstacleMap = transform.Find("Grid/Obstacle Tilemap").GetComponent<Tilemap>();
@@ -51,6 +51,7 @@ public class GameBoardManager : MonoBehaviour
             }
         }
     }
+    
 
     void SetupShip()
     {
