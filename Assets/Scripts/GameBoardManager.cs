@@ -21,10 +21,10 @@ public class GameBoardManager : MonoBehaviour
     // the enemies' ships
     [NonReorderable]
     [SerializeField]
-    Ships[] _enermyShips;
-    public Ships[] EnermyShips
+    Ships[] _enemyShips;
+    public Ships[] EnemyShips
     {
-        get => _enermyShips;
+        get => _enemyShips;
     }
 
     // different types of cell
@@ -69,11 +69,11 @@ public class GameBoardManager : MonoBehaviour
     {
         bool isSetup = true;
         // set player ship
-        isSetup = isSetup && SetShip(_playerShip, _playerShip.position.x, _playerShip.position.y);
+        isSetup = isSetup && SetShip(_playerShip, _playerShip.cellIndex.x, _playerShip.cellIndex.y);
         // set enemy ship
-        foreach (Ships ship in _enermyShips)
+        foreach (Ships ship in _enemyShips)
         {
-            isSetup = isSetup && SetShip(ship, ship.position.x, ship.position.y);
+            isSetup = isSetup && SetShip(ship, ship.cellIndex.x, ship.cellIndex.y);
         }
         if (!isSetup)
             throw new System.Exception("Fail to setup ship: the cell is not empty.");
@@ -86,8 +86,8 @@ public class GameBoardManager : MonoBehaviour
         if (IsEmpty(x, y))
         {
             ship.shipObject.transform.localPosition = GetPosision(x, y);
-            ship.position.x = x;
-            ship.position.y = y;
+            ship.cellIndex.x = x;
+            ship.cellIndex.y = y;
             _cells[x, y] = CellType.Ship;
             return true;
         }
@@ -97,7 +97,7 @@ public class GameBoardManager : MonoBehaviour
 
     bool MoveShip(Ships ship, int x, int y)
     {
-        _cells[ship.position.x, ship.position.y] = CellType.Empty;
+        _cells[ship.cellIndex.x, ship.cellIndex.y] = CellType.Empty;
         return SetShip(ship, x, y);
     }
 
@@ -108,7 +108,7 @@ public class GameBoardManager : MonoBehaviour
 
     Vector2Int GetPlayerIndex()
     {
-        return _playerShip.position;
+        return _playerShip.cellIndex;
     }
 
     bool IsEmpty(int x, int y)
@@ -117,9 +117,10 @@ public class GameBoardManager : MonoBehaviour
     }
 }
 
+// class for player and enemy 
 [System.Serializable]
 public class Ships
 {
     public GameObject shipObject;
-    public Vector2Int position;
+    public Vector2Int cellIndex;
 }
