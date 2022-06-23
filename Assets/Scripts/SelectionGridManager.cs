@@ -17,8 +17,6 @@ public class SelectionGridManager : MonoBehaviour
 
     // Start is called before the first frame update
 
-
-
     void OnEnable()
     {
         var gameBoardManager = gameBoard.GetComponent<GameBoardManager>();
