@@ -10,6 +10,10 @@ public class GameBoardManager : MonoBehaviour
     [SerializeField]
     Tilemap _obstacleMap;
 
+    // bias to make ship in the middle of cell rather than corner.
+    [SerializeField]
+    Vector2 _playerBias;
+
     // the player's ship
     [SerializeField]
     Ships _playerShip;
@@ -32,9 +36,12 @@ public class GameBoardManager : MonoBehaviour
 
     // the whole map information
     CellType[,] _cells; // the whole map info
+    public CellType[,] Cells
+    {
+        get => _cells;
+    }
 
-    // the bias of a ship's position compare to the cells' position
-    static readonly Vector3 _PLAYER_BIAS = new Vector3(0.5f, 0.5f, 0);
+
     Vector3Int _tileBias;
 
     // Start is called before the first frame update
@@ -63,6 +70,7 @@ public class GameBoardManager : MonoBehaviour
             }
         }
     }
+
 
     // place ships to specific cells
     void SetupShip()
@@ -103,7 +111,7 @@ public class GameBoardManager : MonoBehaviour
 
     Vector3 GetPosision(int x, int y)
     {
-        return new Vector3(x + _tileBias.x + _PLAYER_BIAS.x, _height, -(y + _tileBias.y + _PLAYER_BIAS.y));
+        return new Vector3(x + _tileBias.x + _playerBias.x, _height, -(y + _tileBias.y + _playerBias.y));
     }
 
     Vector2Int GetPlayerIndex()
