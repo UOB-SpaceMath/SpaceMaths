@@ -36,16 +36,11 @@ public class GameBoardManager : MonoBehaviour
 
     // the whole map information
     CellType[,] _cells; // the whole map info
-    public CellType[,] Cells
-    {
-        get => _cells;
-    }
 
 
     Vector3Int _tileBias;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         GetWallInfo();
         SetupShip();
@@ -70,7 +65,7 @@ public class GameBoardManager : MonoBehaviour
             }
         }
     }
-    
+
 
 
     // place ships to specific cells
@@ -123,6 +118,26 @@ public class GameBoardManager : MonoBehaviour
     bool IsEmpty(int x, int y)
     {
         return _cells[x, y] == CellType.Empty;
+    }
+
+    public CellType getCellType(int x, int y)
+    {
+        if (isOutOfBound(x, y))
+        {
+            return CellType.Wall;
+        }
+
+        return _cells[x, y];
+    }
+
+    bool isOutOfBound(int x, int y)
+    {
+        if (x < 0 || x >= _cells.GetLength(0) ||
+            y < 0 || y >= _cells.GetLength(1))
+        {
+            return true;
+        }
+        return false;
     }
 }
 
