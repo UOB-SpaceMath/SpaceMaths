@@ -46,6 +46,16 @@ public class GameBoardManager : MonoBehaviour
         SetupShip();
     }
 
+    private void InstantiateShip()
+    {
+        var gridTransform = _obstacleMap.GetComponentInParent<Grid>().transform;
+        _playerShip.shipObject = Instantiate(_playerShip.shipObject, gridTransform);
+        foreach (var ship in _enemyShips)
+        {
+            ship.shipObject = Instantiate(ship.shipObject, gridTransform);
+        }
+    }
+
     // scan the whole map
     void GetWallInfo()
     {
@@ -71,6 +81,7 @@ public class GameBoardManager : MonoBehaviour
     // place ships to specific cells
     void SetupShip()
     {
+        InstantiateShip();
         bool isSetup = true;
         // set player ship
         isSetup = isSetup && SetShip(_playerShip, _playerShip.cellIndex.x, _playerShip.cellIndex.y);
@@ -99,18 +110,19 @@ public class GameBoardManager : MonoBehaviour
             return false;
     }
 
-    bool MoveShip(Ships ship, int x, int y)
+    public bool MoveShip(Ships ship, int x, int y)
     {
         _cells[ship.cellIndex.x, ship.cellIndex.y] = CellType.Empty;
         return SetShip(ship, x, y);
     }
 
+    // return the local position of a grid cell by it's index.
     Vector3 GetPosision(int x, int y)
     {
-        return new Vector3(x + _tileBias.x + _playerBias.x, _height, -(y + _tileBias.y + _playerBias.y));
+        return new Vector3(x + _tileBias.x + _playerBias.x, _height, y + _tileBias.y + _playerBias.y);
     }
 
-    Vector2Int GetPlayerIndex()
+    public Vector2Int GetPlayerIndex()
     {
         return _playerShip.cellIndex;
     }

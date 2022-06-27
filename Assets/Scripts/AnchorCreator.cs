@@ -45,7 +45,7 @@ public class AnchorCreator : MonoBehaviour
 
 
         // get clear buttom
-        m_ClearButton = GameObject.Find("AR Canvas/Button").GetComponent<Button>();
+        m_ClearButton = GameObject.Find("Screen Canvas/Button").GetComponent<Button>();
         m_ClearButton.interactable = false;
 
     }

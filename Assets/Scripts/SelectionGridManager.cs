@@ -51,7 +51,7 @@ public class SelectionGridManager : MonoBehaviour
         _gameBoardManager = _gameBoard.GetComponent<GameBoardManager>();
         _selectionCells = new ActionType[5, 5];
         // find all buttons
-        var buttonsGroup = _gameBoard.GetComponentInChildren<GridLayoutGroup>();
+        var buttonsGroup = GetComponentInChildren<GridLayoutGroup>();
         var buttonsCount = buttonsGroup.transform.childCount;
         _buttons = new GameObject[buttonsCount];
         for (int i = 0; i < _buttons.Length; i++)
@@ -81,7 +81,7 @@ public class SelectionGridManager : MonoBehaviour
         {
             for (int selectY = 0; selectY < 5; selectY++)
             {
-                var wholeVec = GetWholeIndexFromSelectionIndex(selectX, selectY);
+                var wholeVec = GetSelectionIndexFromWhole(selectX, selectY);
                 _selectionCells[selectX, selectY] = _gameBoardManager.getCellType(wholeVec.x, wholeVec.y) switch
                 {
                     GameBoardManager.CellType.Empty => ActionType.Move,
@@ -186,17 +186,28 @@ public class SelectionGridManager : MonoBehaviour
 
     }
 
-    // convert the index of selection cells into the whole cells index
-    Vector2Int GetWholeIndexFromSelectionIndex(int x, int y)
+    // convert the index of whole cells grid into the selection cells index
+    Vector2Int GetSelectionIndexFromWhole(int wholeX, int wholeY)
     {
-        return new Vector2Int(_gameBoardManager.PlayerShips.cellIndex.x + 2 - y,
-            _gameBoardManager.PlayerShips.cellIndex.y - 2 + x);
+        var origin = new Vector2Int(
+            _gameBoardManager.PlayerShips.cellIndex.x + 2,
+            _gameBoardManager.PlayerShips.cellIndex.y + 2);
+        return new Vector2Int(origin.x - wholeY, origin.y - wholeX);
     }
 
-    void ClickAction(Vector2Int targetIndex, ActionType type)
+    Vector2Int GetWholeIndexFromSelection(int selectionX, int selectionY)
     {
-        var output = new SelectionOutput(targetIndex, type);
-        Debug.Log(targetIndex);
+        var origin = new Vector2Int(
+            _gameBoardManager.PlayerShips.cellIndex.x + 2,
+            _gameBoardManager.PlayerShips.cellIndex.y + 2);
+        return new Vector2Int(origin.y - selectionY, origin.x - selectionX);
+    }
+
+    void ClickAction(Vector2Int selectionIndex, ActionType type)
+    {
+
+        var output = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
+        Debug.Log(output.TargetIndex);
         // todo 
         // send output to manager
     }
