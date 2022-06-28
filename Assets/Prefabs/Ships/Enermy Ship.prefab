@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 1404202885270876640}
   - component: {fileID: 2653570712067456581}
   - component: {fileID: 231820796270070415}
+  - component: {fileID: 6592168169966711215}
   m_Layer: 0
   m_Name: Enermy Ship
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,3 +86,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6592168169966711215
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744981823002667866}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17350283, y: 0.081952915, z: 0.030654786}
+  m_Center: {x: -0.016086299, y: 0, z: 0.0045507085}

@@ -14,6 +14,10 @@ public class UIManager : MonoBehaviour
     private List<Button> btnList;
     private Color basicColor;
 
+    // Record the state of answer.
+    public enum AnswerStates { Suspension, Right, Wrong };
+    private AnswerStates answerState;
+
     //Need to change
     private int[] btnArray;
 
@@ -29,6 +33,8 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        answerState = AnswerStates.Suspension;
+
         //Catch UI, default color is white
         QuestionText = GameObject.Find("Canvas/SF QuestionText/QText").GetComponent<Text>();
         AButton = GameObject.Find("Canvas/SF ButtonA").GetComponent<Button>();
@@ -54,6 +60,16 @@ public class UIManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void SetAnswerState(AnswerStates s)
+    {
+        answerState = s;
+    }
+
+    public AnswerStates GetAnswerState()
+    {
+        return answerState;
     }
 
     private void GenerateQuestion()
@@ -160,14 +176,14 @@ public class UIManager : MonoBehaviour
     {
         btnList[index].transform.Find("Background").GetComponent<Image>().color = Color.green;
         btnList[index].transform.Find("Background/Label").GetComponent<Text>().color = Color.green;
-
+        SetAnswerState(AnswerStates.Right);
     }
 
     private void ShowIncorrect(int index)
     {
         btnList[index].transform.Find("Background").GetComponent<Image>().color = Color.red;
         btnList[index].transform.Find("Background/Label").GetComponent<Text>().color = Color.red;
-
+        SetAnswerState(AnswerStates.Wrong);
     }
 
     private void ControlButton(bool buttonStatus)
