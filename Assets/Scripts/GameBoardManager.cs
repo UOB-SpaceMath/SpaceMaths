@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 public class GameBoardManager : MonoBehaviour
 {
     // The height of ship according to the game board.
@@ -25,8 +26,16 @@ public class GameBoardManager : MonoBehaviour
     // the enemies' ships
     [NonReorderable]
     [SerializeField]
-    Ships[] _enemyShips;
-    public Ships[] EnemyShips
+
+    List<Ships> _enemyShips;
+
+    // public Ships[] EnemyShips
+    // {
+    //     get => _enemyShips;
+    // }
+
+
+    public List<Ships> EnemyShips
     {
         get => _enemyShips;
     }
@@ -100,7 +109,7 @@ public class GameBoardManager : MonoBehaviour
     {
         if (IsEmpty(x, y))
         {
-            ship.shipObject.transform.localPosition = GetPosision(x, y);
+            ship.shipObject.transform.localPosition = GetPosition(x, y);
             ship.cellIndex.x = x;
             ship.cellIndex.y = y;
             _cells[x, y] = CellType.Ship;
@@ -117,7 +126,7 @@ public class GameBoardManager : MonoBehaviour
     }
 
     // return the local position of a grid cell by it's index.
-    Vector3 GetPosision(int x, int y)
+    Vector3 GetPosition(int x, int y)
     {
         return new Vector3(x + _tileBias.x + _playerBias.x, _height, y + _tileBias.y + _playerBias.y);
     }
@@ -151,7 +160,43 @@ public class GameBoardManager : MonoBehaviour
         }
         return false;
     }
+
+
+    public void removeTargetShip(Ships currentShip)
+    {
+        GameObject _currentShipObject = currentShip.shipObject;
+        Vector2Int _currentCellIndex = currentShip.cellIndex;
+        int targetPosX = _currentCellIndex.x;
+        int targetPosY = _currentCellIndex.y;
+
+        // if the ship is the playership
+        if (_currentCellIndex == _playerShip.cellIndex)
+        {
+            disablePlayerOnGameBoard();
+            _cells[targetPosX, targetPosY] = CellType.Empty;
+        }
+        else
+        {
+            for (int i = 0; i < _enemyShips.Count; i++)
+            {
+                if (_enemyShips[i].cellIndex.Equals(_currentCellIndex))
+                {
+                    _enemyShips.Remove(currentShip);
+                    _cells[targetPosX, targetPosY] = CellType.Empty;
+                }
+            }
+        }
+    }
+
+    void disablePlayerOnGameBoard()
+    {
+        _playerShip.shipObject.SetActive(false);
+    }
+
+
 }
+
+
 
 // class for player and enemy 
 [System.Serializable]
