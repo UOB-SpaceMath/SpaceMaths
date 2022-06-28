@@ -1,111 +1,83 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Ships : MonoBehaviour
+
+namespace SpaceMath
 {
-    [SerializeField]
-    GameObject _gameBoard;
-    public GameObject shipObject;
-    public Vector2Int cellIndex;
-    private int energyPoints;
-    private int healthPoints;
-    private bool shieldsOn;
-    GameBoardManager _gameBoardManager;
-
-    public int HealthPoints
+    [System.Serializable]
+    public class Ships
     {
-        get => healthPoints;
-    }
+        [SerializeField]
+        GameObject _shipObject;
+        [SerializeField]
+        public Vector2Int _cellIndex;
+        GameBoardManager _gameBoardManager;
 
-    public int EnergyPoints
-    {
-        get => energyPoints;
-    }
+        private int _energy;
+        private int _health;
+        private bool _isShieldsOn;
 
-    public bool isShieldsOn
-    {
-        get => shieldsOn;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        _gameBoardManager = _gameBoard.GetComponent<GameBoardManager>();
-        energyPoints = 100;
-        healthPoints = 100;
-        shieldsOn = false;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
+        public int Health { get => _health; }
 
-    }
+        public int Energy { get => _energy; }
 
-    public void decreaseHealth()
-    {
-        healthPoints = healthPoints - 10;
-        if (isShipDead())
+        public bool SheildEnabled { get => _isShieldsOn; }
+        public Vector2Int CellIndex { get => _cellIndex; set => _cellIndex = value; }
+        public GameObject ShipObject { get => _shipObject; set => _shipObject = value; }
+        public GameBoardManager GameBoardManager { get => _gameBoardManager; set => _gameBoardManager = value; }
+
+        public void DecreaseHealth(int amount)
         {
-            _gameBoardManager.removeTargetShip(this);
-            resetPlayerAfterDeath();
+            _health -= amount;
+            if (IsShipDead())
+            {
+                _gameBoardManager.RemoveTargetShip(this);
+            }
         }
-    }
 
-    public void increaseHealth()
-    {
-        healthPoints = healthPoints + 10;
-    }
-
-    public bool isShipDead()
-    {
-        if (healthPoints < 0)
+        public void IncreaseHealth(int amount)
         {
-            return true;
+            _health += amount;
         }
-        else
+
+        public bool IsShipDead()
         {
-            return false;
+            if (_health < 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-    }
 
-    public void decreaseEnergy()
-    {
-        energyPoints = energyPoints - 10;
-
-        if (isShipOutOfEnergy())
+        public void DecreaseEnergy(int amount)
         {
-            //TO-DO: interact with gameboard manager
+            _energy -= amount;
         }
-    }
 
-    public bool isShipOutOfEnergy()
-    {
-        if (energyPoints < 0)
+        public bool IsShipOutOfEnergy()
         {
-            return true;
+            if (_energy < 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        else
+
+        public void IncreaseEnergy(int amount)
         {
-            return false;
+            _energy += amount;
         }
-    }
 
-    public void increaseEnergy()
-    {
-        energyPoints = energyPoints + 10;
-    }
-
-
-    private void resetPlayerAfterDeath()
-    {
-        energyPoints = 100;
-        healthPoints = 100;
-        shieldsOn = false;
-    }
-
-    private void toggleShields()
-    {
-        shieldsOn = !shieldsOn;
+        public void ToggleShields()
+        {
+            _isShieldsOn = !_isShieldsOn;
+        }
     }
 }
+

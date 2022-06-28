@@ -1,6 +1,7 @@
+using SpaceMath;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Collections.Generic;
 public class GameBoardManager : MonoBehaviour
 {
     // The height of ship according to the game board.
@@ -26,7 +27,6 @@ public class GameBoardManager : MonoBehaviour
     // the enemies' ships
     [NonReorderable]
     [SerializeField]
-
     List<Ships> _enemyShips;
 
     // public Ships[] EnemyShips
@@ -58,10 +58,11 @@ public class GameBoardManager : MonoBehaviour
     private void InstantiateShip()
     {
         var gridTransform = _obstacleMap.GetComponentInParent<Grid>().transform;
-        _playerShip.shipObject = Instantiate(_playerShip.shipObject, gridTransform);
+        _playerShip.ShipObject = Instantiate(_playerShip.ShipObject, gridTransform);
+        _playerShip.GameBoardManager = this;
         foreach (var ship in _enemyShips)
         {
-            ship.shipObject = Instantiate(ship.shipObject, gridTransform);
+            ship.ShipObject = Instantiate(ship.ShipObject, gridTransform);
         }
     }
 
@@ -93,11 +94,11 @@ public class GameBoardManager : MonoBehaviour
         InstantiateShip();
         bool isSetup = true;
         // set player ship
-        isSetup = isSetup && SetShip(_playerShip, _playerShip.cellIndex.x, _playerShip.cellIndex.y);
+        isSetup = isSetup && SetShip(_playerShip, _playerShip.CellIndex.x, _playerShip.CellIndex.y);
         // set enemy ship
         foreach (Ships ship in _enemyShips)
         {
-            isSetup = isSetup && SetShip(ship, ship.cellIndex.x, ship.cellIndex.y);
+            isSetup = isSetup && SetShip(ship, ship.CellIndex.x, ship.CellIndex.y);
         }
         if (!isSetup)
             throw new System.Exception("Fail to setup ship: the cell is not empty.");
@@ -109,9 +110,8 @@ public class GameBoardManager : MonoBehaviour
     {
         if (IsEmpty(x, y))
         {
-            ship.shipObject.transform.localPosition = GetPosition(x, y);
-            ship.cellIndex.x = x;
-            ship.cellIndex.y = y;
+            ship.ShipObject.transform.localPosition = GetPosition(x, y);
+            ship.CellIndex = new Vector2Int(x, y);
             _cells[x, y] = CellType.Ship;
             return true;
         }
@@ -121,7 +121,7 @@ public class GameBoardManager : MonoBehaviour
 
     public bool MoveShip(Ships ship, int x, int y)
     {
-        _cells[ship.cellIndex.x, ship.cellIndex.y] = CellType.Empty;
+        _cells[ship.CellIndex.x, ship.CellIndex.y] = CellType.Empty;
         return SetShip(ship, x, y);
     }
 
@@ -133,7 +133,7 @@ public class GameBoardManager : MonoBehaviour
 
     public Vector2Int GetPlayerIndex()
     {
-        return _playerShip.cellIndex;
+        return _playerShip.CellIndex;
     }
 
     bool IsEmpty(int x, int y)
@@ -141,9 +141,9 @@ public class GameBoardManager : MonoBehaviour
         return _cells[x, y] == CellType.Empty;
     }
 
-    public CellType getCellType(int x, int y)
+    public CellType GetCellType(int x, int y)
     {
-        if (isOutOfBound(x, y))
+        if (IsOutOfBound(x, y))
         {
             return CellType.Wall;
         }
@@ -151,7 +151,7 @@ public class GameBoardManager : MonoBehaviour
         return _cells[x, y];
     }
 
-    bool isOutOfBound(int x, int y)
+    bool IsOutOfBound(int x, int y)
     {
         if (x < 0 || x >= _cells.GetLength(0) ||
             y < 0 || y >= _cells.GetLength(1))
@@ -162,46 +162,18 @@ public class GameBoardManager : MonoBehaviour
     }
 
 
-    public void removeTargetShip(Ships currentShip)
+    public void RemoveTargetShip(Ships currentShip)
     {
-        GameObject _currentShipObject = currentShip.shipObject;
-        Vector2Int _currentCellIndex = currentShip.cellIndex;
+        Vector2Int _currentCellIndex = currentShip.CellIndex;
         int targetPosX = _currentCellIndex.x;
         int targetPosY = _currentCellIndex.y;
 
-        // if the ship is the playership
-        if (_currentCellIndex == _playerShip.cellIndex)
+        // if the ship is not the playership
+        if (_currentCellIndex != _playerShip.CellIndex)
         {
-            disablePlayerOnGameBoard();
-            _cells[targetPosX, targetPosY] = CellType.Empty;
+            _enemyShips.Remove(currentShip);
         }
-        else
-        {
-            for (int i = 0; i < _enemyShips.Count; i++)
-            {
-                if (_enemyShips[i].cellIndex.Equals(_currentCellIndex))
-                {
-                    _enemyShips.Remove(currentShip);
-                    _cells[targetPosX, targetPosY] = CellType.Empty;
-                }
-            }
-        }
+        _cells[targetPosX, targetPosY] = CellType.Empty;
+        currentShip.ShipObject.SetActive(false);
     }
-
-    void disablePlayerOnGameBoard()
-    {
-        _playerShip.shipObject.SetActive(false);
-    }
-
-
-}
-
-
-
-// class for player and enemy 
-[System.Serializable]
-public class Ships
-{
-    public GameObject shipObject;
-    public Vector2Int cellIndex;
 }
