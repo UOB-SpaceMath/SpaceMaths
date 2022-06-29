@@ -4,48 +4,33 @@ using UnityEngine.UI;
 public class SelectionGridManager : MonoBehaviour
 {
     // game board to use
-    [SerializeField]
-    GameObject _gameBoard;
+    [SerializeField] GameObject _gameBoard;
 
     // color of wall cell
-    [SerializeField]
-    Color _wallColor;
+    [SerializeField] Color _wallColor;
 
     // color of empty cell
-    [SerializeField]
-    Color _emptyColor;
+    [SerializeField] Color _emptyColor;
 
     // color of player icon
-    [SerializeField]
-    Color _playerIconColor;
+    [SerializeField] Color _playerIconColor;
 
     // color of empty cell
-    [SerializeField]
-    Color _enemyIconColor;
+    [SerializeField] Color _enemyIconColor;
 
-    [SerializeField]
-    GameObject _playerIcon;
+    [SerializeField] GameObject _playerIcon;
 
-    [SerializeField]
-    GameObject _enemyIcon;
+    [SerializeField] GameObject _enemyIcon;
 
-    // player current index
-    Vector2Int playerIndex;
-
-    // 5x5 selection cells
+    // 5x5 selection cells    
     ActionType[,] _selectionCells;
 
     GameBoardManager _gameBoardManager;
 
     GameObject[] _buttons;
 
+    SelectionOutput output;
 
-    // Start is called before the first frame update
-
-    void OnEnable()
-    {
-
-    }
     void Start()
     {
         _gameBoardManager = _gameBoard.GetComponent<GameBoardManager>();
@@ -61,10 +46,13 @@ public class SelectionGridManager : MonoBehaviour
         UpdateSelectionUI();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Returns what player should do to selected cell
+    public ActionType GetActionResult(Vector2Int selectedCell)
     {
+        int y = selectedCell.y;
+        int x = selectedCell.x;
 
+        return _selectionCells[x,y];
     }
 
     void UpdateSelectionUI()
@@ -76,13 +64,13 @@ public class SelectionGridManager : MonoBehaviour
 
     void UpdateSelectionCells()
     {
-        // TODO: retrieve actual player position to determine 5x5 squares around player; at the moment player.position returns cell position
+        // retrieve actual player position to determine 5x5 squares around player; at the moment player.position returns cell position
         for (int selectX = 0; selectX < 5; selectX++)
         {
             for (int selectY = 0; selectY < 5; selectY++)
             {
                 var wholeVec = GetSelectionIndexFromWhole(selectX, selectY);
-                _selectionCells[selectX, selectY] = _gameBoardManager.getCellType(wholeVec.x, wholeVec.y) switch
+                _selectionCells[selectX, selectY] = _gameBoardManager.GetCellType(wholeVec.x, wholeVec.y) switch
                 {
                     GameBoardManager.CellType.Empty => ActionType.Move,
                     GameBoardManager.CellType.Ship => ActionType.Attack,
@@ -161,8 +149,8 @@ public class SelectionGridManager : MonoBehaviour
     void SetButtonIcon(Image iconImage, GameObject imagePrefab, Color color)
     {
         iconImage.enabled = true;
-        iconImage.sprite = _enemyIcon.GetComponent<SpriteRenderer>().sprite;
-        iconImage.color = _enemyIconColor;
+        iconImage.sprite = imagePrefab.GetComponent<SpriteRenderer>().sprite;
+        iconImage.color = color;
     }
 
     void SetPlayerButton(GameObject button)
@@ -170,10 +158,8 @@ public class SelectionGridManager : MonoBehaviour
         var images = button.GetComponentsInChildren<Image>();
         var buttonImage = images[0];
         var iconImage = images[1];
-        buttonImage.color = _emptyColor;
-        iconImage.sprite = _playerIcon.GetComponent<SpriteRenderer>().sprite;
-        iconImage.color = _playerIconColor;
-        iconImage.enabled = true;
+        SetButtonColor(buttonImage, _emptyColor);
+        SetButtonIcon(iconImage, _playerIcon, _playerIconColor);
     }
 
     void SetButtonInvisible(GameObject button)
@@ -190,26 +176,36 @@ public class SelectionGridManager : MonoBehaviour
     Vector2Int GetSelectionIndexFromWhole(int wholeX, int wholeY)
     {
         var origin = new Vector2Int(
-            _gameBoardManager.PlayerShips.cellIndex.x + 2,
-            _gameBoardManager.PlayerShips.cellIndex.y + 2);
+            _gameBoardManager.GetPlayer.CellIndex.x + 2,
+            _gameBoardManager.GetPlayer.CellIndex.y + 2);
         return new Vector2Int(origin.x - wholeY, origin.y - wholeX);
     }
 
     Vector2Int GetWholeIndexFromSelection(int selectionX, int selectionY)
     {
         var origin = new Vector2Int(
-            _gameBoardManager.PlayerShips.cellIndex.x + 2,
-            _gameBoardManager.PlayerShips.cellIndex.y + 2);
+            _gameBoardManager.GetPlayer.CellIndex.x + 2,
+            _gameBoardManager.GetPlayer.CellIndex.y + 2);
         return new Vector2Int(origin.y - selectionY, origin.x - selectionX);
     }
 
     void ClickAction(Vector2Int selectionIndex, ActionType type)
     {
 
-        var output = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
+        output = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
         Debug.Log(output.TargetIndex);
         // todo 
         // send output to manager
+    }
+
+    // if none selected, returns player position
+    public Vector2Int GetIndexResult()
+    {
+        if (output == null)
+        {
+            return new Vector2Int(_gameBoardManager.GetPlayer.CellIndex.x, _gameBoardManager.GetPlayer.CellIndex.y);
+        }
+        return output.TargetIndex;
     }
 }
 

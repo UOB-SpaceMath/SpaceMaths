@@ -3688,13 +3688,13 @@ MonoBehaviour:
   _obstacleMap: {fileID: 655189652}
   _playerBias: {x: 0.5, y: 0.5}
   _playerShip:
-    shipObject: {fileID: 9169793332967455605, guid: 650b94e1633a33c40baeebea3ad50216,
+    _shipObject: {fileID: 9169793332967455605, guid: 650b94e1633a33c40baeebea3ad50216,
       type: 3}
-    cellIndex: {x: 0, y: 0}
+    _cellIndex: {x: 0, y: 0}
   _enemyShips:
-  - shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
       type: 3}
-    cellIndex: {x: 1, y: 1}
+    _cellIndex: {x: 1, y: 2}
 --- !u!4 &1302405171
 Transform:
   m_ObjectHideFlags: 0
