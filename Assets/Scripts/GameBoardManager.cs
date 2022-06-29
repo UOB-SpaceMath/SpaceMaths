@@ -5,40 +5,19 @@ using UnityEngine.Tilemaps;
 public class GameBoardManager : MonoBehaviour
 {
     // The height of ship according to the game board.
-    [SerializeField]
-    float _height;
+    [SerializeField] float _height;
 
     // the obstacle tile-map
-    [SerializeField]
-    Tilemap _obstacleMap;
+    [SerializeField] Tilemap _obstacleMap;
 
     // bias to make ship in the middle of cell rather than corner.
-    [SerializeField]
-    Vector2 _playerBias;
+    [SerializeField] Vector2 _playerBias;
 
     // the player's ship
-    [SerializeField]
-    Ships _playerShip;
-    public Ships PlayerShips
-    {
-        get => _playerShip;
-    }
+    [SerializeField] Ships _playerShip;    
 
     // the enemies' ships
-    [NonReorderable]
-    [SerializeField]
-    List<Ships> _enemyShips;
-
-    // public Ships[] EnemyShips
-    // {
-    //     get => _enemyShips;
-    // }
-
-
-    public List<Ships> EnemyShips
-    {
-        get => _enemyShips;
-    }
+    [NonReorderable] [SerializeField] List<Ships> _enemyShips;    
 
     // different types of cell
     public enum CellType { Ship, Wall, Empty };
@@ -46,13 +25,54 @@ public class GameBoardManager : MonoBehaviour
     // the whole map information
     CellType[,] _cells; // the whole map info
 
-
     Vector3Int _tileBias;
 
     void Awake()
     {
         GetWallInfo();
         SetupShip();
+    }
+
+    // Return player ship
+    public Ships GetPlayer
+    {
+        get => _playerShip;
+    }
+
+    // Return all enemy ships
+    public List<Ships> GetEnemyShips
+    {
+        get => _enemyShips;
+    }
+
+    // Return all enemy ships in range
+    public List<Ships> GetEnemiesInRange()
+    {
+        List<Ships> result = new List<Ships>();
+        for (int i = 0; i < _enemyShips.Count; i++)
+        {
+            if (isInRange(_enemyShips[i]))
+            {
+                result.Add(_enemyShips[i]);
+            }
+        }
+        return result;
+    }
+
+    // Check an enemy is within range of player (5x5)
+    private bool isInRange(Ships enemy)
+    {
+        int playerY = _playerShip.CellIndex.y;
+        int playerX = _playerShip.CellIndex.x;
+        if (enemy.CellIndex.y < playerY - 2 || enemy.CellIndex.y > playerY + 2)
+        {
+            return false;
+        }
+        if (enemy.CellIndex.x < playerX - 2 || enemy.CellIndex.x > playerX + 2)
+        {
+            return false;
+        }
+        return true;
     }
 
     private void InstantiateShip()
@@ -85,8 +105,6 @@ public class GameBoardManager : MonoBehaviour
             }
         }
     }
-
-
 
     // place ships to specific cells
     void SetupShip()
@@ -176,4 +194,28 @@ public class GameBoardManager : MonoBehaviour
         _cells[targetPosX, targetPosY] = CellType.Empty;
         currentShip.ShipObject.SetActive(false);
     }
+
+    // Get Ship from position, if no ship, returns null 
+    public Ships GetShip(Vector2Int position)
+    {
+        int x = position.x;
+        int y = position.y;
+        //if (_cells[x,y] == CellType.Empty || _cells[x,y] == CellType.Wall)
+        //{
+        //    return null;
+        //}
+        if (_playerShip.CellIndex.x == x && _playerShip.CellIndex.y == y)
+        {
+            return _playerShip;
+        }
+        for (int i=0; i < _enemyShips.Count; i++)
+        {
+            if (_enemyShips[i].CellIndex.y == y && _enemyShips[i].CellIndex.x == x)
+            {
+                return _enemyShips[i];
+            }
+        }
+        return null;
+    }
+    
 }

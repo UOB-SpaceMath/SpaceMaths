@@ -9,7 +9,7 @@ namespace SpaceMath
         [SerializeField]
         GameObject _shipObject;
         [SerializeField]
-        public Vector2Int _cellIndex;
+        private Vector2Int _cellIndex;
         GameBoardManager _gameBoardManager;
 
         private int _energy;
@@ -21,9 +21,12 @@ namespace SpaceMath
 
         public int Energy { get => _energy; }
 
-        public bool SheildEnabled { get => _isShieldsOn; }
+        public bool ShieldsEnabled { get => _isShieldsOn; }
+
         public Vector2Int CellIndex { get => _cellIndex; set => _cellIndex = value; }
+
         public GameObject ShipObject { get => _shipObject; set => _shipObject = value; }
+
         public GameBoardManager GameBoardManager { get => _gameBoardManager; set => _gameBoardManager = value; }
 
         public void DecreaseHealth(int amount)
