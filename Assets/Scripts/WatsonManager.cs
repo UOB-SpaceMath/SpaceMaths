@@ -279,9 +279,9 @@ public class WatsonManager : MonoBehaviour
 
             }
         }
-        if (!hasCol || !hasRow)
+        if (!(hasRow && hasCol))
         {
-            _action = WatsonIntents.Fail;
+            if (_action != WatsonIntents.Sheild) { _action = WatsonIntents.Fail; }
         }
         Debug.Log(string.Format("{0}: {1}", _action.ToString(), _targetIndex.ToString()));
     }
