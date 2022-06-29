@@ -9,7 +9,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class WatsonManager : MonoBehaviour
 {
@@ -31,9 +30,6 @@ public class WatsonManager : MonoBehaviour
     private string _assistantKey;
     [SerializeField]
     private string _assistantId;
-
-    [Header("Debug")]
-    public Text _displayField;
     #endregion
 
     readonly string _micDevice;
@@ -70,9 +66,14 @@ public class WatsonManager : MonoBehaviour
 
     public void StopRecording()
     {
+        StartCoroutine(WaitSecThenStopRecording(0.5f));
+    }
+
+    IEnumerator WaitSecThenStopRecording(float sec)
+    {
+        yield return new WaitForSeconds(sec);
         Debug.Log("Stop microphone.");
         _isRecording = false;
-
         StartCoroutine(GetFinalResult());
     }
 
