@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LookCamera : MonoBehaviour
@@ -9,7 +7,7 @@ public class LookCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Camera = GameObject.Find("AR Session Origin/AR Camera");
+        Camera = gameObject.GetComponentInChildren<Camera>().gameObject;
     }
 
     // Update is called once per frame

@@ -11,7 +11,7 @@ public class PlaneDetectionStatus : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_Status = GameObject.Find("Canvas/PlaneDetectionStatusText").GetComponent<Text>();
+        m_Status = GetComponentInChildren<Text>();
         m_PlaneManager = GameObject.Find("AR Session Origin").GetComponent<ARPlaneManager>();
         m_PointManager = GameObject.Find("AR Session Origin").GetComponent<ARPointCloudManager>();
     }

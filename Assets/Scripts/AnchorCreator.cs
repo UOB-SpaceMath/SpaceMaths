@@ -28,17 +28,24 @@ public class AnchorCreator : MonoBehaviour
     Button m_ClearButton;
 
 
-    void Awake()
+    void Start()
     {
         m_RaycastManager = GetComponent<ARRaycastManager>();
         m_AnchorManager = GetComponent<ARAnchorManager>();
         m_PlaneManager = GetComponent<ARPlaneManager>();
         m_PointCloudManager = GetComponent<ARPointCloudManager>();
-        // get and hide game board.
-        m_GameBoard = GameObject.Find("GameBoard");
-        m_GameBoard.SetActive(false);
+        // get and hide game board if the game is not run in Unity Editor.
+        if (Application.platform != RuntimePlatform.OSXEditor &&
+            Application.platform != RuntimePlatform.LinuxEditor &&
+            Application.platform != RuntimePlatform.WindowsEditor)
+        {
+            m_GameBoard = GameObject.Find("GameBoard");
+            m_GameBoard.SetActive(false);
+        }
+
+
         // get clear buttom
-        m_ClearButton = GameObject.Find("Canvas/Button").GetComponent<Button>();
+        m_ClearButton = GameObject.Find("Screen Canvas/Button").GetComponent<Button>();
         m_ClearButton.interactable = false;
 
     }
