@@ -11,7 +11,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SpeechToText : MonoBehaviour
+public class WatsonManager : MonoBehaviour
 {
 
     #region PLEASE SET THESE VARIABLES IN THE INSPECTOR
@@ -44,6 +44,10 @@ public class SpeechToText : MonoBehaviour
     AudioClip _resultClip;
     string _speechToTextResult;
     MessageOutput _assistantResult;
+    // final result
+    WatsonIntents _action;
+    Vector2Int _targetIndex;
+
 
     // status
     bool _isRecording = false;  // is recording (true to false doesn't mean recording finish)
@@ -68,6 +72,8 @@ public class SpeechToText : MonoBehaviour
     {
         Debug.Log("Stop microphone.");
         _isRecording = false;
+
+        StartCoroutine(GetFinalResult());
     }
 
 
@@ -84,6 +90,8 @@ public class SpeechToText : MonoBehaviour
         // reset result
         _speechToTextResult = null;
         _assistantResult = null;
+        _action = WatsonIntents.Fail;
+
         // clear clip
         if (_resultClip)
         {
@@ -234,8 +242,51 @@ public class SpeechToText : MonoBehaviour
     }
 
     // todo 
-    void GetFinalResult()
+    IEnumerator GetFinalResult()
     {
+        // wait for assistant finish
+        while (_isAssistantRunning)
+        {
+            yield return null;
+        }
+        // get intent
+        if (_assistantResult.Intents.Count != 0)
+        {
+            _action = _assistantResult.Intents[0].Intent.ToLower() switch
+            {
+                "attack" => WatsonIntents.Attack,
+                "move" => WatsonIntents.Move,
+                "shield" => WatsonIntents.Sheild,
+                _ => WatsonIntents.Fail
+            };
+            Debug.Log(_action);
+        }
+        bool hasRow = false;
+        bool hasCol = false;
+        foreach (var entity in _assistantResult.Entities)
+        {
+            if (entity.Entity.Equals("row") && !hasRow)
+            {
+                hasRow = true;
+                _targetIndex.x = int.Parse(entity.Value);
+                Debug.Log(string.Format("X: {0}", _targetIndex.x));
+            }
+            if (entity.Entity.Equals("column") && !hasCol)
+            {
+                hasCol = true;
+                _targetIndex.y = int.Parse(entity.Value);
+                Debug.Log(string.Format("Y: {0}", _targetIndex.y));
 
+            }
+        }
+        if (!hasCol || !hasRow)
+        {
+            _action = WatsonIntents.Fail;
+        }
+        Debug.Log(string.Format("{0}: {1}", _action.ToString(), _targetIndex.ToString()));
     }
+
+    enum WatsonIntents { Attack, Move, Sheild, Fail }
 }
+
+
