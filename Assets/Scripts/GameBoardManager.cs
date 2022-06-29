@@ -34,15 +34,15 @@ public class GameBoardManager : MonoBehaviour
     }
 
     // Return player ship
-    public Ships GetPlayer
+    public Ships GetPlayer()
     {
-        get => _playerShip;
+        return _playerShip;
     }
 
     // Return all enemy ships
-    public List<Ships> GetEnemyShips
+    public List<Ships> GetEnemyShips()
     {
-        get => _enemyShips;
+        return _enemyShips;
     }
 
     // Return all enemy ships in range

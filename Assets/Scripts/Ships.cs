@@ -12,10 +12,31 @@ namespace SpaceMath
         private Vector2Int _cellIndex;
         GameBoardManager _gameBoardManager;
 
-        private int _energy;
-        private int _health;
+        // Must be initialized in the inspector for the player and the enemies respectively
+
+        // Weapon relatives
+        [SerializeField]
+        private int attackDamage = 1;
+        [SerializeField]
+        private float weaponRange = 3.0f;
+        
+        private Vector3 weaponEnd; // Where the weapon is.
+
+        // Ship itself relatives
+        [SerializeField]
+        private int _energy = 100;
+        [SerializeField]
+        private int _health = 100;
+        [SerializeField]
+        private int _energyOpenShield = 5;
+
         private bool _isShieldsOn;
 
+        public int AttackDamage { get => attackDamage; }
+
+        public float WeaponRange { get => weaponRange; }
+
+        public Vector3 WeaponEnd { get => weaponEnd; }
 
         public int Health { get => _health; }
 
@@ -29,8 +50,21 @@ namespace SpaceMath
 
         public GameBoardManager GameBoardManager { get => _gameBoardManager; set => _gameBoardManager = value; }
 
-        public void DecreaseHealth(int amount)
+        public void Start()
         {
+            // Initialize, can be adjusted later on
+            _energyOpenShield = 5;
+            _isShieldsOn = false;
+            weaponEnd = _shipObject.transform.position;
+        }
+
+        // Return value false means the player lose the game
+        public void ApplyDamage(int amount)
+        {
+            if (_isShieldsOn)
+            {
+                DecreaseEnergy(amount);
+            }
             _health -= amount;
             if (IsShipDead())
             {
@@ -45,7 +79,7 @@ namespace SpaceMath
 
         public bool IsShipDead()
         {
-            if (_health < 0)
+            if (_health <= 0 || _energy <= 0)
             {
                 return true;
             }
@@ -62,7 +96,7 @@ namespace SpaceMath
 
         public bool IsShipOutOfEnergy()
         {
-            if (_energy < 0)
+            if (_energy <= 0)
             {
                 return true;
             }
@@ -77,7 +111,19 @@ namespace SpaceMath
             _energy += amount;
         }
 
-        public void ToggleShields()
+        public bool OpenShields()
+        {
+            // Can only raise shield when the energy is enough and shield isn't on
+            if (!_isShieldsOn && _energy>_energyOpenShield)
+            {
+                DecreaseEnergy(_energyOpenShield);
+                _isShieldsOn = !_isShieldsOn;
+                return true;
+            }
+            return false;
+        }
+
+        public void CloseShields()
         {
             _isShieldsOn = !_isShieldsOn;
         }

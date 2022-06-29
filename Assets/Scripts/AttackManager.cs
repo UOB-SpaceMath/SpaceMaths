@@ -1,56 +1,47 @@
+using SpaceMath;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
-    // [SerializeField]
-    // private GameObject player;
-    [SerializeField]
-    private int attackDamage = 1;
-    [SerializeField]
-    private float weaponRange = 3.0f;
-    // Where the weapon is.
-    [SerializeField]
-    private Transform weaponEnd;
-
     private RaycastHit hit;
     //private AudioSource attackAudio;
     private LineRenderer attackLine;
 
-    void Start()
-    {
-        // TODO Attach attacking animation and audio to the attacker, and then get these components.
-        attackLine = GetComponent<LineRenderer>();
-        //attackAudio = GetComponent<AudioSource>();
-        // player = GameObject.FindGameObjectWithTag("Player");
-        // weaponEnd = player.transform;
-    }
+    // TODO delete relatives
+    [SerializeField]
+    private Vector3 hitPoint;
+    [SerializeField]
+    private Rigidbody body;
 
-    void Update()
-    {
-
-    }
 
     // Call this method to attack.
-    public bool Attack(GameObject attacker, GameObject victim)
+    public bool Attack(Ships attacker, Ships victim)
     {
-        Vector3 victimPos = victim.transform.position;
-        Vector3 attackerPos = attacker.transform.position;
+        // TODO Attach attacking animation and audio to the attacker, and then get these components.
+        // attackLine should be disabled originally.
+        attackLine = attacker.ShipObject.GetComponent<LineRenderer>();
+        //attackAudio = attacker.ShipObject.GetComponent<AudioSource>();
+
+        Vector3 victimPos = victim.ShipObject.transform.position;
+        Vector3 attackerPos = attacker.ShipObject.transform.position;
 
         // Set the beginning position of the attacking laser line.
-        attackLine.SetPosition(0, weaponEnd.position);
+        attackLine.SetPosition(0, attacker.WeaponEnd);
 
         // If the attack line hit something, store the hit infomation in the hit variable.
-        if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, weaponRange))
+        if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange))
         {
             // Set the end of the attack line to the hit point.
+            hitPoint = hit.point;
+            body = hit.rigidbody;
             attackLine.SetPosition(1, hit.point);
         }
         else
         {
             // If the attack didn't hit anything, the attack line will end at the maximum distance.
-            attackLine.SetPosition(1, attackerPos + (victimPos - attackerPos) * weaponRange);
+            attackLine.SetPosition(1, attackerPos + (victimPos - attackerPos) * attacker.WeaponRange);
         }
 
         // Attack effects will appear every attck.
@@ -58,8 +49,9 @@ public class AttackManager : MonoBehaviour
 
         if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Player"))
         {
-            //victim.DecreaseHealth(attackDamage);
+            victim.ApplyDamage(attacker.AttackDamage);
         }
+
 
         return true;
     }

@@ -29,7 +29,7 @@ public class SelectionGridManager : MonoBehaviour
 
     GameObject[] _buttons;
 
-    SelectionOutput output;
+    SelectionOutput _finalOutput;
 
     void Start()
     {
@@ -47,12 +47,14 @@ public class SelectionGridManager : MonoBehaviour
     }
 
     // Returns what player should do to selected cell
-    public ActionType GetActionResult(Vector2Int selectedCell)
+    public SelectionOutput GetFinalResult()
     {
-        int y = selectedCell.y;
-        int x = selectedCell.x;
+        return _finalOutput;
+    }
 
-        return _selectionCells[x,y];
+    public void ResetFinalResult()
+    {
+        _finalOutput = null;
     }
 
     void UpdateSelectionUI()
@@ -176,36 +178,23 @@ public class SelectionGridManager : MonoBehaviour
     Vector2Int GetSelectionIndexFromWhole(int wholeX, int wholeY)
     {
         var origin = new Vector2Int(
-            _gameBoardManager.GetPlayer.CellIndex.x + 2,
-            _gameBoardManager.GetPlayer.CellIndex.y + 2);
+            _gameBoardManager.GetPlayer().CellIndex.x + 2,
+            _gameBoardManager.GetPlayer().CellIndex.y + 2);
         return new Vector2Int(origin.x - wholeY, origin.y - wholeX);
     }
 
     Vector2Int GetWholeIndexFromSelection(int selectionX, int selectionY)
     {
         var origin = new Vector2Int(
-            _gameBoardManager.GetPlayer.CellIndex.x + 2,
-            _gameBoardManager.GetPlayer.CellIndex.y + 2);
+            _gameBoardManager.GetPlayer().CellIndex.x + 2,
+            _gameBoardManager.GetPlayer().CellIndex.y + 2);
         return new Vector2Int(origin.y - selectionY, origin.x - selectionX);
     }
 
     void ClickAction(Vector2Int selectionIndex, ActionType type)
     {
-
-        output = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
-        Debug.Log(output.TargetIndex);
-        // todo 
-        // send output to manager
-    }
-
-    // if none selected, returns player position
-    public Vector2Int GetIndexResult()
-    {
-        if (output == null)
-        {
-            return new Vector2Int(_gameBoardManager.GetPlayer.CellIndex.x, _gameBoardManager.GetPlayer.CellIndex.y);
-        }
-        return output.TargetIndex;
+        _finalOutput = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
+        Debug.Log(string.Format("{0} {1}", _finalOutput.Type, _finalOutput.TargetIndex));
     }
 }
 
@@ -225,6 +214,3 @@ public class SelectionOutput
     public ActionType Type { get => _type; }
     public Vector2Int TargetIndex { get => _targetIndex; }
 }
-
-
-

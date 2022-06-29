@@ -264,6 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 33379484}
   - component: {fileID: 33379485}
+  - component: {fileID: 33379486}
   m_Layer: 0
   m_Name: Selection Panel
   m_TagString: Untagged
@@ -307,6 +308,19 @@ MonoBehaviour:
     type: 3}
   _enemyIcon: {fileID: 780568281473803417, guid: 5d292f66e5895274cb82f90fda457415,
     type: 3}
+--- !u!114 &33379486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33379483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc617d2cbca53334193858698468a478, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 1354141925}
 --- !u!1001 &37319114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -840,9 +854,18 @@ MonoBehaviour:
   gbm: {fileID: 1302405170}
   uim: {fileID: 7}
   sgm: {fileID: 33379485}
-  player: {fileID: 0}
+  player:
+    _shipObject: {fileID: 0}
+    _cellIndex: {x: 0, y: 0}
+    attackDamage: 1
+    weaponRange: 3
+    _energy: 0
+    _health: 0
+    _energyOpenShield: 0
+  stage: 0
   questionCanvas: {fileID: 2120676470}
   selectionCanvas: {fileID: 1334104276}
+  energyComsuption: 5
 --- !u!4 &195791574
 Transform:
   m_ObjectHideFlags: 0
@@ -3563,9 +3586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b81fb5832dfdcd4c950dedd1cf8eca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 1
-  weaponRange: 3
-  weaponEnd: {fileID: 0}
+  hitPoint: {x: 0, y: 0, z: 0}
+  body: {fileID: 0}
 --- !u!4 &1174540129
 Transform:
   m_ObjectHideFlags: 0
@@ -3784,13 +3806,23 @@ MonoBehaviour:
   _obstacleMap: {fileID: 655189652}
   _playerBias: {x: 0.5, y: 0.5}
   _playerShip:
-    shipObject: {fileID: 9169793332967455605, guid: 650b94e1633a33c40baeebea3ad50216,
+    _shipObject: {fileID: 9169793332967455605, guid: 650b94e1633a33c40baeebea3ad50216,
       type: 3}
-    cellIndex: {x: 0, y: 0}
+    _cellIndex: {x: 0, y: 0}
+    attackDamage: 1
+    weaponRange: 3
+    _energy: 100
+    _health: 100
+    _energyOpenShield: 5
   _enemyShips:
-  - shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
       type: 3}
-    cellIndex: {x: 1, y: 1}
+    _cellIndex: {x: 1, y: 1}
+    attackDamage: 1
+    weaponRange: 3
+    _energy: 1000
+    _health: 3
+    _energyOpenShield: 0
 --- !u!4 &1302405171
 Transform:
   m_ObjectHideFlags: 0
