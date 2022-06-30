@@ -28,7 +28,7 @@ public class AttackManager : MonoBehaviour
         Vector3 attackerPos = attacker.ShipObject.transform.position;
 
         // Set the beginning position of the attacking laser line.
-        attackLine.SetPosition(0, attacker.WeaponEnd);
+        attackLine.SetPosition(0, attacker.ShipObject.transform.position);
 
         // If the attack line hit something, store the hit infomation in the hit variable.
         if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange))

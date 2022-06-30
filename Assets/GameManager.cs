@@ -15,13 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private SelectionGridManager sgm;
 
-    [SerializeField]
     private Ships player;
     private List<Ships> enemies;
 
     // Store the game stage.
     public enum Stages { None, Question, Player, Enemies };
-    [SerializeField]
     private Stages stage;
 
     // Drag the canvas into these variables in the inspector
@@ -32,14 +30,14 @@ public class GameManager : MonoBehaviour
 
     // Game settings
     [SerializeField]
-    private int energyComsuption;
+    private int energyConsumption;
 
 
     void Start()
     {
         // Question stage
         stage = Stages.Question;
-        SwithPanel(true);
+        SwitchPanel(true);
         player = gbm.GetPlayer();
     }
 
@@ -55,7 +53,7 @@ public class GameManager : MonoBehaviour
             {
                 // Question stage
                 case Stages.Question:
-                    SwithPanel(true);
+                    SwitchPanel(true);
                     switch (uim.GetAnswerState())
                     {
                         // Answer was correct
@@ -89,10 +87,10 @@ public class GameManager : MonoBehaviour
                                 sgm.ResetFinalResult();
                                 StartCoroutine(Move(player, selectionResult.TargetIndex.x, selectionResult.TargetIndex.y));
                                 break;
-                            // case ActionType.Attack:
-                            //   sgm.ResetFinalResult();
-                            //    StartCoroutine(AttackEnemy(player, gbm.GetEnemy(selectionResult.TargetIndex.x, selectionResult.TargetIndex.y)));
-                            //   break;
+                            case ActionType.Attack:
+                                sgm.ResetFinalResult();
+                                StartCoroutine(AttackEnemy(player, gbm.GetShip(selectionResult.TargetIndex)));
+                                break;
                             //case ActionType.Shield:
                             //   sgm.ResetFinalResult();
                             //   Do something
@@ -117,7 +115,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Set "on" to true to turn on the question panel.
-    private void SwithPanel(bool on)
+    private void SwitchPanel(bool on)
     {
         questionCanvas.SetActive(on);
         selectionCanvas.SetActive(!on);
@@ -126,7 +124,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator QuestionToPlayerTurn()
     {
         yield return new WaitForSeconds(0.8f);
-        SwithPanel(false);
+        SwitchPanel(false);
         stage = Stages.Player;
     }
 
@@ -143,11 +141,12 @@ public class GameManager : MonoBehaviour
         am.Attack(player, enemy);
         yield return new WaitForSeconds(1.0f);
         stage = Stages.Enemies;
+        sgm.UpdateSelectionUI();
     }
 
     private IEnumerator AttackPlayer(List<Ships> enemies, Ships player)
     {
-        player.DecreaseEnergy(energyComsuption);
+        player.DecreaseEnergy(energyConsumption);
         if (enemies != null)
         {
             for (int i = 0; i < enemies.Count; i++)
@@ -169,5 +168,6 @@ public class GameManager : MonoBehaviour
         // TODO make the movement animation
         yield return new WaitForSeconds(1.0f);
         stage = Stages.Enemies;
+        sgm.UpdateSelectionUI();
     }
 }

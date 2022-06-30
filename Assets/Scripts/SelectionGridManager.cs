@@ -22,7 +22,7 @@ public class SelectionGridManager : MonoBehaviour
 
     [SerializeField] GameObject _enemyIcon;
 
-    // 5x5 selection cells    
+    // 5x5 selection cells
     ActionType[,] _selectionCells;
 
     GameBoardManager _gameBoardManager;
@@ -57,7 +57,7 @@ public class SelectionGridManager : MonoBehaviour
         _finalOutput = null;
     }
 
-    void UpdateSelectionUI()
+    public void UpdateSelectionUI()
     {
         UpdateSelectionCells();
         UpdateButtonsView();
