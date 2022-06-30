@@ -10,6 +10,7 @@ namespace SpaceMath
         GameObject _shipObject;
         [SerializeField]
         private Vector2Int _cellIndex;
+
         GameBoardManager _gameBoardManager;
 
         // Must be initialized in the inspector for the player and the enemies respectively
@@ -106,7 +107,7 @@ namespace SpaceMath
         public bool OpenShields()
         {
             // Can only raise shield when the energy is enough and shield isn't on
-            if (!_isShieldsOn && _energy>_energyOpenShield)
+            if (!_isShieldsOn && _energy > _energyOpenShield)
             {
                 DecreaseEnergy(_energyOpenShield);
                 _isShieldsOn = !_isShieldsOn;

@@ -71,7 +71,7 @@ public class SelectionGridManager : MonoBehaviour
         {
             for (int selectY = 0; selectY < 5; selectY++)
             {
-                var wholeVec = GetSelectionIndexFromWhole(selectX, selectY);
+                var wholeVec = GetWholeIndexFromSelection(selectX, selectY);
                 _selectionCells[selectX, selectY] = _gameBoardManager.GetCellType(wholeVec.x, wholeVec.y) switch
                 {
                     GameBoardManager.CellType.Empty => ActionType.Move,
@@ -180,15 +180,15 @@ public class SelectionGridManager : MonoBehaviour
         var origin = new Vector2Int(
             _gameBoardManager.GetPlayer().CellIndex.x + 2,
             _gameBoardManager.GetPlayer().CellIndex.y + 2);
-        return new Vector2Int(origin.x - wholeY, origin.y - wholeX);
+        return new Vector2Int(origin.y - wholeY, origin.x - wholeX);
     }
-
+    // convert the index of selection cells grid into the whole cells index
     Vector2Int GetWholeIndexFromSelection(int selectionX, int selectionY)
     {
         var origin = new Vector2Int(
             _gameBoardManager.GetPlayer().CellIndex.x + 2,
             _gameBoardManager.GetPlayer().CellIndex.y + 2);
-        return new Vector2Int(origin.y - selectionY, origin.x - selectionX);
+        return new Vector2Int(origin.x - selectionY, origin.y - selectionX);
     }
 
     void ClickAction(Vector2Int selectionIndex, ActionType type)

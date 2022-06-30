@@ -1,6 +1,5 @@
 using SpaceMath;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackManager : MonoBehaviour
@@ -8,13 +7,6 @@ public class AttackManager : MonoBehaviour
     private RaycastHit hit;
     //private AudioSource attackAudio;
     private LineRenderer attackLine;
-
-    // TODO delete relatives
-    [SerializeField]
-    private Vector3 hitPoint;
-    [SerializeField]
-    private Rigidbody body;
-
 
     // Call this method to attack.
     public bool Attack(Ships attacker, Ships victim)
@@ -34,8 +26,6 @@ public class AttackManager : MonoBehaviour
         if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange))
         {
             // Set the end of the attack line to the hit point.
-            hitPoint = hit.point;
-            body = hit.rigidbody;
             attackLine.SetPosition(1, hit.point);
         }
         else

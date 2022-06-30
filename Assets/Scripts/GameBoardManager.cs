@@ -14,10 +14,10 @@ public class GameBoardManager : MonoBehaviour
     [SerializeField] Vector2 _playerBias;
 
     // the player's ship
-    [SerializeField] Ships _playerShip;    
+    [SerializeField] Ships _playerShip;
 
     // the enemies' ships
-    [NonReorderable] [SerializeField] List<Ships> _enemyShips;    
+    [NonReorderable][SerializeField] List<Ships> _enemyShips;
 
     // different types of cell
     public enum CellType { Ship, Wall, Empty };
@@ -83,6 +83,7 @@ public class GameBoardManager : MonoBehaviour
         foreach (var ship in _enemyShips)
         {
             ship.ShipObject = Instantiate(ship.ShipObject, gridTransform);
+            ship.GameBoardManager = this;
         }
     }
 
@@ -208,7 +209,7 @@ public class GameBoardManager : MonoBehaviour
         {
             return _playerShip;
         }
-        for (int i=0; i < _enemyShips.Count; i++)
+        for (int i = 0; i < _enemyShips.Count; i++)
         {
             if (_enemyShips[i].CellIndex.y == y && _enemyShips[i].CellIndex.x == x)
             {
@@ -217,5 +218,5 @@ public class GameBoardManager : MonoBehaviour
         }
         return null;
     }
-    
+
 }
