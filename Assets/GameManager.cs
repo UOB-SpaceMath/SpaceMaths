@@ -47,6 +47,10 @@ public class GameManager : MonoBehaviour
         {
             // Game over
         }
+        else if (!gbm.IsEnemiesRemain())
+        {
+            // You win
+        }
         else
         {
             switch (stage)
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour
                 // Player's turn
                 case Stages.Player:
                     SelectionOutput selectionResult = sgm.GetFinalResult();
-                    if (selectionResult != null)
+                    if (selectionResult != null && selectionResult.Type != ActionType.None)
                     {
                         stage = Stages.None;
                         switch (selectionResult.Type)

@@ -33,6 +33,11 @@ public class GameBoardManager : MonoBehaviour
         SetupShip();
     }
 
+    public bool IsEnemiesRemain()
+    {
+        return _enemyShips.Count > 0;
+    }
+
     // Return player ship
     public Ships GetPlayer()
     {
