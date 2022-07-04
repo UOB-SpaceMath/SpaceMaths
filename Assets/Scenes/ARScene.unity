@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -264,6 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 33379484}
   - component: {fileID: 33379485}
+  - component: {fileID: 33379486}
   m_Layer: 0
   m_Name: Selection Panel
   m_TagString: Untagged
@@ -307,6 +308,19 @@ MonoBehaviour:
     type: 3}
   _enemyIcon: {fileID: 780568281473803417, guid: 5d292f66e5895274cb82f90fda457415,
     type: 3}
+--- !u!114 &33379486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33379483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc617d2cbca53334193858698468a478, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 1354141925}
 --- !u!1001 &37319114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -807,6 +821,65 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31aa2489c6644b44c8b1f9c0b51712cb, type: 3}
+--- !u!1 &195791572
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 195791574}
+  - component: {fileID: 195791573}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &195791573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195791572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b5137de01dc534a9487eb537d98094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  am: {fileID: 1174540128}
+  gbm: {fileID: 1302405170}
+  uim: {fileID: 7}
+  sgm: {fileID: 33379485}
+  player:
+    _shipObject: {fileID: 0}
+    _cellIndex: {x: 0, y: 0}
+    attackDamage: 1
+    weaponRange: 3
+    _energy: 0
+    _health: 0
+    _energyOpenShield: 0
+  stage: 0
+  questionCanvas: {fileID: 2120676470}
+  selectionCanvas: {fileID: 1334104276}
+  energyComsuption: 5
+--- !u!4 &195791574
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195791572}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0796404, y: -0.005874768, z: -0.08235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &201847837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3484,6 +3557,51 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3562672903225092860}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1174540127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1174540129}
+  - component: {fileID: 1174540128}
+  m_Layer: 0
+  m_Name: AttackManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1174540128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174540127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b81fb5832dfdcd4c950dedd1cf8eca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitPoint: {x: 0, y: 0, z: 0}
+  body: {fileID: 0}
+--- !u!4 &1174540129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174540127}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0796404, y: -0.005874768, z: -0.08235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1195963661 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3562672904228321238, guid: 31aa2489c6644b44c8b1f9c0b51712cb,
@@ -3691,10 +3809,20 @@ MonoBehaviour:
     _shipObject: {fileID: 9169793332967455605, guid: 650b94e1633a33c40baeebea3ad50216,
       type: 3}
     _cellIndex: {x: 0, y: 0}
+    attackDamage: 1
+    weaponRange: 3
+    _energy: 100
+    _health: 100
+    _energyOpenShield: 5
   _enemyShips:
   - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
       type: 3}
-    _cellIndex: {x: 1, y: 2}
+    _cellIndex: {x: 1, y: 1}
+    attackDamage: 1
+    weaponRange: 3
+    _energy: 1000
+    _health: 3
+    _energyOpenShield: 0
 --- !u!4 &1302405171
 Transform:
   m_ObjectHideFlags: 0
@@ -3944,6 +4072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc617d2cbca53334193858698468a478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 1354141925}
 --- !u!1 &1354141925
 GameObject:
   m_ObjectHideFlags: 0
@@ -7192,7 +7321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3712063765679412752
 RectTransform:
   m_ObjectHideFlags: 0
