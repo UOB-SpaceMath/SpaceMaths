@@ -23,6 +23,8 @@ public class AnchorCreator : MonoBehaviour
 
     ARAnchor m_CurrentAnchors;
 
+    GameObject m_GameManager;
+
     GameObject m_GameBoard;
 
     Button m_ClearButton;
@@ -40,7 +42,8 @@ public class AnchorCreator : MonoBehaviour
             Application.platform != RuntimePlatform.WindowsEditor)
         {
             m_GameBoard = GameObject.Find("GameBoard");
-            m_GameBoard.SetActive(false);
+            m_GameManager = GameObject.Find("GameManager");
+            m_GameManager.SetActive(false);
         }
 
 
@@ -109,11 +112,12 @@ public class AnchorCreator : MonoBehaviour
         }
 
         // attach game board on anchor;
+        m_GameManager.SetActive(true);
         m_GameBoard.SetActive(true);
         m_GameBoard.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
         // turn off plane detection
         ToggleDetection();
-        // set button 
+        // set button
         m_ClearButton.interactable = true;
 
         return anchor;
@@ -125,6 +129,7 @@ public class AnchorCreator : MonoBehaviour
         {
             Destroy(m_CurrentAnchors.gameObject);
             m_CurrentAnchors = null;
+            m_GameManager.SetActive(false);
             m_GameBoard.SetActive(false);
             ToggleDetection();
         }
