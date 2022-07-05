@@ -2,6 +2,7 @@ using SpaceMath;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     private Ships player;
     private List<Ships> enemies;
+    [SerializeField]
+    List<GameObject> levels;
 
     // Store the game stage.
     public enum Stages { None, Question, Player, Enemies };
@@ -28,28 +31,41 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject selectionCanvas;
 
-    // Game settings
-    [SerializeField]
-    private int energyConsumption;
+    // Game level
+    private int level = 0;
+    private int maxLevel;
 
+    // Game settings
+
+    // Game controls
+    private GameObject restartScreen;
+    private GameObject continueScreen;
+    private GameObject restartButton;
 
     void Start()
     {
+        restartButton = GameObject.Find("Restart Button");
+        restartScreen = GameObject.Find("Restart?");
+        continueScreen = GameObject.Find("Continue?");
+        restartScreen.SetActive(false);
+        continueScreen.SetActive(false);
+        maxLevel = levels.Count - 1;
         // Question stage
         stage = Stages.Question;
         SwitchPanel(true);
         player = gbm.GetPlayer();
+
     }
 
     void Update()
     {
         if (player.IsShipDead())
         {
-            // Game over
+            ShowLoseScreen();
         }
         else if (!gbm.IsEnemiesRemain())
         {
-            // You win
+            ShowWinScreen();
         }
         else
         {
@@ -150,7 +166,6 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator AttackPlayer(List<Ships> enemies, Ships player)
     {
-        player.DecreaseEnergy(energyConsumption);
         if (enemies != null)
         {
             for (int i = 0; i < enemies.Count; i++)
@@ -163,6 +178,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
         }
+        player.ConsumeEnergyByTurn();
         stage = Stages.Question;
     }
 
@@ -172,6 +188,65 @@ public class GameManager : MonoBehaviour
         // TODO make the movement animation
         yield return new WaitForSeconds(1.0f);
         stage = Stages.Enemies;
+        player.ConsumeEnergyByTurn();
         sgm.UpdateSelectionUI();
+    }
+
+    private void ShowLoseScreen() { ShowContinueScreen(); }
+
+    private void ShowWinScreen() { ShowContinueScreen(); }
+
+    public void ShowRestartScreen()
+    {
+        DisableRestartButton();
+        restartScreen.SetActive(true);
+    }
+
+    public void DisableRestartScreen()
+    {
+        restartScreen.SetActive(false);
+        restartButton.SetActive(true);
+    }
+
+    private void ShowContinueScreen()
+    {
+        DisableRestartButton();
+        continueScreen.SetActive(true);
+    }
+
+    private void DisableContinueScreen()
+    {
+        continueScreen.SetActive(false);
+    }
+
+    public void RestartWholeGame()
+    {
+        level = 0;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void RestartKeepLevel()
+    {
+        DisableContinueScreen();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void RestartNextLevel()
+    {
+        level = Mathf.Max(++level, maxLevel);
+        DisableContinueScreen();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void RestartPreviousLevel()
+    {
+        level = Mathf.Min(--level, 0);
+        DisableContinueScreen();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void DisableRestartButton()
+    {
+        restartButton.SetActive(false);
     }
 }
