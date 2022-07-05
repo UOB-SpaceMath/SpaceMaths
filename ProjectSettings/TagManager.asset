@@ -7,6 +7,9 @@ TagManager:
   - Wall
   - Canvas
   - Enemy
+  - healthSlider
+  - energySlider
+  - enemyHealth
   layers:
   - Default
   - TransparentFX
