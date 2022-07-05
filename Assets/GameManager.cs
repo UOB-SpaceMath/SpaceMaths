@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     private UIManager uim;
     [SerializeField]
     private SelectionGridManager sgm;
+    [SerializeField]
+    private WatsonManager wm;
+    [SerializeField]
+    private MessageManager mm;
 
     private Ships player;
     private List<Ships> enemies;
@@ -27,6 +31,8 @@ public class GameManager : MonoBehaviour
     private GameObject questionCanvas;
     [SerializeField]
     private GameObject selectionCanvas;
+    [SerializeField]
+    private GameObject messageCanvas;
 
     // Game settings
     [SerializeField]
@@ -37,7 +43,7 @@ public class GameManager : MonoBehaviour
     {
         // Question stage
         stage = Stages.Question;
-        SwitchPanel(true);
+        SetPanel(PanelType.Question);
         player = gbm.GetPlayer();
     }
 
@@ -57,7 +63,7 @@ public class GameManager : MonoBehaviour
             {
                 // Question stage
                 case Stages.Question:
-                    SwitchPanel(true);
+                    SetPanel(PanelType.Question);
                     switch (uim.GetAnswerState())
                     {
                         // Answer was correct
@@ -81,22 +87,28 @@ public class GameManager : MonoBehaviour
 
                 // Player's turn
                 case Stages.Player:
+                    SetPanel(PanelType.Selection);
+                    // check Watson running
+                    if (wm.IsWatsonRunning())
+                    {
+                        stage = Stages.None;
+                        StartCoroutine(RunWatsonCommand());
+                        break;
+                    }
                     SelectionOutput selectionResult = sgm.GetFinalResult();
+                    sgm.ResetFinalResult();
                     if (selectionResult != null && selectionResult.Type != ActionType.None)
                     {
                         stage = Stages.None;
                         switch (selectionResult.Type)
                         {
                             case ActionType.Move:
-                                sgm.ResetFinalResult();
                                 StartCoroutine(Move(player, selectionResult.TargetIndex.x, selectionResult.TargetIndex.y));
                                 break;
                             case ActionType.Attack:
-                                sgm.ResetFinalResult();
                                 StartCoroutine(AttackEnemy(player, gbm.GetShip(selectionResult.TargetIndex)));
                                 break;
                             //case ActionType.Shield:
-                            //   sgm.ResetFinalResult();
                             //   Do something
                             //   break;
                             default:
@@ -111,24 +123,53 @@ public class GameManager : MonoBehaviour
                     enemies = gbm.GetEnemiesInRange();
                     StartCoroutine(AttackPlayer(enemies, player));
                     break;
-
                 default:
+                    // reset the second selection input occurred in none stage.
+                    sgm.ResetFinalResult();
                     break;
             }
         }
     }
 
-    // Set "on" to true to turn on the question panel.
-    private void SwitchPanel(bool on)
+    private void SetPanel(PanelType type)
     {
-        questionCanvas.SetActive(on);
-        selectionCanvas.SetActive(!on);
+        // set all false
+        questionCanvas.SetActive(false);
+        selectionCanvas.SetActive(false);
+        messageCanvas.SetActive(false);
+        switch (type)
+        {
+            case PanelType.Question:
+                questionCanvas.SetActive(true);
+                break;
+            case PanelType.Selection:
+                selectionCanvas.SetActive(true);
+                break;
+            case PanelType.Message:
+                messageCanvas.SetActive(true);
+                break;
+        }
+
     }
+
+    private void ShowMessage(string message, Stages nextStage)
+    {
+        mm.SetMessage(message);
+        SetPanel(PanelType.Message);
+        mm.SetCloseAction(() => { stage = nextStage; });
+    }
+
+    //// Set "on" to true to turn on the question panel.
+    //private void SwitchPanel(bool on)
+    //{
+    //    questionCanvas.SetActive(on);
+    //    selectionCanvas.SetActive(!on);
+    //}
 
     private IEnumerator QuestionToPlayerTurn()
     {
         yield return new WaitForSeconds(0.8f);
-        SwitchPanel(false);
+        SetPanel(PanelType.Selection);
         stage = Stages.Player;
     }
 
@@ -168,10 +209,60 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Move(Ships ship, int x, int y)
     {
-        gbm.MoveShip(player, x, y);
+        gbm.MoveShip(ship, x, y);
         // TODO make the movement animation
         yield return new WaitForSeconds(1.0f);
         stage = Stages.Enemies;
         sgm.UpdateSelectionUI();
     }
+
+    private IEnumerator RunWatsonCommand()
+    {
+        Debug.Log("Running Watson Command.");
+        // wait for WatsonManager
+        while (wm.GetFinalResult() == null)
+        {
+            yield return null;
+        }
+        var output = wm.GetFinalResult();
+        wm.ResetFinalResult();
+        var index = sgm.GetWholeIndexFromSelection(output.SelectionIndex);
+        switch (output.Intent)
+        {
+            case WatsonIntents.Attack:
+                if (gbm.IsEnemy(index))
+                {
+                    StartCoroutine(AttackEnemy(player, gbm.GetShip(index)));
+                }
+                else
+                {
+                    var message = string.Format("Nothing to be attacked on {0}", sgm.GetIndexNameString(output.SelectionIndex));
+                    ShowMessage(message, Stages.Player);
+                    Debug.Log(string.Format("Fail to attack {0}", index));
+                }
+                break;
+            case WatsonIntents.Move:
+                if (gbm.IsEmpty(index))
+                {
+                    StartCoroutine(Move(player, index.x, index.y));
+                }
+                else
+                {
+                    var message = string.Format("You can't move to {0}", sgm.GetIndexNameString(output.SelectionIndex));
+                    ShowMessage(message, Stages.Player);
+                    Debug.Log(string.Format("Fail to move {0}", index));
+                }
+                break;
+            //case WatsonIntents.Sheild:
+            //    // todo
+            //    break;
+            default: // fail
+                     // message box;
+                ShowMessage(output.FailMessage, Stages.Player);
+                break;
+        }
+
+    }
+
+    private enum PanelType { Question, Selection, Message };
 }

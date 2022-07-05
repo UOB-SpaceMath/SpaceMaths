@@ -40,13 +40,13 @@ public class WatsonManager : MonoBehaviour
     AudioClip _resultClip;
     string _speechToTextResult;
     MessageOutput _assistantResult;
+    string _failMessage;
     // final result
-    WatsonIntents _action;
-    Vector2Int _targetIndex;
+    WatsonOutput _watsonOutput;
 
 
     // status
-    bool _isRecording = false;  // is recording (true to false doesn't mean recording finish)
+    bool _isRecording = false;  // flag to start and end recording coroutine, false doesn't indicate that audioClip is ready.
     bool _isLongEnough = false; // recording long enough
     bool _isAssemblingClip = false; // _resultClip is Assembling. (true to false means finish recording)
     bool _isSpeechToTextRunning = false;
@@ -74,7 +74,7 @@ public class WatsonManager : MonoBehaviour
         yield return new WaitForSeconds(sec);
         Debug.Log("Stop microphone.");
         _isRecording = false;
-        StartCoroutine(GetFinalResult());
+        StartCoroutine(GetWatsonOutput());
     }
 
 
@@ -91,7 +91,7 @@ public class WatsonManager : MonoBehaviour
         // reset result
         _speechToTextResult = null;
         _assistantResult = null;
-        _action = WatsonIntents.Fail;
+        _failMessage = null;
 
         // clear clip
         if (_resultClip)
@@ -146,14 +146,68 @@ public class WatsonManager : MonoBehaviour
             _resultClip = AudioClip.Create("result", recordDataList.Count, 1, _recordingHZ, false);
             _resultClip.SetData(recordDataList.ToArray(), 0);
         }
+        else
+        {
+            _failMessage = "Recording time too short.";
+        }
         _isAssemblingClip = false;
     }
 
+    IEnumerator SpeechToTextService()
+    {
+        Debug.Log("Start S2T");
+        _isSpeechToTextRunning = true;
+        // IBM Cloud authentication
+        var authenticator = new IamAuthenticator(apikey: _speechToTextKey);
+        while (!authenticator.CanAuthenticate())
+            yield return null;
+
+        var speechToText = new SpeechToTextService(authenticator);
+        speechToText.SetServiceUrl(_speechToTextUrl);
+        SpeechRecognitionResults recognizeResponse = null;
+
+        // wait for assembling audioCip
+        while (_isAssemblingClip)
+        {
+            yield return null;
+        }
+        // already fail in recording.
+        if (_failMessage != null)
+        {
+            _isSpeechToTextRunning = false;
+            yield break;
+        }
+        speechToText.Recognize(
+            callback: (DetailedResponse<SpeechRecognitionResults> response, IBMError error) =>
+            {
+                recognizeResponse = response.Result;
+            },
+            audio: new MemoryStream(WavUtility.FromAudioClip(_resultClip)),
+            contentType: "audio/wav"
+        );
+        Debug.Log("Sent audio to S2T");
+        // wait for Speech to text result
+        while (recognizeResponse == null)
+        {
+            yield return null;
+        }
+        if (recognizeResponse.Results.Count != 0 &&
+            recognizeResponse.Results[0].Alternatives.Count != 0)
+        {
+            _speechToTextResult = recognizeResponse.Results[0].Alternatives[0].Transcript;
+        }
+        else
+        {
+            _failMessage = "Please try to record clearly.";
+        }
+        _isSpeechToTextRunning = false;
+    }
 
     IEnumerator AssistantService()
     {
         Debug.Log("Start Assistant");
         _isAssistantRunning = true;
+        // IBM Cloud authentication
         var authenticator = new IamAuthenticator(apikey: _assistantKey);
         while (!authenticator.CanAuthenticate())
             yield return null;
@@ -165,12 +219,12 @@ public class WatsonManager : MonoBehaviour
         {
             yield return null;
         }
-        if (_speechToTextResult is null)
+        // already fail in other service;
+        if (_failMessage != null)
         {
-            // todo
-            Debug.Log("fail to get text from speech.");
+            _isAssistantRunning = false;
             yield break;
-        }
+        };
         // sent text to assistant
         MessageResponseStateless messageResponse = null;
         assistant.MessageStateless(
@@ -191,103 +245,126 @@ public class WatsonManager : MonoBehaviour
             yield return null;
         }
         Debug.Log("Assistant result back");
-
         _assistantResult = messageResponse.Output;
         _isAssistantRunning = false;
     }
 
-    IEnumerator SpeechToTextService()
-    {
-        Debug.Log("Start S2T");
-        _isSpeechToTextRunning = true;
-        var authenticator = new IamAuthenticator(apikey: _speechToTextKey);
-        while (!authenticator.CanAuthenticate())
-            yield return null;
-
-        var speechToText = new SpeechToTextService(authenticator);
-        speechToText.SetServiceUrl(_speechToTextUrl);
-        SpeechRecognitionResults recognizeResponse = null;
-
-        // wait for assembling audioCip
-        while (_isAssemblingClip)
-        {
-            yield return null;
-        }
-        if (_resultClip is null)
-        {
-            // todo 
-            Debug.Log("Recording fail. Might be to short.");
-            yield break;
-        }
-        speechToText.Recognize(
-            callback: (DetailedResponse<SpeechRecognitionResults> response, IBMError error) =>
-            {
-                recognizeResponse = response.Result;
-            },
-            audio: new MemoryStream(WavUtility.FromAudioClip(_resultClip)),
-            contentType: "audio/wav"
-        );
-        Debug.Log("Sent audio to S2T");
-        // wait for Speech to text
-        while (recognizeResponse == null)
-        {
-            yield return null;
-        }
-        _speechToTextResult = recognizeResponse.Results[0].Alternatives[0].Transcript;
-        _isSpeechToTextRunning = false;
-    }
-
-    private void Update()
-    {
-
-    }
-
-    // todo 
-    IEnumerator GetFinalResult()
+    // get final result from Watson Assistant response
+    IEnumerator GetWatsonOutput()
     {
         // wait for assistant finish
         while (_isAssistantRunning)
         {
             yield return null;
         }
-        // get intent
-        if (_assistantResult.Intents.Count != 0)
+        Debug.Log(string.Format("GetWatsonOutput(): start parsing."));
+        if (_failMessage == null)
         {
-            _action = _assistantResult.Intents[0].Intent.ToLower() switch
-            {
-                "attack" => WatsonIntents.Attack,
-                "move" => WatsonIntents.Move,
-                "shield" => WatsonIntents.Sheild,
-                _ => WatsonIntents.Fail
-            };
-            Debug.Log(_action);
+            // get intent and index
+            var intent = GetFinalIntent();
+            var index = new Vector2Int();
+            if (intent == WatsonIntents.Fail)
+                _watsonOutput = new WatsonOutput("Watson cannot identify your intent. Please try keywords such as Attack, Navigate or Shield.");
+            else if (!GetFinalIndex(ref index) && intent != WatsonIntents.Sheild)
+                _watsonOutput = new WatsonOutput(string.Format("Please specific a target cell to {0}.", intent.ToString().ToLower()));
+            else
+                _watsonOutput = new WatsonOutput(intent, index);
+            // log
+            if (intent == WatsonIntents.Fail)
+                Debug.Log(string.Format("GetFinalResult(): Fail {0}", _watsonOutput.FailMessage));
+            else
+                Debug.Log(string.Format("GetFinalResult(): {0} {1}", _watsonOutput.Intent, _watsonOutput.SelectionIndex));
         }
-        bool hasRow = false;
-        bool hasCol = false;
-        foreach (var entity in _assistantResult.Entities)
+        else
         {
-            if (entity.Entity.Equals("row") && !hasRow)
-            {
-                hasRow = true;
-                _targetIndex.x = int.Parse(entity.Value);
-                Debug.Log(string.Format("X: {0}", _targetIndex.x));
-            }
-            if (entity.Entity.Equals("column") && !hasCol)
-            {
-                hasCol = true;
-                _targetIndex.y = int.Parse(entity.Value);
-                Debug.Log(string.Format("Y: {0}", _targetIndex.y));
-
-            }
+            _watsonOutput = new WatsonOutput(_failMessage);
         }
-        if (!(hasRow && hasCol))
-        {
-            if (_action != WatsonIntents.Sheild) { _action = WatsonIntents.Fail; }
-        }
-        Debug.Log(string.Format("{0}: {1}", _action.ToString(), _targetIndex.ToString()));
     }
 
-    enum WatsonIntents { Attack, Move, Sheild, Fail }
+    // get intent from Watson assistant result
+    WatsonIntents GetFinalIntent()
+    {
+        if (_assistantResult.Intents.Count == 0)
+            return WatsonIntents.Fail;
+        var intent = _assistantResult.Intents[0].Intent.ToLower() switch
+        {
+            "attack" => WatsonIntents.Attack,
+            "move" => WatsonIntents.Move,
+            "shield" => WatsonIntents.Sheild,
+            _ => WatsonIntents.Fail
+        };
+        Debug.Log(string.Format("GetFinalIntent(): {0}", intent));
+        return intent;
+    }
+
+    // get index from Watson assistant result
+    bool GetFinalIndex(ref Vector2Int result)
+    {
+        var xList = new List<int>();
+        var yList = new List<int>();
+        foreach (var entity in _assistantResult.Entities)
+        {
+            if (entity.Entity.ToLower().Equals("row"))
+            {
+                xList.Add(int.Parse(entity.Value));
+            }
+            if (entity.Entity.ToLower().Equals("column"))
+            {
+                yList.Add(int.Parse(entity.Value));
+            }
+        }
+        Debug.Log(string.Format("GetFinalIndex(): x:{0} y:{1}", string.Join(",", xList), string.Join(",", yList)));
+        if (xList.Count != 1 || yList.Count != 1)
+        {
+            return false;
+        }
+        result.x = xList[0];
+        result.y = yList[0];
+        return true;
+    }
+
+    public WatsonOutput GetFinalResult()
+    {
+        return _watsonOutput;
+    }
+
+    public void ResetFinalResult()
+    {
+        _watsonOutput = null;
+    }
+
+    public bool IsWatsonRunning()
+    {
+        return _isAssemblingClip || _isSpeechToTextRunning || _isAssistantRunning;
+    }
+}
+
+namespace SpaceMath
+{
+    public enum WatsonIntents { Attack, Move, Sheild, Fail }
+
+    public class WatsonOutput
+    {
+        readonly WatsonIntents _intent;
+        Vector2Int _selectionIndex;
+        readonly string _failMessage;
+
+        public WatsonOutput(WatsonIntents intent, Vector2Int selectionIndex)
+        {
+            _intent = intent;
+            _selectionIndex = selectionIndex;
+        }
+
+        public WatsonOutput(string failString)
+        {
+            _intent = WatsonIntents.Fail;
+            _failMessage = failString;
+        }
+
+        public WatsonIntents Intent { get => _intent; }
+        public Vector2Int SelectionIndex { get => _selectionIndex; }
+        public string FailMessage { get => _failMessage; }
+    }
 }
 
 
