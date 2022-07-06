@@ -1,3 +1,4 @@
+using SpaceMath;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,8 @@ public class SelectionGridManager : MonoBehaviour
     // color of empty cell
     [SerializeField] Color _enemyIconColor;
 
+    [SerializeField] GridLayoutGroup _buttonsGroup;
+
     [SerializeField] GameObject _playerIcon;
 
     [SerializeField] GameObject _enemyIcon;
@@ -36,12 +39,11 @@ public class SelectionGridManager : MonoBehaviour
         _gameBoardManager = _gameBoard.GetComponent<GameBoardManager>();
         _selectionCells = new ActionType[5, 5];
         // find all buttons
-        var buttonsGroup = GetComponentInChildren<GridLayoutGroup>();
-        var buttonsCount = buttonsGroup.transform.childCount;
+        var buttonsCount = _buttonsGroup.transform.childCount;
         _buttons = new GameObject[buttonsCount];
         for (int i = 0; i < _buttons.Length; i++)
         {
-            _buttons[i] = buttonsGroup.transform.GetChild(i).gameObject;
+            _buttons[i] = _buttonsGroup.transform.GetChild(i).gameObject;
         }
         UpdateSelectionUI();
     }
@@ -175,15 +177,19 @@ public class SelectionGridManager : MonoBehaviour
     }
 
     // convert the index of whole cells grid into the selection cells index
-    Vector2Int GetSelectionIndexFromWhole(int wholeX, int wholeY)
+    public Vector2Int GetSelectionIndexFromWhole(int wholeX, int wholeY)
     {
         var origin = new Vector2Int(
             _gameBoardManager.GetPlayer().CellIndex.x + 2,
             _gameBoardManager.GetPlayer().CellIndex.y + 2);
         return new Vector2Int(origin.y - wholeY, origin.x - wholeX);
     }
+    public Vector2Int GetSelectionIndexFromWhole(Vector2Int wholeIndex)
+    {
+        return GetSelectionIndexFromWhole(wholeIndex.x, wholeIndex.y);
+    }
     // convert the index of selection cells grid into the whole cells index
-    Vector2Int GetWholeIndexFromSelection(int selectionX, int selectionY)
+    public Vector2Int GetWholeIndexFromSelection(int selectionX, int selectionY)
     {
         var origin = new Vector2Int(
             _gameBoardManager.GetPlayer().CellIndex.x + 2,
@@ -191,26 +197,50 @@ public class SelectionGridManager : MonoBehaviour
         return new Vector2Int(origin.x - selectionY, origin.y - selectionX);
     }
 
+    public Vector2Int GetWholeIndexFromSelection(Vector2Int selectionIndex)
+    {
+        return GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y);
+    }
+
     void ClickAction(Vector2Int selectionIndex, ActionType type)
     {
         _finalOutput = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
         Debug.Log(string.Format("{0} {1}", _finalOutput.Type, _finalOutput.TargetIndex));
     }
+    // convert (0,0) to alpha 1
+    public string GetIndexNameString(Vector2Int selectionIndex)
+    {
+        var x = selectionIndex.x + 1;
+        var y = selectionIndex.y + 1;
+        string yName = y switch
+        {
+            1 => "Alpha",
+            2 => "Beta",
+            3 => "Charlie",
+            4 => "Delta",
+            5 => "Echo",
+            _ => ""
+        };
+        return string.Format("{0} {1}", yName, x);
+    }
 }
 
-public enum ActionType { None, Move, Attack };
-
-public class SelectionOutput
+namespace SpaceMath
 {
-    Vector2Int _targetIndex;
-    readonly ActionType _type;
+    public enum ActionType { None, Move, Attack };
 
-    public SelectionOutput(Vector2Int targetIndex, ActionType type)
+    public class SelectionOutput
     {
-        _targetIndex = targetIndex;
-        _type = type;
-    }
+        Vector2Int _targetIndex;
+        readonly ActionType _type;
 
-    public ActionType Type { get => _type; }
-    public Vector2Int TargetIndex { get => _targetIndex; }
+        public SelectionOutput(Vector2Int targetIndex, ActionType type)
+        {
+            _targetIndex = targetIndex;
+            _type = type;
+        }
+
+        public ActionType Type { get => _type; }
+        public Vector2Int TargetIndex { get => _targetIndex; }
+    }
 }

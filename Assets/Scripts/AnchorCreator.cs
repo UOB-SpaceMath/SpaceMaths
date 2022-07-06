@@ -10,53 +10,50 @@ using UnityEngine.XR.ARSubsystems;
 [RequireComponent(typeof(ARPointCloudManager))]
 public class AnchorCreator : MonoBehaviour
 {
+    [SerializeField]
+    GameObject _gameBoard;
 
-    static readonly List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+    [SerializeField]
+    GameObject _gameManager;
 
-    ARRaycastManager m_RaycastManager;
+    [SerializeField]
+    Button _clearButton;
 
-    ARAnchorManager m_AnchorManager;
+    static readonly List<ARRaycastHit> _Hits = new List<ARRaycastHit>();
 
-    ARPlaneManager m_PlaneManager;
+    ARRaycastManager _raycastManager;
 
-    ARPointCloudManager m_PointCloudManager;
+    ARAnchorManager _anchorManager;
 
-    ARAnchor m_CurrentAnchors;
+    ARPlaneManager _planeManager;
 
-    GameObject m_GameManager;
+    ARPointCloudManager _pointCloudManager;
 
-    GameObject m_GameBoard;
+    ARAnchor _currentAnchors;
 
-    Button m_ClearButton;
-
-
-    void Start()
+    void Awake()
     {
-        m_RaycastManager = GetComponent<ARRaycastManager>();
-        m_AnchorManager = GetComponent<ARAnchorManager>();
-        m_PlaneManager = GetComponent<ARPlaneManager>();
-        m_PointCloudManager = GetComponent<ARPointCloudManager>();
+        _raycastManager = GetComponent<ARRaycastManager>();
+        _anchorManager = GetComponent<ARAnchorManager>();
+        _planeManager = GetComponent<ARPlaneManager>();
+        _pointCloudManager = GetComponent<ARPointCloudManager>();
         // get and hide game board if the game is not run in Unity Editor.
         if (Application.platform != RuntimePlatform.OSXEditor &&
             Application.platform != RuntimePlatform.LinuxEditor &&
             Application.platform != RuntimePlatform.WindowsEditor)
         {
-            m_GameBoard = GameObject.Find("GameBoard");
-            m_GameManager = GameObject.Find("GameManager");
-            m_GameManager.SetActive(false);
+            _gameManager.SetActive(false);
+            _gameBoard.SetActive(false);
         }
 
-
-        // get clear buttom
-        m_ClearButton = GameObject.Find("Screen Canvas/Button").GetComponent<Button>();
-        m_ClearButton.interactable = false;
-
+        // get clear button
+        _clearButton.interactable = false;
     }
 
     void Update()
     {
         // no current anchor
-        if (m_CurrentAnchors is null)
+        if (_currentAnchors is null)
         {
             // get touching input
             if (Input.touchCount == 0)
@@ -72,18 +69,19 @@ public class AnchorCreator : MonoBehaviour
                 TrackableType.PlaneWithinPolygon;
 
             // Perform the raycast
-            if (m_RaycastManager.Raycast(touch.position, s_Hits, trackableTypes))
+            if (_raycastManager.Raycast(touch.position, _Hits, trackableTypes))
             {
                 // Raycast hits are sorted by distance, so the first one will be the closest hit.
-                var hit = s_Hits[0];
+                var hit = _Hits[0];
                 var anchor = ShowGameBoardOnPlane(hit);
                 if (anchor)
                 {
                     // Remember the anchor so we can remove it later.
-                    m_CurrentAnchors = anchor;
+                    _currentAnchors = anchor;
                 }
                 else
                 {
+                    Debug.Log("fail to set anchor.");
                     // todo add android toast message.
                 }
             }
@@ -97,7 +95,7 @@ public class AnchorCreator : MonoBehaviour
         // try to create anchor on plane
         if (hit.trackable is ARPlane plane)
         {
-            anchor = m_AnchorManager.AttachAnchor(plane, hit.pose);
+            anchor = _anchorManager.AttachAnchor(plane, hit.pose);
         }
         else
         {
@@ -112,36 +110,36 @@ public class AnchorCreator : MonoBehaviour
         }
 
         // attach game board on anchor;
-        m_GameManager.SetActive(true);
-        m_GameBoard.SetActive(true);
-        m_GameBoard.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
+        _gameManager.SetActive(true);
+        _gameBoard.SetActive(true);
+        _gameBoard.transform.SetPositionAndRotation(anchor.transform.position, anchor.transform.rotation);
         // turn off plane detection
         ToggleDetection();
-        // set button
-        m_ClearButton.interactable = true;
+        // set button active
+        _clearButton.interactable = true;
 
         return anchor;
     }
 
     public void RemoveAnchor()
     {
-        if (m_CurrentAnchors)
+        if (_currentAnchors)
         {
-            Destroy(m_CurrentAnchors.gameObject);
-            m_CurrentAnchors = null;
-            m_GameManager.SetActive(false);
-            m_GameBoard.SetActive(false);
+            Destroy(_currentAnchors.gameObject);
+            _currentAnchors = null;
+            _gameManager.SetActive(false);
+            _gameBoard.SetActive(false);
             ToggleDetection();
         }
-        m_ClearButton.interactable = false;
+        _clearButton.interactable = false;
     }
 
     public void ToggleDetection()
     {
-        m_PlaneManager.enabled = !m_PlaneManager.enabled;
-        m_PlaneManager.SetTrackablesActive(m_PlaneManager.enabled);
-        m_PointCloudManager.enabled = !m_PointCloudManager.enabled;
-        m_PointCloudManager.SetTrackablesActive(m_PointCloudManager.enabled);
+        _planeManager.enabled = !_planeManager.enabled;
+        _planeManager.SetTrackablesActive(_planeManager.enabled);
+        _pointCloudManager.enabled = !_pointCloudManager.enabled;
+        _pointCloudManager.SetTrackablesActive(_pointCloudManager.enabled);
     }
 
 
