@@ -1,5 +1,4 @@
 using SpaceMath;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,17 +23,17 @@ public class EnemyHealth : MonoBehaviour
 
     private void Start()
     {
-        List<Ships> enemies = gameBoardManager.GetEnemyShips();        
-        for (int i=0; i<enemies.Count; i++)
+        List<Ships> enemies = gameBoardManager.GetEnemyShips();
+        for (int i = 0; i < enemies.Count; i++)
         {
             if (enemies[i].ShipObject == this.gameObject)
             {
                 currentEnemy = enemies[i];
-            } 
+            }
         }
 
         health = currentEnemy.Health;
-        maxHealth = currentEnemy.Health;        
+        maxHealth = currentEnemy.Health;
         slider = this.gameObject.GetComponentInChildren<Slider>();
         healthBarUI.SetActive(true);
         slider.value = CalculateHealth();

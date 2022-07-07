@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +14,7 @@ public class DisplayStatsSelectionGrid : MonoBehaviour
     {
         gameBoardManager = GameObject.Find("GameBoard").GetComponent<GameBoardManager>();
     }
-    
+
 
     // Update is called once per frame
     void Update()
@@ -28,8 +26,9 @@ public class DisplayStatsSelectionGrid : MonoBehaviour
         energyDisplay.color = Color.blue;
     }
 
-    private string HealthTextToDisplay()    {        
-        
+    private string HealthTextToDisplay()
+    {
+
         health = gameBoardManager.GetPlayer().Health;
         string result = "Health: " + health.ToString();
         return result;
@@ -38,7 +37,7 @@ public class DisplayStatsSelectionGrid : MonoBehaviour
     private string EnergyTextToDisplay()
     {
 
-        energy = gameBoardManager.GetPlayer().Energy;        
+        energy = gameBoardManager.GetPlayer().Energy;
         string result = "Energy: " + energy.ToString();
         return result;
     }

@@ -185,6 +185,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator AttackEnemy(Ships player, Ships enemy)
     {
+        yield return new WaitForSeconds(0.5f);
         am.Attack(player, enemy);
         yield return new WaitForSeconds(1.0f);
         stage = Stages.Enemies;
