@@ -38,13 +38,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int energyConsumption;
 
+    [SerializeField]
+    private float panelHigh;
 
     void Start()
     {
         // Question stage
         stage = Stages.Question;
-        SetPanel(PanelType.Question);
         player = gbm.GetPlayer();
+        SetPanel(PanelType.Question);
     }
 
     void Update()
@@ -149,7 +151,7 @@ public class GameManager : MonoBehaviour
                 messageCanvas.SetActive(true);
                 break;
         }
-
+        SetPanelPostion();
     }
 
     private void ShowMessage(string message, Stages nextStage)
@@ -262,6 +264,17 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+    }
+
+    private void SetPanelPostion()
+    {
+        if (player.ShipObject != null)
+        {
+            Vector3 pos = player.ShipObject.transform.position;
+            questionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
+            selectionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
+            messageCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
+        }
     }
 
     private enum PanelType { Question, Selection, Message };
