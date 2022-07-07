@@ -19,11 +19,12 @@ public class DisplayStatsSelectionGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Color healthColor = new Color(0.3f, 1.2f, 0.6f, 1);
+        Color energyColor = new Color(0.2f, 0.5f, 1.3f, 1.2f);
         healthDisplay.text = HealthTextToDisplay();
-        healthDisplay.color = Color.green;
+        healthDisplay.color = healthColor;
         energyDisplay.text = EnergyTextToDisplay();
-        energyDisplay.color = Color.blue;
+        energyDisplay.color = energyColor;
     }
 
     private string HealthTextToDisplay()
