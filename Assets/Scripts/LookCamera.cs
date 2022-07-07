@@ -7,7 +7,15 @@ public class LookCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        var camera = _cm.GetCamera();
+        Camera camera;
+        if (_cm != null)
+        {
+            camera = _cm.GetCamera();
+        }
+        else
+        {
+            camera = Camera.main;
+        }
         transform.rotation = Quaternion.LookRotation(camera.transform.TransformVector(Vector3.forward), camera.transform.TransformVector(Vector3.up));
     }
 }
