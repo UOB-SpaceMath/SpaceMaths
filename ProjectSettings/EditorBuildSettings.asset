@@ -4,7 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/StartingScene.unity
+    guid: 118ef66be389b4814aad2134d64111f2
+  - enabled: 0
+    path: Assets/Scenes/ARScene.unity
+    guid: caae3fd0374a00e4d92b61028d2b6d29
+  - enabled: 1
+    path: Assets/Scenes/ARScene.unity
+    guid: 14deca9211cca46088441a29dc46e3f5
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
       type: 2}
