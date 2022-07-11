@@ -37,15 +37,20 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject messageCanvas;
 
+    // Game controls
+    // Drag these screens into the inspector
+    [SerializeField]
+    private GameObject restartScreen;
+    [SerializeField]
+    private GameObject continueScreen;
+
     // Game level
+    [SerializeField]
     private int level = 0;
     private int maxLevel;
 
     // Game settings
 
-    // Game controls
-    private GameObject restartScreen;
-    private GameObject continueScreen;
     private GameObject restartButton;
     [SerializeField]
     private float panelHigh;
@@ -53,8 +58,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         restartButton = GameObject.Find("Restart Button");
-        restartScreen = GameObject.Find("Restart?");
-        continueScreen = GameObject.Find("Continue?");
         restartScreen.SetActive(false);
         continueScreen.SetActive(false);
         maxLevel = levels.Count - 1;
