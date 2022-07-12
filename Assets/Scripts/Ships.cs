@@ -20,8 +20,8 @@ namespace SpaceMath
         private int attackDamage = 1;
         [SerializeField]
         private float weaponRange = 3.0f;
-        [SerializeField]
-        private Transform weaponEnd; // Where the weapon is.
+        //[SerializeField]
+        //private Transform weaponEnd; // Where the weapon is.
 
         // Ship itself relatives
         [SerializeField]
@@ -30,6 +30,8 @@ namespace SpaceMath
         private int _health = 100;
         [SerializeField]
         private int _energyOpenShield = 5;
+        [SerializeField]
+        private int energyConsumption;
 
         private bool _isShieldsOn = false;
 
@@ -37,7 +39,7 @@ namespace SpaceMath
 
         public float WeaponRange { get => weaponRange; }
 
-        public Transform WeaponEnd { get => weaponEnd; }
+        //public Transform WeaponEnd { get => weaponEnd; }
 
         public int Health { get => _health; }
 
@@ -85,6 +87,11 @@ namespace SpaceMath
         public void DecreaseEnergy(int amount)
         {
             _energy -= amount;
+        }
+
+        public void ConsumeEnergyByTurn()
+        {
+            _energy -= energyConsumption;
         }
 
         public bool IsShipOutOfEnergy()
