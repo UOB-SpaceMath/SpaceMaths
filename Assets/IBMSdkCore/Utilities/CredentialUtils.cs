@@ -222,14 +222,13 @@ namespace IBM.Cloud.SDK.Utilities
                 foreach (DictionaryEntry de in environmentVariables)
                 {
                     string key = de.Key.ToString();
-                    string value = de.Value.ToString();
-
+                    
                     if (key.StartsWith(serviceName + "_"))
                     {
                         string credentialName = key.Substring(serviceName.Length + 1);
-                        if (!string.IsNullOrEmpty(credentialName) && !string.IsNullOrEmpty(value))
+                        if (!string.IsNullOrEmpty(credentialName) && de.Value!=null)
                         {
-                            props.Add(credentialName, value);
+                            props.Add(credentialName, de.Value.ToString());
                         }
                     }
                 }
