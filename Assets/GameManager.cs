@@ -7,55 +7,48 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     // Sub managers
-    [SerializeField]
-    private AttackManager am;
-    [SerializeField]
-    private GameBoardManager gbm;
-    [SerializeField]
-    private UIManager uim;
-    [SerializeField]
-    private SelectionGridManager sgm;
-    [SerializeField]
-    private WatsonManager wm;
-    [SerializeField]
-    private MessageManager mm;
+    [SerializeField] private AttackManager am;
+    [SerializeField] private GameBoardManager gbm;
+    [SerializeField] private UIManager uim;
+    [SerializeField] private SelectionGridManager sgm;
+    [SerializeField] private WatsonManager wm;
+    [SerializeField] private MessageManager mm;
 
     private Ships player;
     private List<Ships> enemies;
-    [SerializeField]
-    List<GameObject> levels;
+    [SerializeField] private List<GameObject> levels;
 
     // Store the game stage.
-    public enum Stages { None, Question, Player, Enemies };
+    public enum Stages
+    {
+        None,
+        Question,
+        Player,
+        Enemies
+    };
+
     private Stages stage;
 
     // Drag the canvas into these variables in the inspector
-    [SerializeField]
-    private GameObject questionCanvas;
-    [SerializeField]
-    private GameObject selectionCanvas;
-    [SerializeField]
-    private GameObject messageCanvas;
+    [SerializeField] private GameObject questionCanvas;
+    [SerializeField] private GameObject selectionCanvas;
+    [SerializeField] private GameObject messageCanvas;
 
     // Game controls
     // Drag these screens into the inspector
-    [SerializeField]
-    private GameObject restartScreen;
-    [SerializeField]
-    private GameObject continueScreen;
+    [SerializeField] private GameObject restartScreen;
+    [SerializeField] private GameObject continueScreen;
 
     // Game level
-    [SerializeField]
-    private int level = 0;
+    [SerializeField] private int level = 0;
     private int maxLevel;
 
     // Game settings
 
     private GameObject restartButton;
-    [SerializeField]
-    private float panelHigh;
+    [SerializeField] private float panelHigh;
 
-    void Start()
+    private void Start()
     {
         restartButton = GameObject.Find("Restart Button");
         restartScreen.SetActive(false);
@@ -68,18 +61,13 @@ public class GameManager : MonoBehaviour
         SetPanel(PanelType.Question);
     }
 
-    void Update()
+    private void Update()
     {
         if (player.IsShipDead())
-        {
             ShowLoseScreen();
-        }
         else if (!gbm.IsEnemiesRemain())
-        {
             ShowWinScreen();
-        }
         else
-        {
             switch (stage)
             {
                 // Question stage
@@ -104,6 +92,7 @@ public class GameManager : MonoBehaviour
                         default:
                             break;
                     }
+
                     break;
 
                 // Player's turn
@@ -116,7 +105,8 @@ public class GameManager : MonoBehaviour
                         StartCoroutine(RunWatsonCommand());
                         break;
                     }
-                    SelectionOutput selectionResult = sgm.GetFinalResult();
+
+                    var selectionResult = sgm.GetFinalResult();
                     sgm.ResetFinalResult();
                     if (selectionResult != null && selectionResult.Type != ActionType.None)
                     {
@@ -124,7 +114,8 @@ public class GameManager : MonoBehaviour
                         switch (selectionResult.Type)
                         {
                             case ActionType.Move:
-                                StartCoroutine(Move(player, selectionResult.TargetIndex.x, selectionResult.TargetIndex.y));
+                                StartCoroutine(Move(player, selectionResult.TargetIndex.x,
+                                    selectionResult.TargetIndex.y));
                                 break;
                             case ActionType.Attack:
                                 StartCoroutine(AttackEnemy(player, gbm.GetShip(selectionResult.TargetIndex)));
@@ -136,6 +127,7 @@ public class GameManager : MonoBehaviour
                                 break;
                         }
                     }
+
                     break;
 
                 // Enemies' turn
@@ -149,7 +141,6 @@ public class GameManager : MonoBehaviour
                     sgm.ResetFinalResult();
                     break;
             }
-        }
     }
 
     private void SetPanel(PanelType type)
@@ -170,6 +161,7 @@ public class GameManager : MonoBehaviour
                 messageCanvas.SetActive(true);
                 break;
         }
+
         SetPanelPostion();
     }
 
@@ -214,17 +206,14 @@ public class GameManager : MonoBehaviour
     private IEnumerator AttackPlayer(List<Ships> enemies, Ships player)
     {
         if (enemies != null)
-        {
-            for (int i = 0; i < enemies.Count; i++)
+            for (var i = 0; i < enemies.Count; i++)
             {
                 am.Attack(enemies[i], player);
                 yield return new WaitForSeconds(1.0f);
             }
-        }
         else
-        {
             yield return new WaitForSeconds(1.0f);
-        }
+
         player.ConsumeEnergyByTurn();
         stage = Stages.Question;
     }
@@ -239,9 +228,15 @@ public class GameManager : MonoBehaviour
         sgm.UpdateSelectionUI();
     }
 
-    private void ShowLoseScreen() { ShowContinueScreen(); }
+    private void ShowLoseScreen()
+    {
+        ShowContinueScreen();
+    }
 
-    private void ShowWinScreen() { ShowContinueScreen(); }
+    private void ShowWinScreen()
+    {
+        ShowContinueScreen();
+    }
 
     public void ShowRestartScreen()
     {
@@ -296,14 +291,12 @@ public class GameManager : MonoBehaviour
     {
         restartButton.SetActive(false);
     }
+
     private IEnumerator RunWatsonCommand()
     {
         Debug.Log("Running Watson Command.");
         // wait for WatsonManager
-        while (wm.GetFinalResult() == null)
-        {
-            yield return null;
-        }
+        while (wm.IsWatsonRunning()) yield return null;
         var output = wm.GetFinalResult();
         wm.ResetFinalResult();
         var index = sgm.GetWholeIndexFromSelection(output.SelectionIndex);
@@ -316,10 +309,12 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    var message = string.Format("Nothing to be attacked on {0}", sgm.GetIndexNameString(output.SelectionIndex));
+                    var message = string.Format("Nothing to be attacked on {0}",
+                        sgm.GetIndexNameString(output.SelectionIndex));
                     ShowMessage(message, Stages.Player);
                     Debug.Log(string.Format("Fail to attack {0}", index));
                 }
+
                 break;
             case WatsonIntents.Move:
                 if (gbm.IsEmpty(index))
@@ -332,28 +327,33 @@ public class GameManager : MonoBehaviour
                     ShowMessage(message, Stages.Player);
                     Debug.Log(string.Format("Fail to move {0}", index));
                 }
+
                 break;
             //case WatsonIntents.Sheild:
             //    // todo
             //    break;
             default: // fail
-                     // message box;
+                // message box;
                 ShowMessage(output.FailMessage, Stages.Player);
                 break;
         }
-
     }
 
     private void SetPanelPostion()
     {
         if (player.ShipObject != null)
         {
-            Vector3 pos = player.ShipObject.transform.position;
+            var pos = player.ShipObject.transform.position;
             questionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
             selectionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
             messageCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
         }
     }
 
-    private enum PanelType { Question, Selection, Message };
+    private enum PanelType
+    {
+        Question,
+        Selection,
+        Message
+    };
 }
