@@ -9,11 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/StartingScene.unity
     guid: 118ef66be389b4814aad2134d64111f2
   - enabled: 0
-    path: Assets/Scenes/ARScene.unity
-    guid: caae3fd0374a00e4d92b61028d2b6d29
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/ARScene.unity
     guid: 14deca9211cca46088441a29dc46e3f5
+  - enabled: 1
+    path: Assets/Scenes/ARSceneLevel1.unity
+    guid: c02847636b30043d193cc43824010237
+  - enabled: 1
+    path: Assets/Scenes/ARSceneLevel2.unity
+    guid: 072cfa66a9f0d4fdc98865efdeafb1e4
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
       type: 2}
