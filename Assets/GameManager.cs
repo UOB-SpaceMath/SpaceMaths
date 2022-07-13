@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     // Game level
     [SerializeField] private int level = 0;
     private int maxLevel;
+    [SerializeField] private string previousLevel;
+    [SerializeField] private string nextLevel;
 
     // Game settings
 
@@ -276,15 +278,17 @@ public class GameManager : MonoBehaviour
     public void RestartNextLevel()
     {
         level = Mathf.Max(++level, maxLevel);
-        DisableContinueScreen();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        DisableContinueScreen();        
+        SceneManager.LoadScene(nextLevel);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void RestartPreviousLevel()
     {
         level = Mathf.Min(--level, 0);
         DisableContinueScreen();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(previousLevel);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void DisableRestartButton()
