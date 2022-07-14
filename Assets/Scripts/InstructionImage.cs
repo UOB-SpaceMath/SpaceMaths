@@ -15,9 +15,9 @@ public class InstructionImage : MonoBehaviour
     public TextMeshProUGUI _displayText;
     public TextMeshProUGUI _displayHeaderText;
    
-    public Texture[] instructionSlide = new Texture[5];
-    public TextMeshProUGUI[] instructionText = new TextMeshProUGUI[5];
-    public TextMeshProUGUI[] headerText = new TextMeshProUGUI[5];
+    public Texture[] instructionSlide = new Texture[6];
+    public TextMeshProUGUI[] instructionText = new TextMeshProUGUI[6];
+    public TextMeshProUGUI[] headerText = new TextMeshProUGUI[6];
   
     // Start is called before the first frame update
     void Start()
@@ -38,7 +38,7 @@ public class InstructionImage : MonoBehaviour
     {
         currentPage++;
 
-        if(currentPage > 4)
+        if(currentPage > 5)
         {
             currentPage = 0;
         }
@@ -54,7 +54,7 @@ public class InstructionImage : MonoBehaviour
         currentPage--;
         if(currentPage < 0)
         {
-            currentPage = 4;
+            currentPage = 5;
         }
         _displayImage.texture = instructionSlide[currentPage];
         _displayText.SetText(instructionText[currentPage].text);

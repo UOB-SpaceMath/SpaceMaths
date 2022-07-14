@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.3708625, g: 0.37838694, b: 0.35726872, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1154,6 +1154,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
+      propertyPath: headerText.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: headerText.Array.data[5]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 9f70115fec35c41738ed98a615085d94,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[4]
+      value: 
+      objectReference: {fileID: 7699565235138187243, guid: de9d4567d3178458cb200626fbf72603,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[5]
+      value: 
+      objectReference: {fileID: 7740749178807632894, guid: e55c65246505c4a8ba9bef253455db9a,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
       propertyPath: instructionSlide.Array.data[0]
       value: 
       objectReference: {fileID: 2800000, guid: f9c81e9f21c0a4dbf990e5109cffced9, type: 3}
@@ -1175,6 +1208,11 @@ PrefabInstance:
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[4]
+      value: 
+      objectReference: {fileID: 2800000, guid: ef46b35b6fb264739a983fd58b1f81cd, type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.data[5]
       value: 
       objectReference: {fileID: 2800000, guid: b5170faf257ae420794bef1a81d7d01a, type: 3}
     - target: {fileID: 5027822090337006404, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,

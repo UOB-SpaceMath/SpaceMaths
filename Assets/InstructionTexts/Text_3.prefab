@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pick the correct choice of the maths question.
+  m_text: Choose the correct answer for the maths question.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: de28cdce4095e46cb88682038d258eb3, type: 2}
   m_sharedMaterial: {fileID: -2369440901582580570, guid: de28cdce4095e46cb88682038d258eb3,

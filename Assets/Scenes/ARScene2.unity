@@ -7077,7 +7077,7 @@ GameObject:
   - component: {fileID: 778908767}
   - component: {fileID: 778908766}
   m_Layer: 0
-  m_Name: Beta
+  m_Name: Bravo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7135,9 +7135,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Beta
-
-'
+  m_Text: Bravo
 --- !u!222 &778908767
 CanvasRenderer:
   m_ObjectHideFlags: 0

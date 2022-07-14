@@ -65,8 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: If answer is correct, the selection panel will show. You could choose to
-    move, attack or shield to the target grid.
+  m_text: 'If the answer is correct, you will see a selection panel. You can choose
+    to move, attack a target coordinate or raise shields. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: de28cdce4095e46cb88682038d258eb3, type: 2}
   m_sharedMaterial: {fileID: -2369440901582580570, guid: de28cdce4095e46cb88682038d258eb3,

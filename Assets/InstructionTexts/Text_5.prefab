@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3610366357140331920
+--- !u!1 &1039213558628824047
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2560972217530781870}
-  - component: {fileID: 3397352973794486446}
-  - component: {fileID: 7740749178807632894}
+  - component: {fileID: 6079264299546298811}
+  - component: {fileID: 3582778923173375794}
+  - component: {fileID: 7699565235138187243}
   m_Layer: 5
   m_Name: Text_5
   m_TagString: Untagged
@@ -18,13 +18,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2560972217530781870
+--- !u!224 &6079264299546298811
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3610366357140331920}
+  m_GameObject: {fileID: 1039213558628824047}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,21 +37,21 @@ RectTransform:
   m_AnchoredPosition: {x: 4.5, y: -73.8}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3397352973794486446
+--- !u!222 &3582778923173375794
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3610366357140331920}
+  m_GameObject: {fileID: 1039213558628824047}
   m_CullTransparentMesh: 1
---- !u!114 &7740749178807632894
+--- !u!114 &7699565235138187243
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3610366357140331920}
+  m_GameObject: {fileID: 1039213558628824047}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -65,7 +65,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Health and energy status will show along the selection grid after action.
+  m_text: Left button activates voice control, hold it down and speak to use. Use
+    the right syntax. Right button raises shields.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: de28cdce4095e46cb88682038d258eb3, type: 2}
   m_sharedMaterial: {fileID: -2369440901582580570, guid: de28cdce4095e46cb88682038d258eb3,
@@ -93,8 +94,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8
-  m_fontSizeBase: 8
+  m_fontSize: 5
+  m_fontSizeBase: 5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
