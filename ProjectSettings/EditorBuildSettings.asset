@@ -20,13 +20,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ARScene2.unity
     guid: f03d982b6fba8495eb0b0931a8a32dc5
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ARScene3.unity
     guid: 35ad6cac10bc94d69835d843df456e9c
   m_configObjects:

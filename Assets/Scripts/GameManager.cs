@@ -1,3 +1,4 @@
+using System;
 using SpaceMath;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     // Sub managers
-    [SerializeField] private AttackManager am;
+    [Header("Managers")] [SerializeField] private AttackManager am;
     [SerializeField] private GameBoardManager gbm;
     [SerializeField] private UIManager uim;
     [SerializeField] private SelectionGridManager sgm;
@@ -16,7 +17,6 @@ public class GameManager : MonoBehaviour
 
     private Ships player;
     private List<Ships> enemies;
-    [SerializeField] private List<GameObject> levels;
 
     // Store the game stage.
     public enum Stages
@@ -30,32 +30,26 @@ public class GameManager : MonoBehaviour
     private Stages stage;
 
     // Drag the canvas into these variables in the inspector
-    [SerializeField] private GameObject questionCanvas;
+    [Header("Canvas")] [SerializeField] private GameObject questionCanvas;
     [SerializeField] private GameObject selectionCanvas;
     [SerializeField] private GameObject messageCanvas;
 
     // Game controls
     // Drag these screens into the inspector
-    [SerializeField] private GameObject restartScreen;
+    [Header("Control Screens")] [SerializeField]
+    private GameObject restartScreen;
+
     [SerializeField] private GameObject continueScreen;
-
-    // Game level
-    [SerializeField] private int level = 0;
-    private int maxLevel;
-    [SerializeField] private string previousLevel;
-    [SerializeField] private string nextLevel;
-
     // Game settings
 
     private GameObject restartButton;
-    [SerializeField] private float panelHigh;
+    [Header("Misc")] [SerializeField] private float panelHigh;
 
     private void Start()
     {
         restartButton = GameObject.Find("Restart Button");
         restartScreen.SetActive(false);
         continueScreen.SetActive(false);
-        maxLevel = levels.Count - 1;
         // Question stage
         stage = Stages.Question;
         player = gbm.GetPlayer();
@@ -265,7 +259,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartWholeGame()
     {
-        level = 0;
+        GlobalInformation.CurrentLevelIndex = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -277,18 +271,17 @@ public class GameManager : MonoBehaviour
 
     public void RestartNextLevel()
     {
-        level = Mathf.Max(++level, maxLevel);
-        DisableContinueScreen();        
-        SceneManager.LoadScene(nextLevel);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GlobalInformation.CurrentLevelIndex =
+            Math.Min(++GlobalInformation.CurrentLevelIndex, gbm.GetLevelCount());
+        DisableContinueScreen();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void RestartPreviousLevel()
     {
-        level = Mathf.Min(--level, 0);
+        GlobalInformation.CurrentLevelIndex = Math.Max(--GlobalInformation.CurrentLevelIndex, 0);
         DisableContinueScreen();
-        SceneManager.LoadScene(previousLevel);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void DisableRestartButton()
