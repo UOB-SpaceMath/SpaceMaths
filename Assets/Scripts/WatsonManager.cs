@@ -57,6 +57,7 @@ public class WatsonManager : MonoBehaviour
         _isRecording = false;
         _isHandlingStart = false;
         _isHandlingStop = false;
+        _watsonOutput = null;
     }
 
     private IEnumerator StartHandler()
@@ -143,11 +144,13 @@ public class WatsonManager : MonoBehaviour
                 if (!isFetchingTimeOut)
                     _watsonOutput = GetWatsonOutput(output);
             }
+
+            // _watsonOutput is null mean is out of time
+            if (_watsonOutput == null)
+                _watsonOutput =
+                    new WatsonOutput("Sending command time out, you may not be connected to the spaceship.");
         }
 
-        // _watsonOutput is null mean is out of time
-        if (_watsonOutput == null)
-            _watsonOutput = new WatsonOutput("Sending command time out, you may not be connected to the spaceship.");
         _isHandlingStop = false;
         Debug.Log("Stop StopHandler.");
     }
