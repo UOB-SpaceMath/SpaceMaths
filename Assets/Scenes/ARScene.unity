@@ -3812,7 +3812,6 @@ MonoBehaviour:
   messageCanvas: {fileID: 1786371226}
   restartScreen: {fileID: 1975570225}
   continueScreen: {fileID: 1199847359}
-  levels: []
   panelHigh: 0.3
 --- !u!4 &741442005
 Transform:
