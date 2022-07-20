@@ -7313,7 +7313,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 741442004}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: RestartPreviousLevel
         m_Mode: 1
@@ -11408,9 +11408,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 741442004}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: RestartNextLevel
+        m_MethodName: RestartKeepLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16239,7 +16239,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 741442004}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: RestartPreviousLevel
         m_Mode: 1
@@ -17056,7 +17056,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 741442004}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: RestartNextLevel
         m_Mode: 1
@@ -21261,9 +21261,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 741442004}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: RestartNextLevel
+        m_MethodName: RestartKeepLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
