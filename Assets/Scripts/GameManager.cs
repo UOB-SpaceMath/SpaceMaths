@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SelectionGridManager sgm;
     [SerializeField] private WatsonManager wm;
     [SerializeField] private MessageManager mm;
+    [SerializeField] private ShieldManager sm;
 
     private Ships player;
     private List<Ships> enemies;
@@ -37,7 +38,8 @@ public class GameManager : MonoBehaviour
     // Game controls
     // Drag these screens into the inspector
     [SerializeField] private GameObject restartScreen;
-    [SerializeField] private GameObject continueScreen;
+    [SerializeField] private GameObject wonContinueScreen;
+    [SerializeField] private GameObject lostContinueScreen;
 
     // Game level
     [SerializeField] private int level = 0;
@@ -54,7 +56,8 @@ public class GameManager : MonoBehaviour
     {
         restartButton = GameObject.Find("Restart Button");
         restartScreen.SetActive(false);
-        continueScreen.SetActive(false);
+        wonContinueScreen.SetActive(false);
+        lostContinueScreen.SetActive(false);
         maxLevel = levels.Count - 1;
         // Question stage
         stage = Stages.Question;
@@ -108,6 +111,13 @@ public class GameManager : MonoBehaviour
                         break;
                     }
 
+                    if (sm.IsClicked)
+                    {
+                        stage = Stages.None;
+                        StartCoroutine(SwitchShield(player));
+                        break;
+                    }
+
                     var selectionResult = sgm.GetFinalResult();
                     sgm.ResetFinalResult();
                     if (selectionResult != null && selectionResult.Type != ActionType.None)
@@ -122,9 +132,6 @@ public class GameManager : MonoBehaviour
                             case ActionType.Attack:
                                 StartCoroutine(AttackEnemy(player, gbm.GetShip(selectionResult.TargetIndex)));
                                 break;
-                            //case ActionType.Shield:
-                            //   Do something
-                            //   break;
                             default:
                                 break;
                         }
@@ -216,8 +223,10 @@ public class GameManager : MonoBehaviour
         else
             yield return new WaitForSeconds(1.0f);
 
+        // Always consume player's energy at each turn's ending
         player.ConsumeEnergyByTurn();
         stage = Stages.Question;
+        sgm.UpdateSelectionUI();
     }
 
     private IEnumerator Move(Ships ship, int x, int y)
@@ -226,18 +235,25 @@ public class GameManager : MonoBehaviour
         // TODO make the movement animation
         yield return new WaitForSeconds(1.0f);
         stage = Stages.Enemies;
-        player.ConsumeEnergyByTurn();
         sgm.UpdateSelectionUI();
+    }
+
+    private IEnumerator SwitchShield(Ships player)
+    {
+        sm.IsClicked = false;
+        sm.SwitchShield(player);
+        yield return new WaitForSeconds(1.0f);
+        stage = Stages.Enemies;
     }
 
     private void ShowLoseScreen()
     {
-        ShowContinueScreen();
+        ShowLostContinueScreen();
     }
 
     private void ShowWinScreen()
     {
-        ShowContinueScreen();
+        ShowWonContinueScreen();
     }
 
     public void ShowRestartScreen()
@@ -252,15 +268,22 @@ public class GameManager : MonoBehaviour
         restartButton.SetActive(true);
     }
 
-    private void ShowContinueScreen()
+    private void ShowWonContinueScreen()
     {
         DisableRestartButton();
-        continueScreen.SetActive(true);
+        wonContinueScreen.SetActive(true);
+    }
+
+    private void ShowLostContinueScreen()
+    {
+        DisableRestartButton();
+        lostContinueScreen.SetActive(true);
     }
 
     private void DisableContinueScreen()
     {
-        continueScreen.SetActive(false);
+        wonContinueScreen.SetActive(false);
+        lostContinueScreen.SetActive(false);
     }
 
     public void RestartWholeGame()
