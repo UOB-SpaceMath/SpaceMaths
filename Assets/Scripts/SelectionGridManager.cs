@@ -215,7 +215,7 @@ public class SelectionGridManager : MonoBehaviour
         string yName = y switch
         {
             1 => "Alpha",
-            2 => "Beta",
+            2 => "Bravo",
             3 => "Charlie",
             4 => "Delta",
             5 => "Echo",
