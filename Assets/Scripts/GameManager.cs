@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
     public void RestartWholeGame()
     {
         level = 0;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(0);
     }
 
     public void RestartKeepLevel()
