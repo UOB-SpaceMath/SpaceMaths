@@ -78,8 +78,8 @@ public class UIManager : MonoBehaviour
         switch (Random.Range(0, 2))
         {
             case 1:
-                _numberOne = Random.Range(4, 10);
-                _numberTwo = Random.Range(4, 10);
+                _numberOne = Random.Range(4, 13);
+                _numberTwo = Random.Range(4, 13);
                 _numberThree = _numberOne * _numberTwo;
                 MultiplicationFunc();
                 GetAnswer(_numberThree);

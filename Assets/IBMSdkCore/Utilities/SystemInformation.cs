@@ -15,13 +15,8 @@
 *
 */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-using UnityEngine.Networking;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace IBM.Cloud.SDK.Utilities
 {
@@ -69,6 +64,10 @@ namespace IBM.Cloud.SDK.Utilities
                     Regex pattern = new Regex("\\d+(\\.\\d+)+");
                     Match m = pattern.Match(OsInfo);
                     osVersion = m.Value;
+                }
+                if (string.IsNullOrEmpty(osVersion))
+                {
+                    osVersion = "1";
                 }
 
                 return osVersion;

@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System;
 using IBM.Cloud.SDK.Authentication;
 using IBM.Cloud.SDK.Authentication.Iam;
 using IBM.Watson.Assistant.V2;
@@ -9,6 +5,10 @@ using IBM.Watson.Assistant.V2.Model;
 using IBM.Watson.SpeechToText.V1;
 using IBM.Watson.SpeechToText.V1.Model;
 using SpaceMath;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -57,6 +57,7 @@ public class WatsonManager : MonoBehaviour
         _isRecording = false;
         _isHandlingStart = false;
         _isHandlingStop = false;
+        _watsonOutput = null;
     }
 
     private IEnumerator StartHandler()
@@ -143,13 +144,12 @@ public class WatsonManager : MonoBehaviour
                 if (!isFetchingTimeOut)
                     _watsonOutput = GetWatsonOutput(output);
             }
+            // _watsonOutput is still null mean is out of time
+            if (_watsonOutput == null)
+                _watsonOutput = new WatsonOutput("Sending command time out, you may not be connected to the spaceship.");
         }
-
-        // _watsonOutput is null mean is out of time
-        if (_watsonOutput == null)
-            _watsonOutput = new WatsonOutput("Sending command time out, you may not be connected to the spaceship.");
         _isHandlingStop = false;
-        Debug.Log("Stop StopHandler.");
+        Debug.Log($"Stop StopHandler. Result: {_watsonOutput}");
     }
 
 
@@ -215,6 +215,7 @@ public class WatsonManager : MonoBehaviour
         // if not authenticated or not time out, continue to try
         while (!authenticator.CanAuthenticate() && !isTimeOut)
             yield return null;
+        Debug.Log($"Got authenticator from apiKey:{apiKey}");
         if (isTimeOut)
             failureCallback("Authentication time out, you may not connected to your ship");
         else
@@ -228,7 +229,8 @@ public class WatsonManager : MonoBehaviour
         Authenticator authenticator,
         AudioClip input)
     {
-        Debug.Log("Start S2T");
+        var time = Time.time;
+        Debug.Log($"Start S2T");
         var speechToText = new SpeechToTextService(authenticator);
         speechToText.SetServiceUrl(_speechToTextUrl);
         SpeechRecognitionResults recognizeResponse = null;
@@ -239,11 +241,10 @@ public class WatsonManager : MonoBehaviour
             "audio/wav",
             _recognizeModel
         );
-        Debug.Log("Sent audio to S2T");
         // wait for Speech to text result
         while (recognizeResponse == null)
             yield return null;
-
+        Debug.Log($"S2T result back({Time.time - time}s)");
         var result = "";
         if (recognizeResponse.Results.Count != 0 &&
             recognizeResponse.Results[0].Alternatives.Count != 0)
@@ -257,7 +258,8 @@ public class WatsonManager : MonoBehaviour
         Authenticator authenticator,
         string input)
     {
-        Debug.Log("Start Assistant");
+        var time = Time.time;
+        Debug.Log($"Start Assistant.");
 
         var assistant = new AssistantService("2021-06-14", authenticator);
         assistant.SetServiceUrl(_assistantUrl);
@@ -273,7 +275,7 @@ public class WatsonManager : MonoBehaviour
         // wait for assistant result
         while (messageResponse == null) yield return null;
 
-        Debug.Log("Assistant result back");
+        Debug.Log($"Assistant result back({Time.time - time}s)");
         resultCallback(messageResponse.Output);
     }
 
