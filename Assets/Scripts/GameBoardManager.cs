@@ -46,11 +46,14 @@ public class GameBoardManager : MonoBehaviour
     {
         // instantiate level
         var level = Instantiate(_levelPrefabs[GlobalInformation.CurrentLevelIndex], gameObject.transform, false);
+        // var level = GameObject.Find("Level1");
         var levelInformation = level.GetComponent<LevelGenerator>();
         // get information
         _playerShip = levelInformation.PlayerShip;
         _enemyShips = levelInformation.EnemyShips;
-        _invisibleTilemap = levelInformation.InvisibleTilemap;
+        _invisibleTilemap = level.GetComponentInChildren<Tilemap>();
+        // hide wall indicators tilemap
+        level.GetComponentInChildren<TilemapRenderer>().enabled = false;
     }
 
     public bool IsEnemiesRemain()

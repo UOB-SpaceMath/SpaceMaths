@@ -7,9 +7,6 @@ using UnityEngine.Tilemaps;
 
 public class LevelGenerator : MonoBehaviour
 {
-    // the invisible tilemap 
-    public Tilemap InvisibleTilemap;
-
     // the player's ship
     public Ships PlayerShip;
 
