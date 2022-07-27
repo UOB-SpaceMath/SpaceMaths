@@ -2123,7 +2123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 41ac93651105e2b4b8b4fd32f4d31572, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4978,6 +4978,7 @@ GameObject:
   - component: {fileID: 996555223}
   - component: {fileID: 996555222}
   - component: {fileID: 996555221}
+  - component: {fileID: 996555224}
   - component: {fileID: 996555225}
   m_Layer: 0
   m_Name: Watson Button
@@ -5049,7 +5050,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 996555222}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1196850627}
+        m_TargetAssemblyTypeName: WatsonManager, GameAssembly
+        m_MethodName: ClickAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &996555222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5088,7 +5101,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996555219}
   m_CullTransparentMesh: 1
---- !u!114 &996555225
+--- !u!114 &996555224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5097,66 +5110,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 996555219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d3880ce0d22044a8e13133283a6149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1196850627}
-          m_TargetAssemblyTypeName: WatsonManager, Assembly-CSharp
-          m_MethodName: StartRecording
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1189443433}
-          m_TargetAssemblyTypeName: HintControl, Assembly-CSharp
-          m_MethodName: ShowHint
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1196850627}
-          m_TargetAssemblyTypeName: WatsonManager, Assembly-CSharp
-          m_MethodName: StopRecording
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1189443433}
-          m_TargetAssemblyTypeName: HintControl, Assembly-CSharp
-          m_MethodName: HideHint
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  _normalIcon: {fileID: 21300000, guid: df5673fed87190449bd1f7515476f7c8, type: 3}
+  _recordingIcon: {fileID: 21300000, guid: 7d4d0dc2bf984674fbb598291fd1208b, type: 3}
+  _fetchingIcon: {fileID: 21300000, guid: 6297cd6ebadf5dc478a9af6c1fdbd110, type: 3}
+--- !u!95 &996555225
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996555219}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 524feaf5c80fd8244a02535bbacf24af, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1005892398
 GameObject:
   m_ObjectHideFlags: 0
@@ -6000,6 +5978,8 @@ MonoBehaviour:
   _minimalRecordingSeconds: 2
   _stopRecordingSeconds: 0.5
   _recordingHZ: 22050
+  _buttonController: {fileID: 996555224}
+  _hintController: {fileID: 1189443433}
 --- !u!4 &1196850629
 Transform:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System;
 using SpaceMath;
 using System.Collections;
 using System.Collections.Generic;
+using Codice.CM.WorkspaceServer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -147,22 +148,35 @@ public class GameManager : MonoBehaviour
     private void SetPanel(PanelType type)
     {
         // set all false
-        _questionCanvas.SetActive(false);
-        _selectionCanvas.SetActive(false);
-        _messageCanvas.SetActive(false);
-        switch (type)
+        // _questionCanvas.SetActive(false);
+        // _selectionCanvas.SetActive(false);
+        // _messageCanvas.SetActive(false);
+        // switch (type)
+        // {
+        //     case PanelType.Question:
+        //         _questionCanvas.SetActive(true);
+        //         break;
+        //     case PanelType.Selection:
+        //         _selectionCanvas.SetActive(true);
+        //         break;
+        //     case PanelType.Message:
+        //         _messageCanvas.SetActive(true);
+        //         break;
+        // }
+        var targetPanel = type switch
         {
-            case PanelType.Question:
-                _questionCanvas.SetActive(true);
-                break;
-            case PanelType.Selection:
-                _selectionCanvas.SetActive(true);
-                break;
-            case PanelType.Message:
-                _messageCanvas.SetActive(true);
-                break;
+            PanelType.Question => _questionCanvas,
+            PanelType.Selection => _selectionCanvas,
+            _ => _messageCanvas
+        };
+        var panels = new HashSet<GameObject>() { _questionCanvas, _selectionCanvas, _messageCanvas };
+        panels.Remove(targetPanel);
+        foreach (var panel in panels)
+        {
+            panel.SetActive(false);
         }
-
+        if(!targetPanel.activeSelf)
+            targetPanel.SetActive(true);
         SetPanelPosition();
     }
 

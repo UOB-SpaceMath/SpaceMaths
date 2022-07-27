@@ -22,8 +22,10 @@ public class WatsonManager : MonoBehaviour
 
     // status
     private bool _isRecording; // flag to start and end recording coroutine, doesn't indicate that audioClip is ready.
-    private bool _isHandlingStart;
-    private bool _isHandlingStop; // flag indicated that the WatsonManager is fetching result from cloud.
+    private bool _isHandlingStart; // flag indicates that WatsonManager is start to recording and get authentication
+    private bool _isHandlingStop; // flag indicates that the WatsonManager is fetching result from cloud.
+
+    private bool _isToggle = false; // flag indicates that the WatsonButton is toggle. 
 
     // results
     private Authenticator _speechToTextIam;
@@ -40,13 +42,29 @@ public class WatsonManager : MonoBehaviour
         timeOutCallback();
     }
 
-    public void StartRecording()
+    public void ClickAction()
+    {
+        if (_isToggle)
+        {
+            StopRecording();
+            _hintController.HideHint();
+        }
+        else
+        {
+            StartRecording();
+            _hintController.ShowHint();
+        }
+
+        _isToggle = !_isToggle;
+    }
+
+    private void StartRecording()
     {
         ResetAll();
         StartCoroutine(StartHandler());
     }
 
-    public void StopRecording()
+    private void StopRecording()
     {
         StartCoroutine(StopHandler());
     }
@@ -80,7 +98,6 @@ public class WatsonManager : MonoBehaviour
             (result) => assistantIam = result,
             (error) => errorString = error,
             _assistantKey));
-
         // when no error and not all result back.
         while (errorString is null &&
                (clip is null || speechToTextIam is null || assistantIam is null))
@@ -144,11 +161,15 @@ public class WatsonManager : MonoBehaviour
                 if (!isFetchingTimeOut)
                     _watsonOutput = GetWatsonOutput(output);
             }
+
             // _watsonOutput is still null mean is out of time
-            if (_watsonOutput == null)
-                _watsonOutput = new WatsonOutput("Sending command time out, you may not be connected to the spaceship.");
+            _watsonOutput ??=
+                new WatsonOutput(
+                    "Captain, sending command time out, you may not be connected to the spaceship. (No internet connection or recording too long)");
         }
+
         _isHandlingStop = false;
+        _buttonController.SetButtonNormal();
         Debug.Log($"Stop StopHandler. Result: {_watsonOutput}");
     }
 
@@ -156,6 +177,7 @@ public class WatsonManager : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private IEnumerator RecordingService(Action<AudioClip> successCallback, Action<string> failureCallback)
     {
+        _buttonController.SetButtonRecording();
         // start timer
         var isTimeOut = false;
         StartCoroutine(Timer(() => isTimeOut = true, _minimalRecordingSeconds));
@@ -191,16 +213,18 @@ public class WatsonManager : MonoBehaviour
             }
         }
 
+        _buttonController.SetButtonFetching();
         // check recording time long enough
         if (!isTimeOut)
         {
-            failureCallback("Your command is to short!");
-            yield break;
+            failureCallback("Captain, Your command is to short!");
         }
-
-        var result = AudioClip.Create("result", _recordDataList.Count, 1, _recordingHZ, false);
-        result.SetData(_recordDataList.ToArray(), 0);
-        successCallback(result);
+        else
+        {
+            var result = AudioClip.Create("result", _recordDataList.Count, 1, _recordingHZ, false);
+            result.SetData(_recordDataList.ToArray(), 0);
+            successCallback(result);
+        }
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -213,13 +237,20 @@ public class WatsonManager : MonoBehaviour
         // IBM Cloud authentication
         var authenticator = new IamAuthenticator(apiKey);
         // if not authenticated or not time out, continue to try
-        while (!authenticator.CanAuthenticate() && !isTimeOut)
+        while (!authenticator.CanAuthenticate())
+        {
+            if (isTimeOut)
+            {
+                failureCallback(
+                    "Captain, authentication time out, you may not connected to your ship (Please check internet connection)");
+                yield break;
+            }
+
             yield return null;
+        }
+
         Debug.Log($"Got authenticator from apiKey:{apiKey}");
-        if (isTimeOut)
-            failureCallback("Authentication time out, you may not connected to your ship");
-        else
-            successCallback(authenticator);
+        successCallback(authenticator);
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -381,6 +412,11 @@ public class WatsonManager : MonoBehaviour
     [SerializeField] private float _minimalRecordingSeconds = 2;
     [SerializeField] private float _stopRecordingSeconds = 0.5f;
     [SerializeField] private int _recordingHZ = 22050;
+
+    [Header("Controllers")] [SerializeField]
+    private WatsonButtonController _buttonController;
+
+    [SerializeField] private HintController _hintController;
 
     #endregion
 }

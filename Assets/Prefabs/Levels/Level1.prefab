@@ -1183,7 +1183,7 @@ MonoBehaviour:
     attackDamage: 1
     weaponRange: 3
     _energy: 100
-    _health: 100
+    _health: 10
     _energyOpenShield: 5
     energyConsumption: 10
   EnemyShips:
