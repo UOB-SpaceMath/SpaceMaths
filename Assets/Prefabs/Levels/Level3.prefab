@@ -1621,7 +1621,7 @@ MonoBehaviour:
     _energyOpenShield: 5
     energyConsumption: 10
   EnemyShips:
-  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 4137558152205976039, guid: 900837d137463407d8706c80e3cd8ea6,
       type: 3}
     _cellIndex: {x: 5, y: 3}
     attackDamage: 1
@@ -1630,7 +1630,7 @@ MonoBehaviour:
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
-  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 550324130330758860, guid: 4fcd928b657d14f368edb8b9f6d91f99,
       type: 3}
     _cellIndex: {x: 10, y: 3}
     attackDamage: 1
@@ -1639,7 +1639,7 @@ MonoBehaviour:
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
-  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 4754902374283776258, guid: 5d937ca3a806e4cd185eb9b5cf5722e7,
       type: 3}
     _cellIndex: {x: 19, y: 4}
     attackDamage: 1
@@ -1648,7 +1648,7 @@ MonoBehaviour:
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
-  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 4754902374283776258, guid: 5d937ca3a806e4cd185eb9b5cf5722e7,
       type: 3}
     _cellIndex: {x: 16, y: 7}
     attackDamage: 1
@@ -1657,7 +1657,7 @@ MonoBehaviour:
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
-  - _shipObject: {fileID: 1744981823002667866, guid: a5df684aee82ff843b41075c791a5ba5,
+  - _shipObject: {fileID: 4137558152205976039, guid: 900837d137463407d8706c80e3cd8ea6,
       type: 3}
     _cellIndex: {x: 12, y: 7}
     attackDamage: 1
