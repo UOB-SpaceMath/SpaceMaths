@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465934, g: 0.49642956, b: 0.5748249, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -648,7 +648,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -525}
+  m_AnchoredPosition: {x: 0, y: -385}
   m_SizeDelta: {x: 130, y: 44.83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &608632569
@@ -1080,8 +1080,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScaleFactor: 0.5
+  m_ReferenceResolution: {x: 1200, y: 800}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1099,7 +1099,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 301931276}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1835,8 +1835,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
+      propertyPath: nextButton
+      value: 
+      objectReference: {fileID: 952514284}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: previousButton
+      value: 
+      objectReference: {fileID: 1399594968}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
       propertyPath: headerText.Array.size
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
@@ -1848,17 +1858,41 @@ PrefabInstance:
         type: 3}
       propertyPath: headerText.Array.data[6]
       value: 
-      objectReference: {fileID: 7838834931990749280, guid: 9f70115fec35c41738ed98a615085d94,
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: headerText.Array.data[7]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: headerText.Array.data[8]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: headerText.Array.data[9]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: headerText.Array.data[10]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
         type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionText.Array.size
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.size
-      value: 6
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
@@ -1876,7 +1910,25 @@ PrefabInstance:
         type: 3}
       propertyPath: instructionText.Array.data[6]
       value: 
-      objectReference: {fileID: 7740749178807632894, guid: e55c65246505c4a8ba9bef253455db9a,
+      objectReference: {fileID: 5272035496796033583, guid: 1fb90e039ce124ab3aad93d1d4c95d34,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[7]
+      value: 
+      objectReference: {fileID: 6882547067757605838, guid: f56e6d9fe3c604eda99e28cfedaeec6e,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[8]
+      value: 
+      objectReference: {fileID: 3544099343228529986, guid: 49109fe3e42a644b19d88116d3e0d2c0,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[9]
+      value: 
+      objectReference: {fileID: 3651113980083450133, guid: a8cbaa4f8a733432e8c7843570bca1e3,
         type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
@@ -1912,12 +1964,33 @@ PrefabInstance:
         type: 3}
       propertyPath: instructionSlide.Array.data[6]
       value: 
-      objectReference: {fileID: 2800000, guid: b5170faf257ae420794bef1a81d7d01a, type: 3}
+      objectReference: {fileID: 2800000, guid: 8b6a0c33d57cf45aeaa0dbe22eedf9ac, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[7]
       value: 
-      objectReference: {fileID: 2800000, guid: b5170faf257ae420794bef1a81d7d01a, type: 3}
+      objectReference: {fileID: 2800000, guid: 6e836731750d24c42a10f56d0287c772, type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.data[8]
+      value: 
+      objectReference: {fileID: 2800000, guid: 2ef03d8d72f054124b82e1e519eb1ccc, type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.data[9]
+      value: 
+      objectReference: {fileID: 2800000, guid: e3027ac80d9114748b7b2db5f5df3278, type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[10]
+      value: 
+      objectReference: {fileID: 208497138739683509, guid: 43e2bf064f02e4a9f8c5dad1b80bbfe2,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.data[10]
+      value: 
+      objectReference: {fileID: 2800000, guid: 049d3a3ea17074165b16a0f0e66b43d2, type: 3}
     - target: {fileID: 5027822090337006404, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: m_Texture
@@ -2054,7 +2127,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1688808630
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2445,7 +2518,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: How to play
+  m_text: Instructions
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: de28cdce4095e46cb88682038d258eb3, type: 2}
   m_sharedMaterial: {fileID: -2369440901582580570, guid: de28cdce4095e46cb88682038d258eb3,

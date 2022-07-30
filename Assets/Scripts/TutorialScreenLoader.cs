@@ -33,12 +33,16 @@ public class TutorialScreenLoader : MonoBehaviour
 
     public void NextButton()
     {
-        currentPage++;
-
-        if(currentPage > 4)
+        //currentPage++;
+        if(currentPage <= 4)
         {
-            currentPage = 0;
+            currentPage++;
         }
+
+        //if(currentPage > 4)
+        //{
+        //    currentPage = 0;
+        //}
         _displayImage.texture = tutorialSlide[currentPage];
          _displayText.SetText(tutorialText[currentPage].text);
 
@@ -46,11 +50,15 @@ public class TutorialScreenLoader : MonoBehaviour
 
     public void PreviousButton()
     {
-        currentPage--;
-        if(currentPage < 0)
+        if (currentPage > 0)
         {
-            currentPage = 4;
+            currentPage--;
         }
+        //currentPage--;
+        //if(currentPage < 0)
+        //{
+        //    currentPage = 4;
+        //}
         _displayImage.texture = tutorialSlide[currentPage];
         _displayText.SetText(tutorialText[currentPage].text);
 
