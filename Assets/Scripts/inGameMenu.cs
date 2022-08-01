@@ -5,8 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class inGameMenu : MonoBehaviour
 {
-
+    // Drag these screens into the inspector
+    [Header("Menus")]
     [SerializeField] private GameObject _menu;
+    [SerializeField] private GameObject _wonMenu;
+    [SerializeField] private GameObject _LostMenu;
+
     [SerializeField] private GameObject _menuButton;
     [SerializeField] private GameObject _instructions;
 
@@ -55,8 +59,19 @@ public class inGameMenu : MonoBehaviour
         EnableMenuButton();
     }
 
-    public void Exit()
+    public void ShowLoseScreen()
     {
-        SceneManager.LoadScene("StartingScene");
+        _LostMenu.SetActive(true);
+    }
+
+    public void ShowWinScreen()
+    {
+        _wonMenu.SetActive(true);
+    }
+
+    public void DisableContinueScreen()
+    {
+        _wonMenu.SetActive(false);
+        _LostMenu.SetActive(false);
     }
 }

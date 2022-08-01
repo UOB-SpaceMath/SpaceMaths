@@ -2,7 +2,6 @@ using System;
 using SpaceMath;
 using System.Collections;
 using System.Collections.Generic;
-using Codice.CM.WorkspaceServer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private WatsonManager _wm;
     [SerializeField] private MessageManager _mm;
     [SerializeField] private ShieldManager _sm;
+    [SerializeField] private inGameMenu _Igm;
 
     private Ships _player;
     private List<Ships> _enemies;
@@ -36,24 +36,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _selectionCanvas;
     [SerializeField] private GameObject _messageCanvas;
 
-    // Game controls
-    // Drag these screens into the inspector
-    [Header("Control Screens")] [SerializeField]
-    private GameObject _restartScreen;
-
-    [SerializeField] private GameObject _wonContinueScreen;
-    [SerializeField] private GameObject _lostContinueScreen;
-
     // Game settings
     [SerializeField] private GameObject _restartButton;
     [Header("Misc")] [SerializeField] private float _panelHigh;
 
     private void Start()
     {
-        //_restartButton = GameObject.Find("Restart Button");
-        _restartScreen.SetActive(false);
-        _wonContinueScreen.SetActive(false);
-        _lostContinueScreen.SetActive(false);
         // Question stage
         _stage = Stages.Question;
         _player = _gbm.GetPlayer();
@@ -253,44 +241,24 @@ public class GameManager : MonoBehaviour
         _stage = Stages.Enemies;
     }
 
+    public void LoadGame(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
+
     private void ShowLoseScreen()
     {
-        ShowLostContinueScreen();
+        _Igm.ShowLoseScreen();
     }
 
     private void ShowWinScreen()
     {
-        ShowWonContinueScreen();
-    }
-
-    public void ShowRestartScreen()
-    {
-        DisableRestartButton();
-        _restartScreen.SetActive(true);
-    }
-
-    public void DisableRestartScreen()
-    {
-        _restartScreen.SetActive(false);
-        _restartButton.SetActive(true);
-    }
-
-    private void ShowWonContinueScreen()
-    {
-        DisableRestartButton();
-        _wonContinueScreen.SetActive(true);
-    }
-
-    private void ShowLostContinueScreen()
-    {
-        DisableRestartButton();
-        _lostContinueScreen.SetActive(true);
+        _Igm.ShowWinScreen();
     }
 
     private void DisableContinueScreen()
     {
-        _wonContinueScreen.SetActive(false);
-        _lostContinueScreen.SetActive(false);
+        _Igm.DisableContinueScreen();
     }
 
     public void RestartWholeGame()

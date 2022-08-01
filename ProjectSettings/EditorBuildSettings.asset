@@ -10,7 +10,10 @@ EditorBuildSettings:
     guid: 118ef66be389b4814aad2134d64111f2
   - enabled: 1
     path: Assets/Scenes/ARScene.unity
-    guid: b807cec1067314755ae27e636c29eb43
+    guid: 14deca9211cca46088441a29dc46e3f5
+  - enabled: 1
+    path: Assets/Scenes/LevelSelect.unity
+    guid: 30a9603f151ea2b4691dbb80ef64b23a
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
       type: 2}
