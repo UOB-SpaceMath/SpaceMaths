@@ -45,3 +45,6 @@ sysinfo.txt
 *.unitypackage
 
 .DS_Store
+
+# fix asmdef bug
+Assets/Scripts/SpaceMathAssembly.asmdef
