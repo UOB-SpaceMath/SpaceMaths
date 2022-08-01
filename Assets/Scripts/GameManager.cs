@@ -45,12 +45,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _lostContinueScreen;
 
     // Game settings
-    private GameObject _restartButton;
+    [SerializeField] private GameObject _restartButton;
     [Header("Misc")] [SerializeField] private float _panelHigh;
 
     private void Start()
     {
-        _restartButton = GameObject.Find("Restart Button");
+        //_restartButton = GameObject.Find("Restart Button");
         _restartScreen.SetActive(false);
         _wonContinueScreen.SetActive(false);
         _lostContinueScreen.SetActive(false);
