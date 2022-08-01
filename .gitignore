@@ -47,4 +47,4 @@ sysinfo.txt
 .DS_Store
 
 # fix asmdef bug
-SpaceMathAssembly.asmdef
+Assets/Scripts/SpaceMathAssembly.asmdef
