@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
+    /* Attacking effects */
     private RaycastHit hit;
-    //private AudioSource attackAudio;
+    private AudioSource attackAudio;
     private LineRenderer attackLine;
 
     // Call this method to attack.
@@ -35,22 +36,30 @@ public class AttackManager : MonoBehaviour
         }
 
         // Attack effects will appear every attck.
-        StartCoroutine(AttackEffect());
+        StartCoroutine(AttackEffect(attacker, victim, hit));
+
+        return true;
+    }
+
+    // Turn on the audio and visual effects of attack, and keep the visual effect for a set time.
+    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit)
+    {
+        Vector3 targetDirection = victim.ShipObject.transform.position - attacker.ShipObject.transform.position;
+        targetDirection.y = 0;
+        attacker.ShipObject.transform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+
+        attackLine.enabled = true;
+        attackAudio = attacker.ShipObject.GetComponent<AudioSource>();
+        if(attackAudio != null)
+        {
+            attackAudio.Play();
+        }
 
         if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Player"))
         {
             victim.ApplyDamage(attacker.AttackDamage);
         }
 
-
-        return true;
-    }
-
-    // Turn on the audio and visual effects of attack, and keep the visual effect for a set time.
-    private IEnumerator AttackEffect()
-    {
-        //attackAudio.Play();
-        attackLine.enabled = true;
         yield return new WaitForSeconds(0.5f);
         attackLine.enabled = false;
     }
