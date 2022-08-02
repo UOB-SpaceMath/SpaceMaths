@@ -39,6 +39,10 @@ public class AttackManager : MonoBehaviour
 
         if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Player"))
         {
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                attacker.IncreaseEnergy(victim.Energy);
+            }
             victim.ApplyDamage(attacker.AttackDamage);
         }
 
