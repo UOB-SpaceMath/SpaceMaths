@@ -7,6 +7,7 @@ public class AttackManager : MonoBehaviour
     /* Attacking effects */
     private RaycastHit hit;
     private AudioSource attackAudio;
+    private Transform weaponEnd;
 
     private float rotationFrames = 120;
 
@@ -19,16 +20,21 @@ public class AttackManager : MonoBehaviour
     // Call this method to attack.
     public bool Attack(Ships attacker, Ships victim)
     {
-        // TODO Attach attacking animation and audio to the attacker, and then get these components.
-        // attackLine should be disabled originally.
         LineRenderer attackLine = attacker.ShipObject.GetComponent<LineRenderer>();
-        //attackAudio = attacker.ShipObject.GetComponent<AudioSource>();
 
         Vector3 victimPos = victim.ShipObject.transform.position;
         Vector3 attackerPos = attacker.ShipObject.transform.position;
+        foreach (Transform w in attacker.ShipObject.transform)
+        {
+            if (w.tag == "Weapon")
+            {
+                weaponEnd = w;
+                break;
+            }
+        }
 
         // Set the beginning position of the attacking laser line.
-        attackLine.SetPosition(0, attacker.ShipObject.transform.position);
+        attackLine.SetPosition(0, weaponEnd.position);
 
         // If the attack line hit something, store the hit infomation in the hit variable.
         if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange))
