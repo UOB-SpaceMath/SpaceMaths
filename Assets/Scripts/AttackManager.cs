@@ -7,10 +7,7 @@ public class AttackManager : MonoBehaviour
     /* Attacking effects */
     private RaycastHit hit;
     private AudioSource attackAudio;
-    private LineRenderer attackLine;
 
-    [SerializeField]
-    private float rotationSpeed;
     private float rotationFrames = 120;
 
     [SerializeField]
@@ -24,7 +21,7 @@ public class AttackManager : MonoBehaviour
     {
         // TODO Attach attacking animation and audio to the attacker, and then get these components.
         // attackLine should be disabled originally.
-        attackLine = attacker.ShipObject.GetComponent<LineRenderer>();
+        LineRenderer attackLine = attacker.ShipObject.GetComponent<LineRenderer>();
         //attackAudio = attacker.ShipObject.GetComponent<AudioSource>();
 
         Vector3 victimPos = victim.ShipObject.transform.position;
@@ -46,33 +43,30 @@ public class AttackManager : MonoBehaviour
         }
 
         // Attack effects will appear every attck.
-        StartCoroutine(AttackEffect(attacker, victim, hit));
+        StartCoroutine(AttackEffect(attacker, victim, hit, attackLine));
 
         return true;
     }
 
     // Turn on the audio and visual effects of attack, and keep the visual effect for a set time.
-    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit)
+    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit, LineRenderer attackLine)
     {
         /* Rotation */
         Vector3 targetDirection = victim.ShipObject.transform.position - attacker.ShipObject.transform.position;
         targetDirection.y = 0;
-        /* No effects */
-        //Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-        //attacker.ShipObject.transform.rotation = Quaternion.Slerp(attacker.ShipObject.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+        Quaternion startRotation = attacker.ShipObject.transform.rotation;
 
-        for (int i = 1; i <= rotationFrames; i++)
+        for (var i = 1; i <= rotationFrames; i++)
         {
-            Debug.Log(i * targetDirection / rotationFrames);
-            attacker.ShipObject.transform.rotation = Quaternion.LookRotation(i * targetDirection / rotationFrames, Vector3.up);
-            /* No effects */
-            //yield return null;
+            attacker.ShipObject.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, i / rotationFrames);
+            yield return null;
         }
 
         /* Attacking effects */
-        attackLine.enabled = true;
+        StartCoroutine(LinerEffect(attackLine));
         attackAudio = attacker.ShipObject.GetComponent<AudioSource>();
-        if(attackAudio != null)
+        if (attackAudio != null)
         {
             attackAudio.Play();
         }
@@ -100,6 +94,16 @@ public class AttackManager : MonoBehaviour
             }
         }
 
+        for (var i = 1; i <= rotationFrames; i++)
+        {
+            attacker.ShipObject.transform.rotation = Quaternion.Slerp(attacker.ShipObject.transform.rotation, startRotation, i / rotationFrames);
+            yield return null;
+        }
+    }
+
+    private IEnumerator LinerEffect(LineRenderer attackLine)
+    {
+        attackLine.enabled = true;
         yield return new WaitForSeconds(0.5f);
         attackLine.enabled = false;
     }
