@@ -169,19 +169,20 @@ public class GameBoardManager : MonoBehaviour
 
     public bool IsEmpty(int x, int y)
     {
-        return _cells[x, y] == CellType.Empty;
+        var type = GetCellType(x, y);
+        return type == CellType.Empty;
     }
 
     public bool IsEmpty(Vector2Int index)
     {
-        return _cells[index.x, index.y] == CellType.Empty;
+        return IsEmpty(index.x, index.y);
     }
 
     public bool IsEnemy(int x, int y)
     {
         if (_playerShip.CellIndex.Equals(new Vector2Int(x, y)))
             return false;
-        return _cells[x, y] == CellType.Ship;
+        return GetCellType(x, y) == CellType.Ship;
     }
 
     public bool IsEnemy(Vector2Int index)
@@ -228,6 +229,11 @@ public class GameBoardManager : MonoBehaviour
             if (_enemyShips[i].CellIndex.y == y && _enemyShips[i].CellIndex.x == x)
                 return _enemyShips[i];
         return null;
+    }
+
+    public Vector2Int GetMapSize()
+    {
+        return new Vector2Int(_cells.GetLength(0), _cells.GetLength(1));
     }
 
     public int GetLevelCount()

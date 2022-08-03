@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ShieldManager _sm;
     [SerializeField] private inGameMenu _Igm;
 
+    // path finder
+    private AStarPathFinder _pathFinder;
+
     private Ships _player;
     private List<Ships> _enemies;
 
@@ -45,6 +48,9 @@ public class GameManager : MonoBehaviour
         // Question stage
         _stage = Stages.Question;
         _player = _gbm.GetPlayer();
+
+        // setup path finder
+        _pathFinder = new AStarPathFinder(_gbm);
 
         SetPanel(PanelType.Question);
     }
@@ -159,11 +165,8 @@ public class GameManager : MonoBehaviour
         };
         var panels = new HashSet<GameObject>() { _questionCanvas, _selectionCanvas, _messageCanvas };
         panels.Remove(targetPanel);
-        foreach (var panel in panels)
-        {
-            panel.SetActive(false);
-        }
-        if(!targetPanel.activeSelf)
+        foreach (var panel in panels) panel.SetActive(false);
+        if (!targetPanel.activeSelf)
             targetPanel.SetActive(true);
         SetPanelPosition();
     }
