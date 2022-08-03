@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MessageManager _mm;
     [SerializeField] private ShieldManager _sm;
     [SerializeField] private inGameMenu _Igm;
+    [SerializeField] private Scores _scores;
 
     private Ships _player;
     private List<Ships> _enemies;
@@ -29,17 +30,7 @@ public class GameManager : MonoBehaviour
         Enemies
     };
 
-    private Stages _stage;
-
-    // Store game state - win, lose, playing
-    private enum GameState
-    {
-        Win,
-        Lose,
-        Playing
-    };
-
-    private GameState _gameState;
+    private Stages _stage;    
 
     // Drag the canvas into these variables in the inspector
     [Header("Canvas")] [SerializeField] private GameObject _questionCanvas;
@@ -54,8 +45,7 @@ public class GameManager : MonoBehaviour
     {
         // Question stage
         _stage = Stages.Question;
-        _player = _gbm.GetPlayer();
-        _gameState = GameState.Playing;
+        _player = _gbm.GetPlayer();        
 
         SetPanel(PanelType.Question);
     }
@@ -64,13 +54,13 @@ public class GameManager : MonoBehaviour
     {
         if (_player.IsShipDead())
         {
-            ShowLoseScreen();
-            _gameState = GameState.Lose;
+            ShowLoseScreen();            
+            _scores.checkScore(_player.Energy);
         }
         else if (!_gbm.IsEnemiesRemain())
         {
-            ShowWinScreen();
-            _gameState = GameState.Win;
+            ShowWinScreen();            
+            _scores.checkScore(_player.Energy);
         }
         else
             switch (_stage)
@@ -85,6 +75,7 @@ public class GameManager : MonoBehaviour
                             _stage = Stages.None;
                             _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
                             StartCoroutine(QuestionToPlayerTurn());
+                            _scores.incrementScore();
                             break;
 
                         // Answer was incorrect
@@ -302,24 +293,6 @@ public class GameManager : MonoBehaviour
         GlobalInformation.CurrentLevelIndex = Math.Max(--GlobalInformation.CurrentLevelIndex, 0);
         DisableContinueScreen();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    // API for checking whether question correctly answered
-    public bool isCorrectAnswer()
-    {
-        return _uim.GetAnswerState() == UIManager.AnswerStates.Right;
-    }
-
-    // API for getting game state
-    public bool isGameOver()
-    {
-        return _gameState == GameState.Win || _gameState == GameState.Lose;
-    }
-
-    // API to get player from GM
-    public Ships getPlayer()
-    {
-        return _player;
     }
 
     private void DisableRestartButton()

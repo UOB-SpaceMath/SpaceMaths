@@ -1,55 +1,68 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using SpaceMath;
 
 public class Scores : MonoBehaviour
 {
-    [SerializeField] private GameManager _gm;
-    [SerializeField] private GameBoardManager _gbm;
-    [SerializeField] private int scoreIncrement;
-    private Ships player;
+    
+    [SerializeField] private GameBoardManager _gbm;    
+    [SerializeField] private int scoreIncrement = 10;
+    [SerializeField] private GameObject highScoreScreen;
+
+    public Text HS;
+    public Text currentScore;
+
+    //private Ships player;
     private int score;
+    private string currentLevel;
+       
 
     // Start is called before the first frame update
     void Start()
     {
-        player = _gbm.GetPlayer();
-        Debug.Log(player);
+        currentLevel = _gbm.GetCurrentLevel();
+        Debug.Log(currentLevel);
     }
 
     // Update is called once per frame
     void Update()
     {
-        checkAnswer();        
-        checkScore();
+        // Display current score and high score
+        HS.text = "High Score: " + getHighScore();
+        currentScore.text = "Current Score: " + getScore();
     }
 
-    private void checkAnswer()
+    // Checks if player's score at end of game is higher than high score, taking into account remaining energy
+    // High score saved to PlayerPrefs by key-value pair currentLevel: score
+    // 10pts per correct answer + remaining energy
+    public void checkScore(int remainingEnergy)
     {
 
-        if (_gm.isCorrectAnswer())
+        if (score + remainingEnergy > PlayerPrefs.GetInt(currentLevel))
         {
-            score += scoreIncrement;
-            Debug.Log("Score: " + score);
+            PlayerPrefs.SetInt(currentLevel, score + remainingEnergy);
+            highScoreScreen.SetActive(true);
         }
+
+    }
+
+    public void incrementScore()
+    {
+        score += scoreIncrement;
     }    
-
-    private void checkScore()
-    {
-
-        if (_gm.isGameOver() && score + player.Energy > PlayerPrefs.GetInt("highScore"))
-        {
-            PlayerPrefs.SetInt("highScore", score + player.Energy);
-        }
-
-    }
 
     public int getScore()
     {
         return score;
     }
 
+    // Returns high score for currentLevel
+    public int getHighScore()
+    {
+        return PlayerPrefs.GetInt(currentLevel);
+    }
 
 
 }

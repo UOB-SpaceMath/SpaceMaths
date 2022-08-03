@@ -234,4 +234,11 @@ public class GameBoardManager : MonoBehaviour
     {
         return _levelPrefabs.Count;
     }
+
+    // API for getting current level
+    public string GetCurrentLevel()
+    {
+        return _levelPrefabs[GlobalInformation.CurrentLevelIndex].name;
+    }
+
 }
