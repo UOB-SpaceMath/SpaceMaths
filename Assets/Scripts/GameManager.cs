@@ -40,8 +40,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _messageCanvas;
 
     // Game settings
-    [SerializeField] private GameObject _restartButton;
     [Header("Misc")] [SerializeField] private float _panelHigh;
+    [SerializeField] private GameObject _restartButton;
+    [SerializeField] private int _framesForEachMove = 10;
+
 
     private void Start()
     {
@@ -96,14 +98,14 @@ public class GameManager : MonoBehaviour
                         StartCoroutine(RunWatsonCommand());
                         break;
                     }
-
+                    // check shield
                     if (_sm.IsClicked)
                     {
                         _stage = Stages.None;
                         StartCoroutine(SwitchShield(_player));
                         break;
                     }
-
+                    // check selection gird
                     var selectionResult = _sgm.GetFinalResult();
                     _sgm.ResetFinalResult();
                     if (selectionResult != null && selectionResult.Type != ActionType.None)
@@ -118,9 +120,6 @@ public class GameManager : MonoBehaviour
                             case ActionType.Attack:
                                 StartCoroutine(AttackEnemy(_player, _gbm.GetShip(selectionResult.TargetIndex)));
                                 break;
-                            //case ActionType.Shield:
-                            //   Do something
-                            //   break;
                         }
                     }
 
@@ -141,22 +140,6 @@ public class GameManager : MonoBehaviour
 
     private void SetPanel(PanelType type)
     {
-        // set all false
-        // _questionCanvas.SetActive(false);
-        // _selectionCanvas.SetActive(false);
-        // _messageCanvas.SetActive(false);
-        // switch (type)
-        // {
-        //     case PanelType.Question:
-        //         _questionCanvas.SetActive(true);
-        //         break;
-        //     case PanelType.Selection:
-        //         _selectionCanvas.SetActive(true);
-        //         break;
-        //     case PanelType.Message:
-        //         _messageCanvas.SetActive(true);
-        //         break;
-        // }
         var targetPanel = type switch
         {
             PanelType.Question => _questionCanvas,
@@ -228,9 +211,22 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Move(Ships ship, int x, int y)
     {
-        _gbm.MoveShip(ship, x, y);
-        // TODO make the movement animation
-        yield return new WaitForSeconds(1.0f);
+        var path = _pathFinder.FindPath(ship.CellIndex, new Vector2Int(x, y));
+
+        // move animation
+        while (path.Count != 0)
+        {
+            var currentNode = ship.CellIndex;
+            var nextNode = path.Pop();
+            var direction = new Vector3(nextNode.x - currentNode.x, 0, nextNode.y - currentNode.y);
+            for (var i = 0; i < _framesForEachMove; i++)
+            {
+                ship.ShipObject.transform.localPosition += direction / 10;
+                yield return null;
+            }
+
+            _gbm.MoveShip(ship, nextNode.x, nextNode.y);
+        }
         _stage = Stages.Enemies;
         _player.ConsumeEnergyByTurn();
         _sgm.UpdateSelectionUI();
@@ -331,9 +327,9 @@ public class GameManager : MonoBehaviour
                 }
 
                 break;
-            //case WatsonIntents.Shield:
-            //    // todo
-            //    break;
+            case WatsonIntents.Shield:
+                StartCoroutine(SwitchShield(_player));
+                break;
             default: // fail
                 // message box;
                 ShowMessage(output.FailMessage, Stages.Player);
