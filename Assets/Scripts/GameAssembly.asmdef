@@ -1,0 +1,21 @@
+{
+    "name": "GameAssembly",
+    "rootNamespace": "",
+    "references": [
+        "WatsonUnitySDK",
+        "Unity.XR.ARSubsystems",
+        "Unity.TextMeshPro",
+        "Unity.XR.ARCore",
+        "Unity.XR.ARFoundation",
+        "IBM.Cloud.SDK"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

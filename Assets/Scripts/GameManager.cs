@@ -31,6 +31,16 @@ public class GameManager : MonoBehaviour
 
     private Stages _stage;
 
+    // Store game state - win, lose, playing
+    private enum GameState
+    {
+        Win,
+        Lose,
+        Playing
+    };
+
+    private GameState _gameState;
+
     // Drag the canvas into these variables in the inspector
     [Header("Canvas")] [SerializeField] private GameObject _questionCanvas;
     [SerializeField] private GameObject _selectionCanvas;
@@ -45,6 +55,7 @@ public class GameManager : MonoBehaviour
         // Question stage
         _stage = Stages.Question;
         _player = _gbm.GetPlayer();
+        _gameState = GameState.Playing;
 
         SetPanel(PanelType.Question);
     }
@@ -52,9 +63,15 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (_player.IsShipDead())
+        {
             ShowLoseScreen();
+            _gameState = GameState.Lose;
+        }
         else if (!_gbm.IsEnemiesRemain())
+        {
             ShowWinScreen();
+            _gameState = GameState.Win;
+        }
         else
             switch (_stage)
             {
@@ -112,9 +129,9 @@ public class GameManager : MonoBehaviour
                             case ActionType.Attack:
                                 StartCoroutine(AttackEnemy(_player, _gbm.GetShip(selectionResult.TargetIndex)));
                                 break;
-                            //case ActionType.Shield:
-                            //   Do something
-                            //   break;
+                                //case ActionType.Shield:
+                                //   Do something
+                                //   break;
                         }
                     }
 
@@ -285,6 +302,24 @@ public class GameManager : MonoBehaviour
         GlobalInformation.CurrentLevelIndex = Math.Max(--GlobalInformation.CurrentLevelIndex, 0);
         DisableContinueScreen();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // API for checking whether question correctly answered
+    public bool isCorrectAnswer()
+    {
+        return _uim.GetAnswerState() == UIManager.AnswerStates.Right;
+    }
+
+    // API for getting game state
+    public bool isGameOver()
+    {
+        return _gameState == GameState.Win || _gameState == GameState.Lose;
+    }
+
+    // API to get player from GM
+    public Ships getPlayer()
+    {
+        return _player;
     }
 
     private void DisableRestartButton()
