@@ -4947,11 +4947,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b81fb5832dfdcd4c950dedd1cf8eca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0
   DeathExplosionPrefab: {fileID: 3679241277410186164, guid: a05fd6045d6f60d4eb1c67a561b8a94b,
     type: 3}
   AttackExplosionPrefab: {fileID: 3679241277410186164, guid: d2c7c7a5d6482e94ca2217271b3218db,
     type: 3}
+  GainEnergyPrefab: {fileID: 100000, guid: 0fddeeac4d9b4a74981d41ab7ae6f622, type: 3}
 --- !u!4 &904791230
 Transform:
   m_ObjectHideFlags: 0

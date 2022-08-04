@@ -15,6 +15,8 @@ public class AttackManager : MonoBehaviour
     private GameObject DeathExplosionPrefab;
     [SerializeField]
     private GameObject AttackExplosionPrefab;
+    [SerializeField]
+    private GameObject GainEnergyPrefab;
     private AudioSource explosionAudio;
 
     // Call this method to attack.
@@ -81,9 +83,15 @@ public class AttackManager : MonoBehaviour
         {
             Vector3 explosionPosition = victim.ShipObject.transform.position;
             GameObject explosion;
+
             /* If victim was destroyed, trigger a bigger explosion */
             if (victim.ApplyDamage(attacker.AttackDamage) == 1)
             {
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    attacker.IncreaseEnergy(victim.Energy);
+                    StartCoroutine(GainEnergyEffect(attacker));
+                }
                 explosion = Instantiate<GameObject>(DeathExplosionPrefab);
                 explosion.transform.position = explosionPosition;
                 explosionAudio = GetComponent<AudioSource>();
@@ -112,5 +120,13 @@ public class AttackManager : MonoBehaviour
         attackLine.enabled = true;
         yield return new WaitForSeconds(0.5f);
         attackLine.enabled = false;
+    }
+
+    private IEnumerator GainEnergyEffect(Ships attacker)
+    {
+        GameObject energyAnimation = Instantiate<GameObject>(GainEnergyPrefab);
+        energyAnimation.transform.position = attacker.ShipObject.transform.position;
+        yield return new WaitForSeconds(1.3f);
+        Destroy(energyAnimation);
     }
 }
