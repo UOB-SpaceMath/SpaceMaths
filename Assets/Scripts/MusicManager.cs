@@ -1,16 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class MusicManager : MonoBehaviour
 {
-    [SerializeField] private AudioClip mainMusic; 
-    [SerializeField] private AudioClip gameMusic;
-    [SerializeField] private AudioSource audio;
+    [SerializeField] private Sprite muteIcon;
+    [SerializeField] private Sprite soundIcon;
     private static MusicManager _musicManagerInstance;
     private SceneManager _sceneManager;
+    private bool isMuted;
+    private Image _buttonImage;
+
+
+
+    private void Start()
+    {
+        isMuted = false;
+        _buttonImage = GameObject.Find("SoundButton/Button").GetComponent<Image>();
+    }
+
+    private void Update()
+    {
+        if (isMuted)
+        {
+            AudioListener.volume = 0;
+        }
+        else
+        {
+            AudioListener.volume = 1;
+        }
+    }
+
     private void Awake()
     {
         if (_musicManagerInstance == null)
@@ -24,15 +45,20 @@ public class MusicManager : MonoBehaviour
             return;
         }
     }
-    public void ToggleMusic(bool muted)
+    public void ToggleMusic()
     {
-        if (muted)
+        isMuted = !isMuted;
+    }
+
+    public void ChangeSprint()
+    {
+        if (isMuted)
         {
-            AudioListener.volume = 0;
+            _buttonImage.sprite = muteIcon;
         }
         else
         {
-            AudioListener.volume = 1;
+            _buttonImage.sprite = soundIcon;
         }
     }
 
