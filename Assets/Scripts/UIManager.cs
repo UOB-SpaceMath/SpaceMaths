@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    // TODO remove this.
+    [SerializeField]
+    private bool isDebug = false;
+
     private Text QuestionText;
     private Button AButton;
     private Button BButton;
@@ -64,7 +68,15 @@ public class UIManager : MonoBehaviour
 
     public void SetAnswerState(AnswerStates s)
     {
-        answerState = s;
+        // TODO remove
+        if (isDebug)
+        {
+            answerState = AnswerStates.Right;
+        }
+        else
+        {
+            answerState = s;
+        }
     }
 
     public AnswerStates GetAnswerState()
