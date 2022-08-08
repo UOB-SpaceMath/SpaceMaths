@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour
     public void RestartNextLevel()
     {
         GlobalInformation.CurrentLevelIndex =
-            Math.Min(++GlobalInformation.CurrentLevelIndex, _gbm.GetLevelCount());
+            Math.Min(++GlobalInformation.CurrentLevelIndex, (_gbm.GetLevelCount() - 1));
         DisableContinueScreen();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
