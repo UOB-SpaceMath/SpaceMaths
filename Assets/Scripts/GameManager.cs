@@ -120,9 +120,6 @@ public class GameManager : MonoBehaviour
                             case ActionType.Attack:
                                 StartCoroutine(AttackEnemy(_player, _gbm.GetShip(selectionResult.TargetIndex)));
                                 break;
-                                //case ActionType.Shield:
-                                //   Do something
-                                //   break;
                         }
                     }
 
@@ -143,22 +140,6 @@ public class GameManager : MonoBehaviour
 
     private void SetPanel(PanelType type)
     {
-        // set all false
-        // _questionCanvas.SetActive(false);
-        // _selectionCanvas.SetActive(false);
-        // _messageCanvas.SetActive(false);
-        // switch (type)
-        // {
-        //     case PanelType.Question:
-        //         _questionCanvas.SetActive(true);
-        //         break;
-        //     case PanelType.Selection:
-        //         _selectionCanvas.SetActive(true);
-        //         break;
-        //     case PanelType.Message:
-        //         _messageCanvas.SetActive(true);
-        //         break;
-        // }
         var targetPanel = type switch
         {
             PanelType.Question => _questionCanvas,
@@ -182,13 +163,6 @@ public class GameManager : MonoBehaviour
         SetPanel(PanelType.Message);
         _mm.SetCloseAction(() => { _stage = nextStage; });
     }
-
-    //// Set "on" to true to turn on the question panel.
-    //private void SwitchPanel(bool on)
-    //{
-    //    questionCanvas.SetActive(on);
-    //    selectionCanvas.SetActive(!on);
-    //}
 
     private IEnumerator QuestionToPlayerTurn()
     {
@@ -336,9 +310,6 @@ public class GameManager : MonoBehaviour
                 }
 
                 break;
-            //case WatsonIntents.Shield:
-            //    // todo
-            //    break;
             default: // fail
                 // message box;
                 ShowMessage(output.FailMessage, Stages.Player);
