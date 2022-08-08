@@ -1192,7 +1192,7 @@ MonoBehaviour:
     _cellIndex: {x: 1, y: 1}
     attackDamage: 1
     weaponRange: 3
-    _energy: 5
+    _energy: 10
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
@@ -1201,7 +1201,7 @@ MonoBehaviour:
     _cellIndex: {x: 3, y: 2}
     attackDamage: 1
     weaponRange: 3
-    _energy: 1000
+    _energy: 10
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0

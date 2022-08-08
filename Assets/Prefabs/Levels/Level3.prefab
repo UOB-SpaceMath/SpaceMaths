@@ -1616,8 +1616,8 @@ MonoBehaviour:
     _cellIndex: {x: 1, y: 6}
     attackDamage: 1
     weaponRange: 3
-    _energy: 500
-    _health: 100
+    _energy: 350
+    _health: 10
     _energyOpenShield: 5
     energyConsumption: 10
   EnemyShips:
@@ -1626,7 +1626,7 @@ MonoBehaviour:
     _cellIndex: {x: 5, y: 3}
     attackDamage: 1
     weaponRange: 3
-    _energy: 1000
+    _energy: 30
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
@@ -1635,7 +1635,7 @@ MonoBehaviour:
     _cellIndex: {x: 10, y: 3}
     attackDamage: 1
     weaponRange: 3
-    _energy: 1000
+    _energy: 30
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
@@ -1644,7 +1644,7 @@ MonoBehaviour:
     _cellIndex: {x: 19, y: 4}
     attackDamage: 1
     weaponRange: 3
-    _energy: 1000
+    _energy: 30
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
@@ -1653,7 +1653,7 @@ MonoBehaviour:
     _cellIndex: {x: 16, y: 7}
     attackDamage: 1
     weaponRange: 3
-    _energy: 1000
+    _energy: 30
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
@@ -1662,7 +1662,7 @@ MonoBehaviour:
     _cellIndex: {x: 12, y: 7}
     attackDamage: 1
     weaponRange: 3
-    _energy: 1000
+    _energy: 30
     _health: 3
     _energyOpenShield: 0
     energyConsumption: 0
