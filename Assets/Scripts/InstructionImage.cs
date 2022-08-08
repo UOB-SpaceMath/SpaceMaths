@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +23,9 @@ public class InstructionImage : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        previousButton.SetActive(false);
         _displayImage.texture = instructionSlide[currentPage];
         _displayText.SetText(instructionText[currentPage].text);
         _displayHeaderText.SetText(headerText[currentPage].text);
@@ -33,48 +33,33 @@ public class InstructionImage : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (currentPage == 0)
-        {
-            previousButton.SetActive(false);
-        }
-        else
+        if(currentPage > 0)
         {
             previousButton.SetActive(true);
         }
 
-        if (currentPage == instructionSlide.Count - 1)
-        {
-            nextButton.SetActive(false);
-        }
-        else
-        {
-            nextButton.SetActive(true);
-        }
+        nextButton.SetActive(currentPage != instructionSlide.Count - 1);
     }
 
     public void NextButton()
     {
-        if (currentPage < instructionSlide.Count - 1)
-        {
-            currentPage++;
-            _displayImage.texture = instructionSlide[currentPage];
-            _displayText.SetText(instructionText[currentPage].text);
-            _displayHeaderText.SetText(headerText[currentPage].text);
-        }
+        if (currentPage >= instructionSlide.Count - 1) return;
+        currentPage++;
+        _displayImage.texture = instructionSlide[currentPage];
+        _displayText.SetText(instructionText[currentPage].text);
+        _displayHeaderText.SetText(headerText[currentPage].text);
 
     }
 
     public void PreviousButton()
     {
-        if (currentPage > 0)
-        {
-            currentPage--;
-            _displayImage.texture = instructionSlide[currentPage];
-            _displayText.SetText(instructionText[currentPage].text);
-            _displayHeaderText.SetText(headerText[currentPage].text);
-        }
+        if (currentPage <= 0) return;
+        currentPage--;
+        _displayImage.texture = instructionSlide[currentPage];
+        _displayText.SetText(instructionText[currentPage].text);
+        _displayHeaderText.SetText(headerText[currentPage].text);
 
     }
 
