@@ -28,8 +28,16 @@ public class ShieldManager : MonoBehaviour
         else
         {
             player.OpenShields();
+            StartCoroutine(RaiseShieldSound());
             _button2.SetActive(false);
             _button1.SetActive(true);
         }
+    }
+
+    private IEnumerator RaiseShieldSound()
+    {
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.Play();
+        yield return new WaitForSeconds(0.5f);
     }
 }
