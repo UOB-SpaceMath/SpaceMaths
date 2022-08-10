@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private inGameMenu _Igm;
     [SerializeField] private Scores _scores;
 
+    // path finder
+    private AStarPathFinder _pathFinder;
+
     private Ships _player;
     private List<Ships> _enemies;
 
@@ -38,14 +41,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _messageCanvas;
 
     // Game settings
-    [SerializeField] private GameObject _restartButton;
     [Header("Misc")] [SerializeField] private float _panelHigh;
+    [SerializeField] private GameObject _restartButton;
+    [SerializeField] private int _framesForEachMove = 10;
+
 
     private void Start()
     {
         // Question stage
         _stage = Stages.Question;
         _player = _gbm.GetPlayer();        
+
+        // setup path finder
+        _pathFinder = new AStarPathFinder(_gbm);
 
         SetPanel(PanelType.Question);
     }
@@ -98,14 +106,14 @@ public class GameManager : MonoBehaviour
                         StartCoroutine(RunWatsonCommand());
                         break;
                     }
-
+                    // check shield
                     if (_sm.IsClicked)
                     {
                         _stage = Stages.None;
                         StartCoroutine(SwitchShield(_player));
                         break;
                     }
-
+                    // check selection gird
                     var selectionResult = _sgm.GetFinalResult();
                     _sgm.ResetFinalResult();
                     if (selectionResult != null && selectionResult.Type != ActionType.None)
@@ -148,11 +156,8 @@ public class GameManager : MonoBehaviour
         };
         var panels = new HashSet<GameObject>() { _questionCanvas, _selectionCanvas, _messageCanvas };
         panels.Remove(targetPanel);
-        foreach (var panel in panels)
-        {
-            panel.SetActive(false);
-        }
-        if(!targetPanel.activeSelf)
+        foreach (var panel in panels) panel.SetActive(false);
+        if (!targetPanel.activeSelf)
             targetPanel.SetActive(true);
         SetPanelPosition();
     }
@@ -207,9 +212,22 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Move(Ships ship, int x, int y)
     {
-        _gbm.MoveShip(ship, x, y);
-        // TODO make the movement animation
-        yield return new WaitForSeconds(1.0f);
+        var path = _pathFinder.FindPath(ship.CellIndex, new Vector2Int(x, y));
+
+        // move animation
+        while (path.Count != 0)
+        {
+            var currentNode = ship.CellIndex;
+            var nextNode = path.Pop();
+            var direction = new Vector3(nextNode.x - currentNode.x, 0, nextNode.y - currentNode.y);
+            for (var i = 0; i < _framesForEachMove; i++)
+            {
+                ship.ShipObject.transform.localPosition += direction / 10;
+                yield return null;
+            }
+
+            _gbm.MoveShip(ship, nextNode.x, nextNode.y);
+        }
         _stage = Stages.Enemies;
         _player.ConsumeEnergyByTurn();
         _sgm.UpdateSelectionUI();
@@ -309,6 +327,9 @@ public class GameManager : MonoBehaviour
                     Debug.Log($"Fail to move {index}");
                 }
 
+                break;
+            case WatsonIntents.Shield:
+                StartCoroutine(SwitchShield(_player));
                 break;
             default: // fail
                 // message box;
