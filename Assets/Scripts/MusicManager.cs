@@ -32,19 +32,19 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        if (_musicManagerInstance == null)
-        {
-            _musicManagerInstance = this;
-            DontDestroyOnLoad(_musicManagerInstance);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
+    // private void Awake()
+    // {
+    //     if (_musicManagerInstance == null)
+    //     {
+    //         _musicManagerInstance = this;
+    //         DontDestroyOnLoad(_musicManagerInstance);
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //         return;
+    //     }
+    // }
     public void ToggleMusic()
     {
         isMuted = !isMuted;
