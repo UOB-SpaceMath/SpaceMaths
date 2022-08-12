@@ -186,20 +186,30 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator AttackEnemy(Ships player, Ships enemy)
     {
+        bool isAttackEnd = false;
         yield return new WaitForSeconds(0.5f);
-        _am.Attack(player, enemy);
-        yield return new WaitForSeconds(1.0f);
+        _am.Attack(player, enemy, () => { isAttackEnd = true; });
+        while (!isAttackEnd)
+        {
+            yield return null;
+        }
+        isAttackEnd = false;
         _stage = Stages.Enemies;
         _sgm.UpdateSelectionUI();
     }
 
     private IEnumerator AttackPlayer(List<Ships> enemies, Ships player)
     {
+        bool isAttackEnd = false;
         if (enemies != null)
             foreach (var t in enemies)
             {
-                _am.Attack(t, player);
-                yield return new WaitForSeconds(1.0f);
+                _am.Attack(t, player, () => { isAttackEnd = true; });
+                while (!isAttackEnd)
+                {
+                    yield return null;
+                }
+                isAttackEnd = false;
             }
         else
             yield return new WaitForSeconds(1.0f);

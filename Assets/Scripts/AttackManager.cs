@@ -1,4 +1,5 @@
 using SpaceMath;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class AttackManager : MonoBehaviour
     private AudioSource attackAudio;
     private Transform weaponEnd;
 
-    private float rotationFrames = 120;
+    private float rotationFrames = 30;
 
     [SerializeField]
     private GameObject DeathExplosionPrefab;
@@ -20,7 +21,7 @@ public class AttackManager : MonoBehaviour
     private AudioSource explosionAudio;
 
     // Call this method to attack.
-    public bool Attack(Ships attacker, Ships victim)
+    public bool Attack(Ships attacker, Ships victim, Action callback)
     {
         LineRenderer attackLine = attacker.ShipObject.GetComponent<LineRenderer>();
 
@@ -51,13 +52,13 @@ public class AttackManager : MonoBehaviour
         }
 
         // Attack effects will appear every attck.
-        StartCoroutine(AttackEffect(attacker, victim, hit, attackLine));
+        StartCoroutine(AttackEffect(attacker, victim, hit, attackLine, callback));
 
         return true;
     }
 
     // Turn on the audio and visual effects of attack, and keep the visual effect for a set time.
-    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit, LineRenderer attackLine)
+    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit, LineRenderer attackLine, Action callback)
     {
         /* Rotation */
         Vector3 targetDirection = victim.ShipObject.transform.position - attacker.ShipObject.transform.position;
@@ -113,6 +114,8 @@ public class AttackManager : MonoBehaviour
             attacker.ShipObject.transform.rotation = Quaternion.Slerp(attacker.ShipObject.transform.rotation, startRotation, i / rotationFrames);
             yield return null;
         }
+
+        callback();
     }
 
     private IEnumerator LinerEffect(LineRenderer attackLine)
