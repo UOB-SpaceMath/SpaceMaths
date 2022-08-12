@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465934, g: 0.49642956, b: 0.5748249, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1382,7 +1382,7 @@ PrefabInstance:
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: headerText.Array.size
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
@@ -1422,13 +1422,25 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
+      propertyPath: headerText.Array.data[11]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: headerText.Array.data[12]
+      value: 
+      objectReference: {fileID: 7838834931990749280, guid: 82a424957a0624fa28825326ec5abc40,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
       propertyPath: instructionText.Array.size
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.size
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
@@ -1480,53 +1492,75 @@ PrefabInstance:
         type: 3}
       propertyPath: instructionSlide.Array.data[2]
       value: 
-      objectReference: {fileID: 2800000, guid: 7a2c406032c2743878b20f18b4bcc245, type: 3}
+      objectReference: {fileID: 2800000, guid: e6dba6e610c158849a8f009a3563a8be, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[3]
       value: 
-      objectReference: {fileID: 2800000, guid: 1242bca08efb2499fad3571372cc7b21, type: 3}
+      objectReference: {fileID: 2800000, guid: 110a1490e37da504c98f289c56ce26a4, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[4]
       value: 
-      objectReference: {fileID: 2800000, guid: ef46b35b6fb264739a983fd58b1f81cd, type: 3}
+      objectReference: {fileID: 2800000, guid: 06aadac91a01df04ba9634ab25321656, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[5]
       value: 
-      objectReference: {fileID: 2800000, guid: b5170faf257ae420794bef1a81d7d01a, type: 3}
+      objectReference: {fileID: 2800000, guid: 8a72e238243467942995a989c6d13572, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[6]
       value: 
-      objectReference: {fileID: 2800000, guid: 8b6a0c33d57cf45aeaa0dbe22eedf9ac, type: 3}
+      objectReference: {fileID: 2800000, guid: 580e4fdddec194c439e946535d692d21, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[7]
       value: 
-      objectReference: {fileID: 2800000, guid: 6e836731750d24c42a10f56d0287c772, type: 3}
+      objectReference: {fileID: 2800000, guid: 477f978d9840f0f4583cb7b70b239fae, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[8]
       value: 
-      objectReference: {fileID: 2800000, guid: 2ef03d8d72f054124b82e1e519eb1ccc, type: 3}
+      objectReference: {fileID: 2800000, guid: 0641d62c6e74dff4583d3d5ea9a90bbb, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionSlide.Array.data[9]
       value: 
-      objectReference: {fileID: 2800000, guid: e3027ac80d9114748b7b2db5f5df3278, type: 3}
+      objectReference: {fileID: 2800000, guid: 7ced6b941497459418bfcfef81a081d2, type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: instructionText.Array.data[10]
+      value: 
+      objectReference: {fileID: 3651113980083450133, guid: aba29f136efbd6443a491784f9a0f90e,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionText.Array.data[11]
       value: 
       objectReference: {fileID: 208497138739683509, guid: 43e2bf064f02e4a9f8c5dad1b80bbfe2,
         type: 3}
     - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
+      propertyPath: instructionText.Array.data[12]
+      value: 
+      objectReference: {fileID: 208497138739683509, guid: ad5cf7faab4ee8a43b672d7349d60803,
+        type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
       propertyPath: instructionSlide.Array.data[10]
       value: 
-      objectReference: {fileID: 2800000, guid: 049d3a3ea17074165b16a0f0e66b43d2, type: 3}
+      objectReference: {fileID: 2800000, guid: 5130e654c867d8a4fa04377a168fc431, type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.data[11]
+      value: 
+      objectReference: {fileID: 2800000, guid: 78b202aa06cc9494fa63992c309eba3e, type: 3}
+    - target: {fileID: 5027822089844670706, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
+        type: 3}
+      propertyPath: instructionSlide.Array.data[12]
+      value: 
+      objectReference: {fileID: 2800000, guid: 15a1985cc4d82e841a48385658c400ab, type: 3}
     - target: {fileID: 5027822090337006404, guid: 0bc7a20fd6fdd4f19b54a54420de2b22,
         type: 3}
       propertyPath: m_Texture
