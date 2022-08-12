@@ -205,7 +205,7 @@ public class SelectionGridManager : MonoBehaviour
     void ClickAction(Vector2Int selectionIndex, ActionType type)
     {
         _finalOutput = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
-        Debug.Log(string.Format("{0} {1}", _finalOutput.Type, _finalOutput.TargetIndex));
+        // Debug.Log(string.Format("{0} {1}", _finalOutput.Type, _finalOutput.TargetIndex));
     }
     // convert (0,0) to alpha 1
     public string GetIndexNameString(Vector2Int selectionIndex)

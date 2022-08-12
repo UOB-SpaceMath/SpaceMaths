@@ -39,11 +39,14 @@ public class AttackManager : MonoBehaviour
         // Set the beginning position of the attacking laser line.
         attackLine.SetPosition(0, weaponEnd.position);
 
+        bool hitSth = false;
+
         // If the attack line hit something, store the hit infomation in the hit variable.
         if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange))
         {
             // Set the end of the attack line to the hit point.
             attackLine.SetPosition(1, hit.point);
+            hitSth = true;
         }
         else
         {
@@ -52,13 +55,13 @@ public class AttackManager : MonoBehaviour
         }
 
         // Attack effects will appear every attck.
-        StartCoroutine(AttackEffect(attacker, victim, hit, attackLine, callback));
+        StartCoroutine(AttackEffect(attacker, victim, hit, attackLine, callback, hitSth));
 
         return true;
     }
 
     // Turn on the audio and visual effects of attack, and keep the visual effect for a set time.
-    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit, LineRenderer attackLine, Action callback)
+    private IEnumerator AttackEffect(Ships attacker, Ships victim, RaycastHit hit, LineRenderer attackLine, Action callback, bool hitSth)
     {
         /* Rotation */
         Vector3 targetDirection = victim.ShipObject.transform.position - attacker.ShipObject.transform.position;
@@ -80,7 +83,7 @@ public class AttackManager : MonoBehaviour
             attackAudio.Play();
         }
 
-        if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Player"))
+        if (hitSth && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Player")))
         {
             Vector3 explosionPosition = victim.ShipObject.transform.position;
             GameObject explosion;
