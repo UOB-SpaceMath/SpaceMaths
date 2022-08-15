@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MessageManager _mm;
     [SerializeField] private ShieldManager _sm;
     [SerializeField] private inGameMenu _Igm;
+    [SerializeField] private SoundManager _sdm;
     [SerializeField] private Scores _scores;
 
     // path finder
@@ -224,6 +225,7 @@ public class GameManager : MonoBehaviour
     {
         var path = _pathFinder.FindPath(ship.CellIndex, new Vector2Int(x, y));
 
+        _sdm.PlayMovingSound();
         // move animation
         while (path.Count != 0)
         {
@@ -238,6 +240,7 @@ public class GameManager : MonoBehaviour
 
             _gbm.MoveShip(ship, nextNode.x, nextNode.y);
         }
+        _sdm.StopMovingSound();
         _stage = Stages.Enemies;
         _player.ConsumeEnergyByTurn();
         _sgm.UpdateSelectionUI();
