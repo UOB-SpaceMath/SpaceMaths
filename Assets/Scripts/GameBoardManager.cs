@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class GameBoardManager : MonoBehaviour
 {
-    // The height of ship according to the game board.
+    // The height of player's ship
     [SerializeField] private float _height;
 
     // bias to make ship in the middle of cell rather than corner.
@@ -128,26 +128,40 @@ public class GameBoardManager : MonoBehaviour
     {
         InstantiateShip();
         // set player ship
-        var isSetup = SetShip(_playerShip, _playerShip.CellIndex.x, _playerShip.CellIndex.y);
+        var isSetup = SetShip(_playerShip, _playerShip.CellIndex.x, _playerShip.CellIndex.y,_height);
+        SetShipRotation(_playerShip,90);
         // set enemy ship
-        foreach (var ship in _enemyShips) isSetup = isSetup && SetShip(ship, ship.CellIndex.x, ship.CellIndex.y);
+        foreach (var ship in _enemyShips)
+        {
+            isSetup = isSetup && SetShip(ship, ship.CellIndex.x, ship.CellIndex.y);
+            SetShipRotation(ship,-90);
+        }
         if (!isSetup)
             throw new System.Exception("Fail to setup ship: the cell is not empty.");
     }
 
+   
+
+    private void SetShipRotation(Ships ship,float angle)
+    {
+        ship.ShipObject.transform.Rotate(0,angle,0);
+    }
+    
     // set ship to a cell
     // don't use this method to move the ship, use MoveShip()
+
     private bool SetShip(Ships ship, int x, int y)
     {
-        if (IsEmpty(x, y))
-        {
-            ship.ShipObject.transform.localPosition = GetPosition(x, y);
-            ship.CellIndex = new Vector2Int(x, y);
-            _cells[x, y] = CellType.Ship;
-            return true;
-        }
+        return SetShip(ship, x, y, ship.ShipObject.transform.localPosition.y);
+    }
+    private bool SetShip(Ships ship, int x, int y, float h)
+    {
+        if (!IsEmpty(x, y)) return false;
+        ship.ShipObject.transform.localPosition = GetPosition(x, y) + new Vector3(0, h, 0);
+        ship.CellIndex = new Vector2Int(x, y);
+        _cells[x, y] = CellType.Ship;
+        return true;
 
-        return false;
     }
 
     public bool MoveShip(Ships ship, int x, int y)
@@ -159,7 +173,7 @@ public class GameBoardManager : MonoBehaviour
     // return the local position of a grid cell by it's index.
     private Vector3 GetPosition(int x, int y)
     {
-        return new Vector3(x + _tileBias.x + _playerBias.x, _height, y + _tileBias.y + _playerBias.y);
+        return new Vector3(x + _tileBias.x + _playerBias.x, 0, y + _tileBias.y + _playerBias.y);
     }
 
     public Vector2Int GetPlayerIndex()
