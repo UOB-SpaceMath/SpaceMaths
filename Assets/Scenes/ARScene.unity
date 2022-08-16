@@ -3072,7 +3072,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00018310547, y: 63.1}
+  m_AnchoredPosition: {x: -0.00018310547, y: 85}
   m_SizeDelta: {x: 700, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &246852290
@@ -3123,10 +3123,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Voice commands syntax:
-
-    [Move to/Navigate to/Attack]  [Alpha/Bravo/Charlie/Delta/Echo]
-    Number [1/2/3/4/5]'
+  m_Text: "== Voice commands syntax ==\n\n[Go to / fire on] + [Row] + [Column] \nor\n[activate
+    / deactive] + Shield"
 --- !u!222 &246852292
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3364,7 +3362,7 @@ GameObject:
   - component: {fileID: 249305926}
   - component: {fileID: 249305925}
   m_Layer: 0
-  m_Name: One
+  m_Name: Victor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3379,7 +3377,7 @@ RectTransform:
   m_GameObject: {fileID: 249305923}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2083540003}
   m_RootOrder: 0
@@ -3410,11 +3408,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 7cb2912222469634ba17a77055919ea8, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 12800000, guid: 6f818a599714b45b094a3d755e4d289a, type: 3}
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -3422,7 +3420,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: I
+  m_Text: Victor
 --- !u!222 &249305926
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5871,9 +5869,9 @@ MonoBehaviour:
   _height: 0.2
   _playerBias: {x: 0.5, y: 0.5}
   _levelPrefabs:
-  - {fileID: 7385994913918513659, guid: 96553ec85568fb44c93ab73e265960dc, type: 3}
-  - {fileID: 3905167745387319889, guid: 6e11bb5dbd770ad448ed6b765e619c32, type: 3}
-  - {fileID: 4576148835283326943, guid: 427fa5e5341dfa7479df25c9cf7ce0df, type: 3}
+  - {fileID: 7494805152279955219, guid: ee5900ef72f7e3e1f86397438d84ceae, type: 3}
+  - {fileID: 7980108012670622739, guid: f9bc069784e03923b815226ed9a9641b, type: 3}
+  - {fileID: 8135244639569166252, guid: 427fa5e5341dfa7479df25c9cf7ce0df, type: 3}
 --- !u!114 &539834610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12707,7 +12705,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -366.1, y: 232.17}
+  m_AnchoredPosition: {x: -351, y: 241}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1233976096
@@ -13152,12 +13150,12 @@ PrefabInstance:
     - target: {fileID: 5056691762482507861, guid: f81f943c593213bcc959b329a04369af,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.06
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5056691762482507861, guid: f81f943c593213bcc959b329a04369af,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.75
+      value: -4.65
       objectReference: {fileID: 0}
     - target: {fileID: 5056691762482507861, guid: f81f943c593213bcc959b329a04369af,
         type: 3}
@@ -16858,7 +16856,7 @@ GameObject:
   - component: {fileID: 1607779569}
   - component: {fileID: 1607779568}
   m_Layer: 0
-  m_Name: Three
+  m_Name: Xray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16873,7 +16871,7 @@ RectTransform:
   m_GameObject: {fileID: 1607779566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2083540003}
   m_RootOrder: 2
@@ -16904,11 +16902,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 7cb2912222469634ba17a77055919ea8, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 12800000, guid: 6f818a599714b45b094a3d755e4d289a, type: 3}
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -16916,7 +16914,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: III
+  m_Text: X-ray
 --- !u!222 &1607779569
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20665,7 +20663,7 @@ GameObject:
   - component: {fileID: 1887122231}
   - component: {fileID: 1887122230}
   m_Layer: 0
-  m_Name: Four
+  m_Name: Yankee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20680,7 +20678,7 @@ RectTransform:
   m_GameObject: {fileID: 1887122228}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2083540003}
   m_RootOrder: 3
@@ -20711,11 +20709,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 7cb2912222469634ba17a77055919ea8, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 12800000, guid: 6f818a599714b45b094a3d755e4d289a, type: 3}
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -20723,7 +20721,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: IV
+  m_Text: Yankee
 --- !u!222 &1887122231
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20823,7 +20821,7 @@ GameObject:
   - component: {fileID: 1901815247}
   - component: {fileID: 1901815246}
   m_Layer: 0
-  m_Name: Two
+  m_Name: Whiskey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20838,7 +20836,7 @@ RectTransform:
   m_GameObject: {fileID: 1901815244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2083540003}
   m_RootOrder: 1
@@ -20869,11 +20867,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 7cb2912222469634ba17a77055919ea8, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 12800000, guid: 6f818a599714b45b094a3d755e4d289a, type: 3}
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -20881,9 +20879,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'II
-
-'
+  m_Text: Whiskey
 --- !u!222 &1901815247
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21665,7 +21661,7 @@ GameObject:
   - component: {fileID: 1965005587}
   - component: {fileID: 1965005586}
   m_Layer: 0
-  m_Name: Five
+  m_Name: Zulu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21680,7 +21676,7 @@ RectTransform:
   m_GameObject: {fileID: 1965005584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2083540003}
   m_RootOrder: 4
@@ -21711,11 +21707,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 7cb2912222469634ba17a77055919ea8, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 12800000, guid: 6f818a599714b45b094a3d755e4d289a, type: 3}
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
+    m_MinSize: 0
     m_MaxSize: 50
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -21723,7 +21719,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: V
+  m_Text: Zulu
 --- !u!222 &1965005587
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23650,8 +23646,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 350}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 35, y: 368}
+  m_SizeDelta: {x: 677.4, y: 47.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2083540004
 MonoBehaviour:
@@ -23672,11 +23668,11 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
-  m_StartAxis: 1
-  m_CellSize: {x: 100, y: 50}
-  m_Spacing: {x: 22.71, y: 10}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_StartAxis: 0
+  m_CellSize: {x: 138, y: 40}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 1
+  m_ConstraintCount: 5
 --- !u!1001 &2086094054
 PrefabInstance:
   m_ObjectHideFlags: 0
