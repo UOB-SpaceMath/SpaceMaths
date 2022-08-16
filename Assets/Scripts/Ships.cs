@@ -124,7 +124,7 @@ namespace SpaceMath
                 DecreaseEnergy(_energyOpenShield);
                 _isShieldsOn = !_isShieldsOn;
                 GameObject shield = GameObject.Find("Shield");
-                shield.transform.localScale = new Vector3(0.46f, 0.24f, 0.15f);
+                shield.transform.localScale = new Vector3(0.6f, 0.4f, 1.0f);
                 return true;
             }
             return false;

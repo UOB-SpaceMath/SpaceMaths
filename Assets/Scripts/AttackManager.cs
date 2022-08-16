@@ -40,9 +40,12 @@ public class AttackManager : MonoBehaviour
         attackLine.SetPosition(0, weaponEnd.position);
 
         bool hitSth = false;
-
+        
+        // disable collider to prevent shoot attacker it self
+        var selfCollider = attacker.ShipObject.GetComponent<BoxCollider>();
+        selfCollider.enabled = false;
         // If the attack line hit something, store the hit infomation in the hit variable.
-        if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange))
+        if (Physics.Raycast(attackerPos, victimPos - attackerPos, out hit, attacker.WeaponRange,1))
         {
             // Set the end of the attack line to the hit point.
             attackLine.SetPosition(1, hit.point);
@@ -53,6 +56,7 @@ public class AttackManager : MonoBehaviour
             // If the attack didn't hit anything, the attack line will end at the maximum distance.
             attackLine.SetPosition(1, attackerPos + (victimPos - attackerPos) * attacker.WeaponRange);
         }
+        selfCollider.enabled = true;
 
         // Attack effects will appear every attck.
         StartCoroutine(AttackEffect(attacker, victim, hit, attackLine, callback, hitSth));
