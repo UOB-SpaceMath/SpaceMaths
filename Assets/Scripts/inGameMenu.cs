@@ -13,6 +13,7 @@ public class inGameMenu : MonoBehaviour
 
     [SerializeField] private GameObject _menuButton;
     [SerializeField] private GameObject _instructions;
+    [SerializeField] private GameObject _background;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +41,7 @@ public class inGameMenu : MonoBehaviour
     private void DisableMenuButton()
     {
         _menuButton.SetActive(false);
+        _background.SetActive(false);
     }
 
     private void EnableMenuButton()
@@ -56,22 +58,31 @@ public class inGameMenu : MonoBehaviour
     public void Resume()
     {
         _menu.SetActive(false);
+        _background.SetActive(false);
         EnableMenuButton();
     }
 
     public void ShowLoseScreen()
     {
         _LostMenu.SetActive(true);
+        _background.SetActive(true);
     }
 
     public void ShowWinScreen()
     {
         _wonMenu.SetActive(true);
+        _background.SetActive(true);
     }
 
     public void DisableContinueScreen()
     {
         _wonMenu.SetActive(false);
         _LostMenu.SetActive(false);
+        _background.SetActive(false);
+    }
+
+    public void ShowBackground()
+    {
+        _background.SetActive(true);
     }
 }

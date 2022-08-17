@@ -17,7 +17,8 @@ public class SoundManager : MonoBehaviour
     private AudioSource startWatsonSound;
     [SerializeField]
     private AudioSource stoptWatsonSound;
-
+    [SerializeField]
+    private AudioSource exitSound;
     private bool watsonClicked = false;
 
     public void Awake()
@@ -28,6 +29,11 @@ public class SoundManager : MonoBehaviour
     public void PlayButtonSound()
     {
         buttonSound.Play();
+    }
+
+    public void PlayExitSound()
+    {
+        exitSound.Play();
     }
 
     public void PlayNextSound()
