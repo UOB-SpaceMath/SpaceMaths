@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &208497138739683515
+--- !u!1 &3651113980083450139
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 208497138739683514}
-  - component: {fileID: 208497138739683508}
-  - component: {fileID: 208497138739683509}
+  - component: {fileID: 3651113980083450138}
+  - component: {fileID: 3651113980083450132}
+  - component: {fileID: 3651113980083450133}
   m_Layer: 5
   m_Name: Text_5
   m_TagString: Untagged
@@ -18,13 +18,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &208497138739683514
+--- !u!224 &3651113980083450138
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208497138739683515}
+  m_GameObject: {fileID: 3651113980083450139}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -37,21 +37,21 @@ RectTransform:
   m_AnchoredPosition: {x: 544.5, y: 886.2}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &208497138739683508
+--- !u!222 &3651113980083450132
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208497138739683515}
+  m_GameObject: {fileID: 3651113980083450139}
   m_CullTransparentMesh: 1
---- !u!114 &208497138739683509
+--- !u!114 &3651113980083450133
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 208497138739683515}
+  m_GameObject: {fileID: 3651113980083450139}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: If either health or energy drops to zero, you will lose the game.
+  m_text: Player ship can gain energy when destroy, as you can see the animation.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: de28cdce4095e46cb88682038d258eb3, type: 2}
   m_sharedMaterial: {fileID: -2369440901582580570, guid: de28cdce4095e46cb88682038d258eb3,

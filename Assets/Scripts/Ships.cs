@@ -53,8 +53,8 @@ namespace SpaceMath
 
         public GameBoardManager GameBoardManager { get => _gameBoardManager; set => _gameBoardManager = value; }
 
-        // Return value false means the player lose the game
-        public void ApplyDamage(int amount)
+        // Return value 1 means the ship is dead.
+        public int ApplyDamage(int amount)
         {
             if (_isShieldsOn)
             {
@@ -67,7 +67,9 @@ namespace SpaceMath
             if (IsShipDead())
             {
                 _gameBoardManager.RemoveTargetShip(this);
+                return 1;
             }
+            return 0;
         }
 
         public void IncreaseHealth(int amount)
@@ -122,7 +124,7 @@ namespace SpaceMath
                 DecreaseEnergy(_energyOpenShield);
                 _isShieldsOn = !_isShieldsOn;
                 GameObject shield = GameObject.Find("Shield");
-                shield.transform.localScale = new Vector3(0.46f, 0.24f, 0.15f);
+                shield.transform.localScale = new Vector3(0.6f, 0.4f, 1.0f);
                 return true;
             }
             return false;

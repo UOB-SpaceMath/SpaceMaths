@@ -2,35 +2,58 @@ using SpaceMath;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
 public class GameBoardManager : MonoBehaviour
 {
-    // The height of ship according to the game board.
-    [SerializeField] float _height;
-
-    // the obstacle tile-map
-    [SerializeField] Tilemap _obstacleMap;
+    // The height of player's ship
+    [SerializeField] private float _height;
 
     // bias to make ship in the middle of cell rather than corner.
-    [SerializeField] Vector2 _playerBias;
+    [SerializeField] private Vector2 _playerBias;
 
-    // the player's ship
-    [SerializeField] Ships _playerShip;
-
-    // the enemies' ships
-    [NonReorderable][SerializeField] List<Ships> _enemyShips;
+    [NonReorderable] [SerializeField] private List<GameObject> _levelPrefabs;
 
     // different types of cell
-    public enum CellType { Ship, Wall, Empty };
+    public enum CellType
+    {
+        Ship,
+        Wall,
+        Empty
+    };
 
     // the whole map information
-    CellType[,] _cells; // the whole map info
+    private CellType[,] _cells; // the whole map info
 
-    Vector3Int _tileBias;
+    private Vector3Int _tileBias;
 
-    void Awake()
+    // the player's ship
+    private Ships _playerShip;
+
+    // the enemies' ships
+    private List<Ships> _enemyShips;
+
+    // the obstacle tile-map
+    private Tilemap _invisibleTilemap;
+
+    private void Awake()
     {
+        ImportLevel();
         GetWallInfo();
         SetupShip();
+    }
+
+    private void ImportLevel()
+    {
+        // instantiate level
+        var level = Instantiate(_levelPrefabs[GlobalInformation.CurrentLevelIndex], gameObject.transform, false);
+        // var level = GameObject.Find("Level1");
+        var levelInformation = level.GetComponent<LevelGenerator>();
+        // get information
+        _playerShip = levelInformation.PlayerShip;
+        _enemyShips = levelInformation.EnemyShips;
+        _invisibleTilemap = level.GetComponentInChildren<Tilemap>();
+        // hide wall indicators tilemap
+        level.GetComponentInChildren<TilemapRenderer>().enabled = false;
     }
 
     public bool IsEnemiesRemain()
@@ -53,36 +76,27 @@ public class GameBoardManager : MonoBehaviour
     // Return all enemy ships in range
     public List<Ships> GetEnemiesInRange()
     {
-        List<Ships> result = new List<Ships>();
-        for (int i = 0; i < _enemyShips.Count; i++)
-        {
-            if (isInRange(_enemyShips[i]))
-            {
-                result.Add(_enemyShips[i]);
-            }
-        }
+        var result = new List<Ships>();
+        foreach (var ship in _enemyShips)
+            if (IsInRange(ship))
+                result.Add(ship);
+
         return result;
     }
 
     // Check an enemy is within range of player (5x5)
-    private bool isInRange(Ships enemy)
+    private bool IsInRange(Ships enemy)
     {
-        int playerY = _playerShip.CellIndex.y;
-        int playerX = _playerShip.CellIndex.x;
-        if (enemy.CellIndex.y < playerY - 2 || enemy.CellIndex.y > playerY + 2)
-        {
-            return false;
-        }
-        if (enemy.CellIndex.x < playerX - 2 || enemy.CellIndex.x > playerX + 2)
-        {
-            return false;
-        }
+        var playerY = _playerShip.CellIndex.y;
+        var playerX = _playerShip.CellIndex.x;
+        if (enemy.CellIndex.y < playerY - 2 || enemy.CellIndex.y > playerY + 2) return false;
+        if (enemy.CellIndex.x < playerX - 2 || enemy.CellIndex.x > playerX + 2) return false;
         return true;
     }
 
     private void InstantiateShip()
     {
-        var gridTransform = _obstacleMap.GetComponentInParent<Grid>().transform;
+        var gridTransform = _invisibleTilemap.GetComponentInParent<Grid>().transform;
         _playerShip.ShipObject = Instantiate(_playerShip.ShipObject, gridTransform);
         _playerShip.GameBoardManager = this;
         foreach (var ship in _enemyShips)
@@ -93,54 +107,61 @@ public class GameBoardManager : MonoBehaviour
     }
 
     // scan the whole map
-    void GetWallInfo()
+    private void GetWallInfo()
     {
         // get map info
-        _obstacleMap.CompressBounds();
-        var obstacleBound = _obstacleMap.cellBounds;
+        _invisibleTilemap.CompressBounds();
+        var obstacleBound = _invisibleTilemap.cellBounds;
         var xSize = obstacleBound.size.x - 2;
         var ySize = obstacleBound.size.y - 2;
         _cells = new CellType[xSize, ySize];
         _tileBias = obstacleBound.position + new Vector3Int(1, 1, 0);
-        for (int x = 0; x < _cells.GetLength(0); x++)
-        {
-            for (int y = 0; y < _cells.GetLength(1); y++)
-            {
-                _cells[x, y] = _obstacleMap.HasTile(new Vector3Int(x, y, 0) + _tileBias) ?
-                    CellType.Wall : CellType.Empty;
-            }
-        }
+        for (var x = 0; x < _cells.GetLength(0); x++)
+        for (var y = 0; y < _cells.GetLength(1); y++)
+            _cells[x, y] = _invisibleTilemap.HasTile(new Vector3Int(x, y, 0) + _tileBias)
+                ? CellType.Wall
+                : CellType.Empty;
     }
 
     // place ships to specific cells
-    void SetupShip()
+    private void SetupShip()
     {
         InstantiateShip();
-        bool isSetup = true;
         // set player ship
-        isSetup = isSetup && SetShip(_playerShip, _playerShip.CellIndex.x, _playerShip.CellIndex.y);
+        var isSetup = SetShip(_playerShip, _playerShip.CellIndex.x, _playerShip.CellIndex.y,_height);
+        SetShipRotation(_playerShip,90);
         // set enemy ship
-        foreach (Ships ship in _enemyShips)
+        foreach (var ship in _enemyShips)
         {
             isSetup = isSetup && SetShip(ship, ship.CellIndex.x, ship.CellIndex.y);
+            SetShipRotation(ship,-90);
         }
         if (!isSetup)
             throw new System.Exception("Fail to setup ship: the cell is not empty.");
     }
 
+   
+
+    private void SetShipRotation(Ships ship,float angle)
+    {
+        ship.ShipObject.transform.Rotate(0,angle,0);
+    }
+    
     // set ship to a cell
     // don't use this method to move the ship, use MoveShip()
-    bool SetShip(Ships ship, int x, int y)
+
+    private bool SetShip(Ships ship, int x, int y)
     {
-        if (IsEmpty(x, y))
-        {
-            ship.ShipObject.transform.localPosition = GetPosition(x, y);
-            ship.CellIndex = new Vector2Int(x, y);
-            _cells[x, y] = CellType.Ship;
-            return true;
-        }
-        else
-            return false;
+        return SetShip(ship, x, y, ship.ShipObject.transform.localPosition.y);
+    }
+    private bool SetShip(Ships ship, int x, int y, float h)
+    {
+        if (!IsEmpty(x, y)) return false;
+        ship.ShipObject.transform.localPosition = GetPosition(x, y) + new Vector3(0, h, 0);
+        ship.CellIndex = new Vector2Int(x, y);
+        _cells[x, y] = CellType.Ship;
+        return true;
+
     }
 
     public bool MoveShip(Ships ship, int x, int y)
@@ -150,9 +171,9 @@ public class GameBoardManager : MonoBehaviour
     }
 
     // return the local position of a grid cell by it's index.
-    Vector3 GetPosition(int x, int y)
+    private Vector3 GetPosition(int x, int y)
     {
-        return new Vector3(x + _tileBias.x + _playerBias.x, _height, y + _tileBias.y + _playerBias.y);
+        return new Vector3(x + _tileBias.x + _playerBias.x, 0, y + _tileBias.y + _playerBias.y);
     }
 
     public Vector2Int GetPlayerIndex()
@@ -162,19 +183,20 @@ public class GameBoardManager : MonoBehaviour
 
     public bool IsEmpty(int x, int y)
     {
-        return _cells[x, y] == CellType.Empty;
+        var type = GetCellType(x, y);
+        return type == CellType.Empty;
     }
 
     public bool IsEmpty(Vector2Int index)
     {
-        return _cells[index.x, index.y] == CellType.Empty;
+        return IsEmpty(index.x, index.y);
     }
 
     public bool IsEnemy(int x, int y)
     {
         if (_playerShip.CellIndex.Equals(new Vector2Int(x, y)))
             return false;
-        return _cells[x, y] == CellType.Ship;
+        return GetCellType(x, y) == CellType.Ship;
     }
 
     public bool IsEnemy(Vector2Int index)
@@ -184,36 +206,28 @@ public class GameBoardManager : MonoBehaviour
 
     public CellType GetCellType(int x, int y)
     {
-        if (IsOutOfBound(x, y))
-        {
-            return CellType.Wall;
-        }
+        if (IsOutOfBound(x, y)) return CellType.Wall;
 
         return _cells[x, y];
     }
 
-    bool IsOutOfBound(int x, int y)
+    private bool IsOutOfBound(int x, int y)
     {
         if (x < 0 || x >= _cells.GetLength(0) ||
             y < 0 || y >= _cells.GetLength(1))
-        {
             return true;
-        }
         return false;
     }
 
 
     public void RemoveTargetShip(Ships currentShip)
     {
-        Vector2Int _currentCellIndex = currentShip.CellIndex;
-        int targetPosX = _currentCellIndex.x;
-        int targetPosY = _currentCellIndex.y;
+        var _currentCellIndex = currentShip.CellIndex;
+        var targetPosX = _currentCellIndex.x;
+        var targetPosY = _currentCellIndex.y;
 
-        // if the ship is not the playership
-        if (_currentCellIndex != _playerShip.CellIndex)
-        {
-            _enemyShips.Remove(currentShip);
-        }
+        // if the ship is not the player ship
+        if (_currentCellIndex != _playerShip.CellIndex) _enemyShips.Remove(currentShip);
         _cells[targetPosX, targetPosY] = CellType.Empty;
         currentShip.ShipObject.SetActive(false);
     }
@@ -221,24 +235,30 @@ public class GameBoardManager : MonoBehaviour
     // Get Ship from position, if no ship, returns null 
     public Ships GetShip(Vector2Int position)
     {
-        int x = position.x;
-        int y = position.y;
-        //if (_cells[x,y] == CellType.Empty || _cells[x,y] == CellType.Wall)
-        //{
-        //    return null;
-        //}
-        if (_playerShip.CellIndex.x == x && _playerShip.CellIndex.y == y)
-        {
-            return _playerShip;
-        }
-        for (int i = 0; i < _enemyShips.Count; i++)
-        {
+        var x = position.x;
+        var y = position.y;
+
+        if (_playerShip.CellIndex.x == x && _playerShip.CellIndex.y == y) return _playerShip;
+        for (var i = 0; i < _enemyShips.Count; i++)
             if (_enemyShips[i].CellIndex.y == y && _enemyShips[i].CellIndex.x == x)
-            {
                 return _enemyShips[i];
-            }
-        }
         return null;
+    }
+
+    public Vector2Int GetMapSize()
+    {
+        return new Vector2Int(_cells.GetLength(0), _cells.GetLength(1));
+    }
+
+    public int GetLevelCount()
+    {
+        return _levelPrefabs.Count;
+    }
+
+    // API for getting current level
+    public string GetCurrentLevel()
+    {
+        return _levelPrefabs[GlobalInformation.CurrentLevelIndex].name;
     }
 
 }

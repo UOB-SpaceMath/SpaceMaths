@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    // TODO remove this.
+    [SerializeField]
+    private bool isDebug = false;
+
     private Text QuestionText;
     private Button AButton;
     private Button BButton;
@@ -74,23 +78,29 @@ public class UIManager : MonoBehaviour
 
     private void GenerateQuestion()
     {
-
-        switch (Random.Range(0, 2))
+        if (isDebug)
         {
-            case 1:
-                _numberOne = Random.Range(4, 13);
-                _numberTwo = Random.Range(4, 13);
-                _numberThree = _numberOne * _numberTwo;
-                MultiplicationFunc();
-                GetAnswer(_numberThree);
-                break;
-            default:
-                _numberOne = Random.Range(10, 20);
-                _numberTwo = Random.Range(1, 10);
-                _numberThree = _numberOne * _numberTwo;
-                DivisionFunc();
-                GetAnswer(_numberOne);
-                break;
+            QuestionText.text = "It is debug mode" + "\n" + "Please click any button to continue";
+        }
+        else
+        {
+            switch (Random.Range(0, 2))
+            {
+                case 1:
+                    _numberOne = Random.Range(4, 13);
+                    _numberTwo = Random.Range(4, 13);
+                    _numberThree = _numberOne * _numberTwo;
+                    MultiplicationFunc();
+                    GetAnswer(_numberThree);
+                    break;
+                default:
+                    _numberOne = Random.Range(10, 20);
+                    _numberTwo = Random.Range(1, 10);
+                    _numberThree = _numberOne * _numberTwo;
+                    DivisionFunc();
+                    GetAnswer(_numberOne);
+                    break;
+            }
         }
 
     }
@@ -154,22 +164,33 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator OnBtnClick(int index)
     {
-        if (index == _trueIndex)
+        if (isDebug)
         {
             ShowCorrect(index);
+            ControlButton(false);
+            yield return new WaitForSeconds(1);
+            ResetButton(index);
+            GenerateQuestion();
         }
         else
         {
-            ShowIncorrect(index);
+            if (index == _trueIndex)
+            {
+                ShowCorrect(index);
+            }
+            else
+            {
+                ShowIncorrect(index);
+            }
+
+            ControlButton(false);
+            yield return new WaitForSeconds(1);
+
+            //Need to check this when merge the gameManager
+            ResetButton(index);
+
+            GenerateQuestion();
         }
-
-        ControlButton(false);
-        yield return new WaitForSeconds(1);
-
-        //Need to check this when merge the gameManager
-        ResetButton(index);
-
-        GenerateQuestion();
     }
 
     private void ShowCorrect(int index)

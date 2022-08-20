@@ -8,27 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartingScene.unity
     guid: 118ef66be389b4814aad2134d64111f2
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/ARScene.unity
     guid: 14deca9211cca46088441a29dc46e3f5
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/ARScene2.unity
-    guid: f03d982b6fba8495eb0b0931a8a32dc5
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+    path: Assets/Scenes/LevelSelect.unity
+    guid: 30a9603f151ea2b4691dbb80ef64b23a
   - enabled: 1
-    path: Assets/Scenes/ARScene3.unity
-    guid: 35ad6cac10bc94d69835d843df456e9c
+    path: Assets/Scenes/HighScores.unity
+    guid: 09101e3db3d684fe4b96693fd7868ace
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
       type: 2}

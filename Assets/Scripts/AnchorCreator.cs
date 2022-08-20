@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -71,8 +72,15 @@ public class AnchorCreator : MonoBehaviour
             // Perform the raycast
             if (_raycastManager.Raycast(touch.position, _Hits, trackableTypes))
             {
-                // Raycast hits are sorted by distance, so the first one will be the closest hit.
-                var hit = _Hits[0];
+                // get first hit no matter points or planes
+                ARRaycastHit hit = _Hits[0];
+                // get first plane if plane exist.
+                foreach (var planeHit in _Hits.Where(planeHit => planeHit.hitType == TrackableType.PlaneWithinBounds))
+                {
+                    hit = planeHit;
+                    break;
+                }
+
                 var anchor = ShowGameBoardOnPlane(hit);
                 if (anchor)
                 {

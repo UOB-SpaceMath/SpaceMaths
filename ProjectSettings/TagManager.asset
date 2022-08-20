@@ -10,6 +10,8 @@ TagManager:
   - healthSlider
   - energySlider
   - enemyHealth
+  - selection_buttons
+  - Weapon
   layers:
   - Default
   - TransparentFX

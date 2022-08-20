@@ -1,3 +1,4 @@
+using System;
 using SpaceMath;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,20 +8,25 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     // Sub managers
-    [SerializeField] private AttackManager am;
-    [SerializeField] private GameBoardManager gbm;
-    [SerializeField] private UIManager uim;
-    [SerializeField] private SelectionGridManager sgm;
-    [SerializeField] private WatsonManager wm;
-    [SerializeField] private MessageManager mm;
-    [SerializeField] private ShieldManager sm;
+    [Header("Managers")] [SerializeField] private AttackManager _am;
+    [SerializeField] private GameBoardManager _gbm;
+    [SerializeField] private UIManager _uim;
+    [SerializeField] private SelectionGridManager _sgm;
+    [SerializeField] private WatsonManager _wm;
+    [SerializeField] private MessageManager _mm;
+    [SerializeField] private ShieldManager _sm;
+    [SerializeField] private inGameMenu _Igm;
+    [SerializeField] private SoundManager _sdm;
+    [SerializeField] private Scores _scores;
 
-    private Ships player;
-    private List<Ships> enemies;
-    [SerializeField] private List<GameObject> levels;
+    // path finder
+    private AStarPathFinder _pathFinder;
+
+    private Ships _player;
+    private List<Ships> _enemies;
 
     // Store the game stage.
-    public enum Stages
+    private enum Stages
     {
         None,
         Question,
@@ -28,73 +34,64 @@ public class GameManager : MonoBehaviour
         Enemies
     };
 
-    private Stages stage;
+    private Stages _stage;    
 
     // Drag the canvas into these variables in the inspector
-    [SerializeField] private GameObject questionCanvas;
-    [SerializeField] private GameObject selectionCanvas;
-    [SerializeField] private GameObject messageCanvas;
-
-    // Game controls
-    // Drag these screens into the inspector
-    [SerializeField] private GameObject restartScreen;
-    [SerializeField] private GameObject wonContinueScreen;
-    [SerializeField] private GameObject lostContinueScreen;
-
-    // Game level
-    [SerializeField] private int level = 0;
-    private int maxLevel;
-    [SerializeField] private string previousLevel;
-    [SerializeField] private string nextLevel;
+    [Header("Canvas")] [SerializeField] private GameObject _questionCanvas;
+    [SerializeField] private GameObject _selectionCanvas;
+    [SerializeField] private GameObject _messageCanvas;
 
     // Game settings
+    [Header("Misc")] [SerializeField] private float _panelHigh;
+    [SerializeField] private GameObject _restartButton;
+    [SerializeField] private int _framesForEachMove = 10;
 
-    private GameObject restartButton;
-    [SerializeField] private float panelHigh;
 
     private void Start()
     {
-        restartButton = GameObject.Find("Restart Button");
-        restartScreen.SetActive(false);
-        wonContinueScreen.SetActive(false);
-        lostContinueScreen.SetActive(false);
-        maxLevel = levels.Count - 1;
         // Question stage
-        stage = Stages.Question;
-        player = gbm.GetPlayer();
+        _stage = Stages.Question;
+        _player = _gbm.GetPlayer();        
+
+        // setup path finder
+        _pathFinder = new AStarPathFinder(_gbm);
 
         SetPanel(PanelType.Question);
     }
 
     private void Update()
     {
-        if (player.IsShipDead())
-            ShowLoseScreen();
-        else if (!gbm.IsEnemiesRemain())
-            ShowWinScreen();
+        if (_player.IsShipDead())
+        {
+            ShowLoseScreen();            
+            _scores.checkScore(_player.Energy);
+        }
+        else if (!_gbm.IsEnemiesRemain())
+        {
+            ShowWinScreen();            
+            _scores.checkScore(_player.Energy);
+        }
         else
-            switch (stage)
+            switch (_stage)
             {
                 // Question stage
                 case Stages.Question:
                     SetPanel(PanelType.Question);
-                    switch (uim.GetAnswerState())
+                    switch (_uim.GetAnswerState())
                     {
                         // Answer was correct
                         case UIManager.AnswerStates.Right:
-                            stage = Stages.None;
-                            uim.SetAnswerState(UIManager.AnswerStates.Suspension);
+                            _stage = Stages.None;
+                            _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
                             StartCoroutine(QuestionToPlayerTurn());
+                            _scores.incrementScore();
                             break;
 
                         // Answer was incorrect
                         case UIManager.AnswerStates.Wrong:
-                            stage = Stages.None;
-                            uim.SetAnswerState(UIManager.AnswerStates.Suspension);
+                            _stage = Stages.None;
+                            _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
                             StartCoroutine(QuestionToEnemiesTurn());
-                            break;
-
-                        default:
                             break;
                     }
 
@@ -104,35 +101,33 @@ public class GameManager : MonoBehaviour
                 case Stages.Player:
                     SetPanel(PanelType.Selection);
                     // check Watson running
-                    if (wm.IsWatsonRunning())
+                    if (_wm.IsWatsonRunning())
                     {
-                        stage = Stages.None;
+                        _stage = Stages.None;
                         StartCoroutine(RunWatsonCommand());
                         break;
                     }
-
-                    if (sm.IsClicked)
+                    // check shield
+                    if (_sm.IsClicked)
                     {
-                        stage = Stages.None;
-                        StartCoroutine(SwitchShield(player));
+                        _stage = Stages.None;
+                        StartCoroutine(SwitchShield(_player));
                         break;
                     }
-
-                    var selectionResult = sgm.GetFinalResult();
-                    sgm.ResetFinalResult();
+                    // check selection gird
+                    var selectionResult = _sgm.GetFinalResult();
+                    _sgm.ResetFinalResult();
                     if (selectionResult != null && selectionResult.Type != ActionType.None)
                     {
-                        stage = Stages.None;
+                        _stage = Stages.None;
                         switch (selectionResult.Type)
                         {
                             case ActionType.Move:
-                                StartCoroutine(Move(player, selectionResult.TargetIndex.x,
+                                StartCoroutine(Move(_player, selectionResult.TargetIndex.x,
                                     selectionResult.TargetIndex.y));
                                 break;
                             case ActionType.Attack:
-                                StartCoroutine(AttackEnemy(player, gbm.GetShip(selectionResult.TargetIndex)));
-                                break;
-                            default:
+                                StartCoroutine(AttackEnemy(_player, _gbm.GetShip(selectionResult.TargetIndex)));
                                 break;
                         }
                     }
@@ -141,154 +136,146 @@ public class GameManager : MonoBehaviour
 
                 // Enemies' turn
                 case Stages.Enemies:
-                    stage = Stages.None;
-                    enemies = gbm.GetEnemiesInRange();
-                    StartCoroutine(AttackPlayer(enemies, player));
+                    _stage = Stages.None;
+                    _enemies = _gbm.GetEnemiesInRange();
+                    StartCoroutine(AttackPlayer(_enemies, _player));
                     break;
                 default:
                     // reset the second selection input occurred in none stage.
-                    sgm.ResetFinalResult();
+                    _sgm.ResetFinalResult();
                     break;
             }
     }
 
     private void SetPanel(PanelType type)
     {
-        // set all false
-        questionCanvas.SetActive(false);
-        selectionCanvas.SetActive(false);
-        messageCanvas.SetActive(false);
-        switch (type)
+        var targetPanel = type switch
         {
-            case PanelType.Question:
-                questionCanvas.SetActive(true);
-                break;
-            case PanelType.Selection:
-                selectionCanvas.SetActive(true);
-                break;
-            case PanelType.Message:
-                messageCanvas.SetActive(true);
-                break;
-        }
-
-        SetPanelPostion();
+            PanelType.Question => _questionCanvas,
+            PanelType.Selection => _selectionCanvas,
+            _ => _messageCanvas
+        };
+        var panels = new HashSet<GameObject>() { _questionCanvas, _selectionCanvas, _messageCanvas };
+        panels.Remove(targetPanel);
+        foreach (var panel in panels) panel.SetActive(false);
+        if (!targetPanel.activeSelf)
+            targetPanel.SetActive(true);
+        SetPanelPosition();
     }
 
     private void ShowMessage(string message, Stages nextStage)
     {
-        mm.SetMessage(message);
+        _mm.SetMessage(message);
         SetPanel(PanelType.Message);
-        mm.SetCloseAction(() => { stage = nextStage; });
+        _mm.SetCloseAction(() => { _stage = nextStage; });
     }
-
-    //// Set "on" to true to turn on the question panel.
-    //private void SwitchPanel(bool on)
-    //{
-    //    questionCanvas.SetActive(on);
-    //    selectionCanvas.SetActive(!on);
-    //}
 
     private IEnumerator QuestionToPlayerTurn()
     {
         yield return new WaitForSeconds(0.8f);
         SetPanel(PanelType.Selection);
-        stage = Stages.Player;
+        _stage = Stages.Player;
     }
 
     private IEnumerator QuestionToEnemiesTurn()
     {
         yield return new WaitForSeconds(0.8f);
-        questionCanvas.SetActive(false);
-        selectionCanvas.SetActive(false);
-        stage = Stages.Enemies;
+        _questionCanvas.SetActive(false);
+        _selectionCanvas.SetActive(false);
+        _stage = Stages.Enemies;
     }
 
     private IEnumerator AttackEnemy(Ships player, Ships enemy)
     {
+        bool isAttackEnd = false;
         yield return new WaitForSeconds(0.5f);
-        am.Attack(player, enemy);
-        yield return new WaitForSeconds(1.0f);
-        stage = Stages.Enemies;
-        sgm.UpdateSelectionUI();
+        _am.Attack(player, enemy, () => { isAttackEnd = true; });
+        while (!isAttackEnd)
+        {
+            yield return null;
+        }
+        isAttackEnd = false;
+        _stage = Stages.Enemies;
+        _sgm.UpdateSelectionUI();
     }
 
     private IEnumerator AttackPlayer(List<Ships> enemies, Ships player)
     {
+        bool isAttackEnd = false;
         if (enemies != null)
-            for (var i = 0; i < enemies.Count; i++)
+            foreach (var t in enemies)
             {
-                am.Attack(enemies[i], player);
-                yield return new WaitForSeconds(1.0f);
+                _am.Attack(t, player, () => { isAttackEnd = true; });
+                while (!isAttackEnd)
+                {
+                    yield return null;
+                }
+                isAttackEnd = false;
             }
         else
             yield return new WaitForSeconds(1.0f);
 
         // Always consume player's energy at each turn's ending
         player.ConsumeEnergyByTurn();
-        stage = Stages.Question;
-        sgm.UpdateSelectionUI();
+        _stage = Stages.Question;
+        _sgm.UpdateSelectionUI();
     }
 
     private IEnumerator Move(Ships ship, int x, int y)
     {
-        gbm.MoveShip(ship, x, y);
-        // TODO make the movement animation
-        yield return new WaitForSeconds(1.0f);
-        stage = Stages.Enemies;
-        sgm.UpdateSelectionUI();
+        var path = _pathFinder.FindPath(ship.CellIndex, new Vector2Int(x, y));
+
+        _sdm.PlayMovingSound();
+        // move animation
+        while (path.Count != 0)
+        {
+            var currentNode = ship.CellIndex;
+            var nextNode = path.Pop();
+            var direction = new Vector3(nextNode.x - currentNode.x, 0, nextNode.y - currentNode.y);
+            for (var i = 0; i < _framesForEachMove; i++)
+            {
+                ship.ShipObject.transform.localPosition += direction / 10;
+                yield return null;
+            }
+
+            _gbm.MoveShip(ship, nextNode.x, nextNode.y);
+        }
+        _sdm.StopMovingSound();
+        _stage = Stages.Enemies;
+        _player.ConsumeEnergyByTurn();
+        _sgm.UpdateSelectionUI();
     }
 
     private IEnumerator SwitchShield(Ships player)
     {
-        sm.IsClicked = false;
-        sm.SwitchShield(player);
+        _sm.IsClicked = false;
+        _sm.SwitchShield(player);
         yield return new WaitForSeconds(1.0f);
-        stage = Stages.Enemies;
+        _stage = Stages.Enemies;
+    }
+
+    public void LoadGame(int index)
+    {
+        SceneManager.LoadScene(index);
     }
 
     private void ShowLoseScreen()
     {
-        ShowLostContinueScreen();
+        _Igm.ShowLoseScreen();
     }
 
     private void ShowWinScreen()
     {
-        ShowWonContinueScreen();
-    }
-
-    public void ShowRestartScreen()
-    {
-        DisableRestartButton();
-        restartScreen.SetActive(true);
-    }
-
-    public void DisableRestartScreen()
-    {
-        restartScreen.SetActive(false);
-        restartButton.SetActive(true);
-    }
-
-    private void ShowWonContinueScreen()
-    {
-        DisableRestartButton();
-        wonContinueScreen.SetActive(true);
-    }
-
-    private void ShowLostContinueScreen()
-    {
-        DisableRestartButton();
-        lostContinueScreen.SetActive(true);
+        _Igm.ShowWinScreen();
     }
 
     private void DisableContinueScreen()
     {
-        wonContinueScreen.SetActive(false);
-        lostContinueScreen.SetActive(false);
+        _Igm.DisableContinueScreen();
     }
 
     public void RestartWholeGame()
     {
-        level = 0;
         SceneManager.LoadScene(0);
     }
 
@@ -300,65 +287,63 @@ public class GameManager : MonoBehaviour
 
     public void RestartNextLevel()
     {
-        level = Mathf.Max(++level, maxLevel);
-        DisableContinueScreen();        
-        SceneManager.LoadScene(nextLevel);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GlobalInformation.CurrentLevelIndex =
+            Math.Min(++GlobalInformation.CurrentLevelIndex, (_gbm.GetLevelCount() - 1));
+        DisableContinueScreen();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void RestartPreviousLevel()
     {
-        level = Mathf.Min(--level, 0);
+        GlobalInformation.CurrentLevelIndex = Math.Max(--GlobalInformation.CurrentLevelIndex, 0);
         DisableContinueScreen();
-        SceneManager.LoadScene(previousLevel);
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void DisableRestartButton()
     {
-        restartButton.SetActive(false);
+        _restartButton.SetActive(false);
     }
 
     private IEnumerator RunWatsonCommand()
     {
         Debug.Log("Running Watson Command.");
         // wait for WatsonManager
-        while (wm.IsWatsonRunning()) yield return null;
-        var output = wm.GetFinalResult();
-        wm.ResetFinalResult();
-        var index = sgm.GetWholeIndexFromSelection(output.SelectionIndex);
+        while (_wm.IsWatsonRunning()) yield return null;
+        var output = _wm.GetFinalResult();
+        _wm.ResetFinalResult();
+        var index = _sgm.GetWholeIndexFromSelection(output.SelectionIndex);
         switch (output.Intent)
         {
             case WatsonIntents.Attack:
-                if (gbm.IsEnemy(index))
+                if (_gbm.IsEnemy(index))
                 {
-                    StartCoroutine(AttackEnemy(player, gbm.GetShip(index)));
+                    StartCoroutine(AttackEnemy(_player, _gbm.GetShip(index)));
                 }
                 else
                 {
-                    var message = string.Format("Nothing to be attacked on {0}",
-                        sgm.GetIndexNameString(output.SelectionIndex));
+                    var message = $"Nothing to be attacked on {_sgm.GetIndexNameString(output.SelectionIndex)}";
                     ShowMessage(message, Stages.Player);
-                    Debug.Log(string.Format("Fail to attack {0}", index));
+                    Debug.Log($"Fail to attack {index}");
                 }
 
                 break;
             case WatsonIntents.Move:
-                if (gbm.IsEmpty(index))
+                if (_gbm.IsEmpty(index))
                 {
-                    StartCoroutine(Move(player, index.x, index.y));
+                    StartCoroutine(Move(_player, index.x, index.y));
                 }
                 else
                 {
-                    var message = string.Format("You can't move to {0}", sgm.GetIndexNameString(output.SelectionIndex));
+                    var message = $"You can't move to {_sgm.GetIndexNameString(output.SelectionIndex)}";
                     ShowMessage(message, Stages.Player);
-                    Debug.Log(string.Format("Fail to move {0}", index));
+                    Debug.Log($"Fail to move {index}");
                 }
 
                 break;
-            //case WatsonIntents.Sheild:
-            //    // todo
-            //    break;
+            case WatsonIntents.Shield:
+                StartCoroutine(SwitchShield(_player));
+                break;
             default: // fail
                 // message box;
                 ShowMessage(output.FailMessage, Stages.Player);
@@ -366,14 +351,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SetPanelPostion()
+    private void SetPanelPosition()
     {
-        if (player.ShipObject != null)
+        if (_player.ShipObject != null)
         {
-            var pos = player.ShipObject.transform.position;
-            questionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
-            selectionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
-            messageCanvas.transform.parent.position = new Vector3(pos.x, pos.y + panelHigh, pos.z);
+            var pos = _player.ShipObject.transform.position;
+            _questionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + _panelHigh, pos.z);
+            _selectionCanvas.transform.parent.position = new Vector3(pos.x, pos.y + _panelHigh, pos.z);
+            _messageCanvas.transform.parent.position = new Vector3(pos.x, pos.y + _panelHigh, pos.z);
         }
     }
 

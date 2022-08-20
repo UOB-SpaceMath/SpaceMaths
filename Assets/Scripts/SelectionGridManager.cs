@@ -205,14 +205,14 @@ public class SelectionGridManager : MonoBehaviour
     void ClickAction(Vector2Int selectionIndex, ActionType type)
     {
         _finalOutput = new SelectionOutput(GetWholeIndexFromSelection(selectionIndex.x, selectionIndex.y), type);
-        Debug.Log(string.Format("{0} {1}", _finalOutput.Type, _finalOutput.TargetIndex));
+        // Debug.Log(string.Format("{0} {1}", _finalOutput.Type, _finalOutput.TargetIndex));
     }
     // convert (0,0) to alpha 1
     public string GetIndexNameString(Vector2Int selectionIndex)
     {
         var x = selectionIndex.x + 1;
         var y = selectionIndex.y + 1;
-        string yName = y switch
+        var yName = y switch
         {
             1 => "Alpha",
             2 => "Bravo",
@@ -221,7 +221,16 @@ public class SelectionGridManager : MonoBehaviour
             5 => "Echo",
             _ => ""
         };
-        return string.Format("{0} {1}", yName, x);
+        var xName = x switch
+        {
+            1 => "Vector",
+            2 => "Whiskey",
+            3 => "X-ray",
+            4 => "Yankee",
+            5 => "Zulu",
+            _ => ""
+        };
+        return $"{yName}, {xName}";
     }
 }
 
