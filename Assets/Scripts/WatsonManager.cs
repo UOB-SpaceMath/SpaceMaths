@@ -25,7 +25,7 @@ public class WatsonManager : MonoBehaviour
     private bool _isHandlingStart; // flag indicates that WatsonManager is start to recording and get authentication
     private bool _isHandlingStop; // flag indicates that the WatsonManager is fetching result from cloud.
 
-    private bool _isToggle = false; // flag indicates that the WatsonButton is toggle. 
+    private bool _isToggle = false; // flag indicates that the WatsonButton is toggle.
 
     // results
     private Authenticator _speechToTextIam;
@@ -133,7 +133,7 @@ public class WatsonManager : MonoBehaviour
         // wait until startHandler stop
         while (_isHandlingStart)
             yield return null;
-        if (_watsonOutput == null) //if not null, already fail before, no need to access Watson.           
+        if (_watsonOutput == null) //if not null, already fail before, no need to access Watson.
         {
             // timer for stop fetching
             var isFetchingTimeOut = false;
@@ -322,7 +322,7 @@ public class WatsonManager : MonoBehaviour
         // no intent
         if (intent == WatsonIntents.Fail)
             result = new WatsonOutput(
-                "Your intent is ambitious. Please use keywords such as Attack, Move or Shield.");
+                "Your intent is ambiguous. Please use keywords such as Attack, Move or Shield.");
         // no index
         else if (!GetFinalIndex(ref index, input) && intent != WatsonIntents.Shield)
             result = new WatsonOutput($"Please specific a target cell to {intent.ToString().ToLower()}.");
@@ -405,7 +405,7 @@ public class WatsonManager : MonoBehaviour
     [SerializeField] private string _assistantId;
 
     [FormerlySerializedAs("_connectionTimeOut")]
-    [Header("Setting")] // 
+    [Header("Setting")] //
     [SerializeField]
     private float _connectionTimeOutSecond = 10;
 
@@ -413,7 +413,8 @@ public class WatsonManager : MonoBehaviour
     [SerializeField] private float _stopRecordingSeconds = 0.5f;
     [SerializeField] private int _recordingHZ = 22050;
 
-    [Header("Controllers")] [SerializeField]
+    [Header("Controllers")]
+    [SerializeField]
     private WatsonButtonController _buttonController;
 
     [SerializeField] private HintController _hintController;
