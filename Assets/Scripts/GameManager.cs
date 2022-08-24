@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     // Sub managers
     [Header("Managers")] [SerializeField] private AttackManager _am;
     [SerializeField] private GameBoardManager _gbm;
-    [SerializeField] private UIManager _uim;
+    [SerializeField] private QuestionManager _qm;
     [SerializeField] private SelectionGridManager _sgm;
     [SerializeField] private WatsonManager _wm;
     [SerializeField] private MessageManager _mm;
@@ -77,20 +77,20 @@ public class GameManager : MonoBehaviour
                 // Question stage
                 case Stages.Question:
                     SetPanel(PanelType.Question);
-                    switch (_uim.GetAnswerState())
+                    switch (_qm.GetAnswerState())
                     {
                         // Answer was correct
-                        case UIManager.AnswerStates.Right:
+                        case QuestionManager.AnswerStates.Right:
                             _stage = Stages.None;
-                            _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
+                            _qm.SetAnswerState(QuestionManager.AnswerStates.Suspension);
                             StartCoroutine(QuestionToPlayerTurn());
                             _scores.incrementScore();
                             break;
 
                         // Answer was incorrect
-                        case UIManager.AnswerStates.Wrong:
+                        case QuestionManager.AnswerStates.Wrong:
                             _stage = Stages.None;
-                            _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
+                            _qm.SetAnswerState(QuestionManager.AnswerStates.Suspension);
                             StartCoroutine(QuestionToEnemiesTurn());
                             break;
                     }
