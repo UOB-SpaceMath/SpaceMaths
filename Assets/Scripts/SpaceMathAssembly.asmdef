@@ -6,7 +6,9 @@
         "Unity.XR.ARSubsystems",
         "Unity.TextMeshPro",
         "IBM.Cloud.SDK",
-        "WatsonUnitySDK"
+        "WatsonUnitySDK",
+        "UnityEditor.UI",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
