@@ -165,7 +165,7 @@ public class WatsonManager : MonoBehaviour
             // _watsonOutput is still null mean is out of time
             _watsonOutput ??=
                 new WatsonOutput(
-                    "Captain, sending command time out, you may not be connected to the spaceship. (No internet connection or recording too long)");
+                    "Captain, sending command time out, you may not be connected to the ship's comms. (No internet connection or recording too long)");
         }
 
         _isHandlingStop = false;
@@ -217,7 +217,7 @@ public class WatsonManager : MonoBehaviour
         // check recording time long enough
         if (!isTimeOut)
         {
-            failureCallback("Captain, Your command is to short!");
+            failureCallback("Captain, Your command is too short!");
         }
         else
         {
@@ -242,7 +242,7 @@ public class WatsonManager : MonoBehaviour
             if (isTimeOut)
             {
                 failureCallback(
-                    "Captain, authentication time out, you may not connected to your ship (Please check internet connection)");
+                    "Captain, authentication timed out, you may not be connected to your ship's comms (Please check internet connection)");
                 yield break;
             }
 
@@ -322,7 +322,7 @@ public class WatsonManager : MonoBehaviour
         // no intent
         if (intent == WatsonIntents.Fail)
             result = new WatsonOutput(
-                "Your intent is ambitious. Please use keywords such as Attack, Move or Shield.");
+                "Your intent is ambiguous. Please use keywords such as Attack, Move or Shields.");
         // no index
         else if (!GetFinalIndex(ref index, input) && intent != WatsonIntents.Shield)
             result = new WatsonOutput($"Please specific a target cell to {intent.ToString().ToLower()}.");
