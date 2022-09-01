@@ -29,5 +29,6 @@ To move the camera when playing without AR:
 - Mingzhe Deng([Desmond121](https://github.com/Desmond121))
 
 ## Credits
-- Plain Spaceship models (https://sketchfab.com/3d-models/spaceships-69d7d84573be4e358d92d63e9cee4e50)
-- Gameboard assets (https://www.kenney.nl/assets/survival-kit)
+- Plain Spaceship models from TechLevel (https://sketchfab.com/3d-models/spaceships-69d7d84573be4e358d92d63e9cee4e50)
+- Gameboard assets used from Kenney (https://www.kenney.nl/assets/survival-kit)
+- Background music from Pix (https://www.youtube.com/watch?v=G2nmOULeOBQ&list=LL&index=26)
