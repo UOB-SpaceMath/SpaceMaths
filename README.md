@@ -12,7 +12,7 @@ This project is built with Unity Editor 2020.3.35f1. To build this project:
 3. Click "Build" and specify a path for your .apk file.
 4. Install the apk to your android phone and enjoy the game!
 
-## Run the game inside the Unity Editor.
+## Run the game inside the Unity Editor
 This game can be run without any AR support inside the Unity Editor. What you need to do is open `StartingScene` under "Assets/Scenes/" and click the "play" button.
 
 To move the camera when playing without AR: 
