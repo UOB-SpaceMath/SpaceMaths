@@ -23,6 +23,9 @@ To move the camera when playing without AR:
 
 ## Acknowledgements
 - Voxel Mechas Collection by maxparata: https://maxparata.itch.io/voxel-mechas
+- Plain Spaceship models from TechLevel (https://sketchfab.com/3d-models/spaceships-69d7d84573be4e358d92d63e9cee4e50)
+- Gameboard assets used from Kenney (https://www.kenney.nl/assets/survival-kit)
+- Background music from Pix (https://www.youtube.com/watch?v=G2nmOULeOBQ&list=LL&index=26)
 
 ## Team Members
 - Arthur Ng([arthurng](https://github.com/arthurtng))
