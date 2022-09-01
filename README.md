@@ -35,3 +35,8 @@ To move the camera when playing without AR:
 - Background music from Pix (https://www.youtube.com/watch?v=G2nmOULeOBQ&list=LL&index=26)
 - Voxel Mechas Collection by maxparata (https://maxparata.itch.io/voxel-mechas)
 - Question Panel assets from Unity assert store (https://assetstore.unity.com/)
+- Sc-Fi Music from Theo Prior Music (https://assetstore.unity.com/publishers/58542)
+- Dark Magic from MGWSoundDesign (https://assetstore.unity.com/publishers/27115)
+- Retro Noisy Explosion Sound Pack Lite from hiro (https://assetstore.unity.com/publishers/13951)
+- Shooting Sound from B.G.M (https://assetstore.unity.com/publishers/9381)
+- UI Samples from Unity Technologies (unity3d.com)
