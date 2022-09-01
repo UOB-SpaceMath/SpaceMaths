@@ -27,3 +27,7 @@ To move the camera when playing without AR:
 - Fangxu Chu([Jimmy-True](https://github.com/Jimmy-True))
 - Junting Lai([Travisljt](https://github.com/Travisljt))
 - Mingzhe Deng([Desmond121](https://github.com/Desmond121))
+
+## Credits
+- Plain Spaceship models (https://sketchfab.com/3d-models/spaceships-69d7d84573be4e358d92d63e9cee4e50)
+- Gameboard assets (https://www.kenney.nl/assets/survival-kit)
