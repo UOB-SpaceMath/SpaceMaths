@@ -21,6 +21,9 @@ To move the camera when playing without AR:
   
 *Warning: Interaction with clicking is not available when the fly camera is enabled, if you want to click any button, you should disable it first*
 
+## Acknowledgements
+- Voxel Mechas Collection by maxparata: https://maxparata.itch.io/voxel-mechas
+
 ## Team Members
 - Arthur Ng([arthurng](https://github.com/arthurtng))
 - Crystal Poon([pcypoon](https://github.com/pcypoon))
