@@ -1,4 +1,4 @@
-# SpaceMath
+# SpaceMaths
 An AR space strategy game that trains your maths, with voice control powered by IBM Watson.
 
 ## Build Instructions
