@@ -7920,7 +7920,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 692277105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ecc1ca823dba014aaabd414f1ab4744, type: 3}
+  m_Script: {fileID: 11500000, guid: 2518e1c1b987b184ca3f3a07ef3bdf30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isDebug: 0
@@ -8458,7 +8458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _am: {fileID: 904791229}
   _gbm: {fileID: 539834609}
-  _qgm: {fileID: 692277107}
+  _qm: {fileID: 692277107}
   _sgm: {fileID: 1044467941}
   _wm: {fileID: 1196850627}
   _mm: {fileID: 2018166064}
