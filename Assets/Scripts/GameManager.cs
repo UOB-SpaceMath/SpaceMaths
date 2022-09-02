@@ -1,5 +1,5 @@
-using System;
 using SpaceMath;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         Enemies
     };
 
-    private Stages _stage;    
+    private Stages _stage;
 
     // Drag the canvas into these variables in the inspector
     [Header("Canvas")] [SerializeField] private GameObject _questionCanvas;
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         // Question stage
         _stage = Stages.Question;
-        _player = _gbm.GetPlayer();        
+        _player = _gbm.GetPlayer();
 
         // setup path finder
         _pathFinder = new AStarPathFinder(_gbm);
@@ -63,12 +63,12 @@ public class GameManager : MonoBehaviour
     {
         if (_player.IsShipDead())
         {
-            ShowLoseScreen();            
+            ShowLoseScreen();
             _scores.checkScore(_player.Energy);
         }
         else if (!_gbm.IsEnemiesRemain())
         {
-            ShowWinScreen();            
+            ShowWinScreen();
             _scores.checkScore(_player.Energy);
         }
         else

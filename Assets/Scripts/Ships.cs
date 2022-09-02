@@ -20,8 +20,7 @@ namespace SpaceMath
         private int attackDamage = 1;
         [SerializeField]
         private float weaponRange = 3.0f;
-        //[SerializeField]
-        //private Transform weaponEnd; // Where the weapon is.
+       
 
         // Ship itself relatives
         [SerializeField]

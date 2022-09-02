@@ -13,13 +13,13 @@ public class InstructionImage : MonoBehaviour
 
     private int currentPage = 0;
 
-    public RawImage _displayImage;
-    public TextMeshProUGUI _displayText;
-    public TextMeshProUGUI _displayHeaderText;
+    [SerializeField] private  RawImage _displayImage;
+    [SerializeField] private  TextMeshProUGUI _displayText;
+    [SerializeField] private  TextMeshProUGUI _displayHeaderText;
 
-    public List<Texture> instructionSlide = new List<Texture>();
-    public List<TextMeshProUGUI> instructionText = new List<TextMeshProUGUI>();
-    public List<TextMeshProUGUI> headerText = new List<TextMeshProUGUI>();
+    [SerializeField] private  List<Texture> instructionSlide = new List<Texture>();
+    [SerializeField] private  List<TextMeshProUGUI> instructionText = new List<TextMeshProUGUI>();
+    [SerializeField] private  List<TextMeshProUGUI> headerText = new List<TextMeshProUGUI>();
 
 
     // Start is called before the first frame update
