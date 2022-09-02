@@ -7891,7 +7891,7 @@ GameObject:
   - component: {fileID: 692277106}
   - component: {fileID: 692277107}
   m_Layer: 0
-  m_Name: EasyModeUIManager
+  m_Name: QuestionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8458,7 +8458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _am: {fileID: 904791229}
   _gbm: {fileID: 539834609}
-  _uim: {fileID: 692277107}
+  _qgm: {fileID: 692277107}
   _sgm: {fileID: 1044467941}
   _wm: {fileID: 1196850627}
   _mm: {fileID: 2018166064}

@@ -1,5 +1,5 @@
-using System;
 using SpaceMath;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     // Sub managers
     [Header("Managers")] [SerializeField] private AttackManager _am;
     [SerializeField] private GameBoardManager _gbm;
-    [SerializeField] private UIManager _uim;
+    [SerializeField] private QuestionGenerator _qgm;
     [SerializeField] private SelectionGridManager _sgm;
     [SerializeField] private WatsonManager _wm;
     [SerializeField] private MessageManager _mm;
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         Enemies
     };
 
-    private Stages _stage;    
+    private Stages _stage;
 
     // Drag the canvas into these variables in the inspector
     [Header("Canvas")] [SerializeField] private GameObject _questionCanvas;
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         // Question stage
         _stage = Stages.Question;
-        _player = _gbm.GetPlayer();        
+        _player = _gbm.GetPlayer();
 
         // setup path finder
         _pathFinder = new AStarPathFinder(_gbm);
@@ -63,12 +63,12 @@ public class GameManager : MonoBehaviour
     {
         if (_player.IsShipDead())
         {
-            ShowLoseScreen();            
+            ShowLoseScreen();
             _scores.checkScore(_player.Energy);
         }
         else if (!_gbm.IsEnemiesRemain())
         {
-            ShowWinScreen();            
+            ShowWinScreen();
             _scores.checkScore(_player.Energy);
         }
         else
@@ -77,20 +77,20 @@ public class GameManager : MonoBehaviour
                 // Question stage
                 case Stages.Question:
                     SetPanel(PanelType.Question);
-                    switch (_uim.GetAnswerState())
+                    switch (_qgm.GetAnswerState())
                     {
                         // Answer was correct
-                        case UIManager.AnswerStates.Right:
+                        case QuestionGenerator.AnswerStates.Right:
                             _stage = Stages.None;
-                            _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
+                            _qgm.SetAnswerState(QuestionGenerator.AnswerStates.Suspension);
                             StartCoroutine(QuestionToPlayerTurn());
                             _scores.incrementScore();
                             break;
 
                         // Answer was incorrect
-                        case UIManager.AnswerStates.Wrong:
+                        case QuestionGenerator.AnswerStates.Wrong:
                             _stage = Stages.None;
-                            _uim.SetAnswerState(UIManager.AnswerStates.Suspension);
+                            _qgm.SetAnswerState(QuestionGenerator.AnswerStates.Suspension);
                             StartCoroutine(QuestionToEnemiesTurn());
                             break;
                     }

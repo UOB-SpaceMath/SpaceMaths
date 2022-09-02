@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class UIManager : MonoBehaviour
+public class QuestionGenerator : MonoBehaviour
 {
     // TODO remove this.
     [SerializeField]
